@@ -1,8 +1,6 @@
 package com.memegle.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.memegle.server.helper.SequenceGeneratorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,16 +17,16 @@ public class Picture {
     private String name;
 
     @JsonIgnore
-    private String path;
+    private String url;
 
     public Picture() {
     }
 
     public long getId() {return this.id;}
     public String getName() {return this.name;}
-    public String getPath() {return this.path;}
+    public String getUrl() {return this.url;}
 
     public void setId(long id) {this.id = id;}
     public void setName(String name) {this.name = name;}
-    public void setPath(String path) {this.path = path;}
+    public void setUrl(String url) {this.url = url;}
 }
