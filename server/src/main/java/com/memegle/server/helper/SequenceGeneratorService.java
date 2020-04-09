@@ -32,4 +32,8 @@ public class SequenceGeneratorService {
 
         return !Objects.isNull(counter) ? counter.getSeq() : 1;
     }
+
+    public void resetSequence(String seqName) {
+        mongoOperations.findAndRemove(query(where("_id").is(seqName)), DatabaseSequence.class);
+    }
 }
