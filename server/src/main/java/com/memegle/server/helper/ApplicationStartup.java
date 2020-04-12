@@ -12,6 +12,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 
 
@@ -22,10 +23,14 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
     private final PictureRepository pictureRepo;
     private final SequenceGeneratorService sequenceGeneratorService;
 
+    private ServletContext servletContext;
+    private static String STATIC_RESOURCES_PATH;
+
     @Autowired
-    public ApplicationStartup(PictureRepository pictureRepo, SequenceGeneratorService sequenceGeneratorService) {
+    public ApplicationStartup(PictureRepository pictureRepo, SequenceGeneratorService sequenceGeneratorService, ServletContext servletContext) {
         this.pictureRepo = pictureRepo;
         this.sequenceGeneratorService = sequenceGeneratorService;
+        this.servletContext = servletContext;
     }
 
     @Override
@@ -40,7 +45,12 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
     }
 
     private void scanDataPath() {
-        File dataFolder = new File(PictureController.DATA_PATH);
+        STATIC_RESOURCES_PATH = servletContext.getRealPath("WEB-INF/classes/static/");
+        File dataFolder = new File(STATIC_RESOURCES_PATH + "data");
+        if (!dataFolder.exists()) {
+            dataFolder = new File("./src/main/resources/static/data");
+        }
+        LOGGER.info("DATA_PATH: " + dataFolder.getAbsolutePath());
         File[] picFiles = dataFolder.listFiles();
 
         if (picFiles == null)
@@ -49,9 +59,10 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
         for (File picFile : picFiles) {
             Picture pic = new Picture();
             pic.setName(picFile.getName());
-            pic.setUrl(ServerApplication.BASE_URL + PictureController.DATA_MAPPING + "/" + picFile.getName());
+            pic.setUrl(ServerApplication.BASE_URL + PictureController.DATA_MAPPING + "/" + pic.getName());
             pic.setId(sequenceGeneratorService.generateSequence(Picture.SEQUENCE_NAME));
             pictureRepo.save(pic);
         }
     }
+
 }
