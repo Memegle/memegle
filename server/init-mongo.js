@@ -1,8 +1,8 @@
 // Not used
 db.createUser(
     {
-//        user : "memegleapp",
-//        pwd : "memegleapp",
+        user : "memegleapp",
+        pwd : "memegleapp",
         roles :[
             {
                 role : "readWrite",
