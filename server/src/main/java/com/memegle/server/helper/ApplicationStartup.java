@@ -31,6 +31,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
         this.pictureRepo = pictureRepo;
         this.sequenceGeneratorService = sequenceGeneratorService;
         this.servletContext = servletContext;
+        STATIC_RESOURCES_PATH = servletContext.getRealPath("WEB-INF/classes/static/");
     }
 
     @Override
@@ -45,10 +46,10 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
     }
 
     private void scanDataPath() {
-        STATIC_RESOURCES_PATH = servletContext.getRealPath("WEB-INF/classes/static/");
         File dataFolder = new File(STATIC_RESOURCES_PATH + "data");
         if (!dataFolder.exists()) {
             dataFolder = new File("./src/main/resources/static/data");
+            STATIC_RESOURCES_PATH = "./src/main/resources/static/";
         }
         LOGGER.info("DATA_PATH: " + dataFolder.getAbsolutePath());
         File[] picFiles = dataFolder.listFiles();
