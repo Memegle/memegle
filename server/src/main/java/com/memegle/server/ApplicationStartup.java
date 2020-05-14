@@ -1,10 +1,10 @@
-package com.memegle.server.helper;
+package com.memegle.server;
 
-import com.memegle.server.ServerApplication;
-import com.memegle.server.controller.PictureController;
-import com.memegle.server.model.Picture;
-import com.memegle.server.model.PictureRepository;
+import com.memegle.server.Picture.PictureController;
+import com.memegle.server.Picture.Picture;
+import com.memegle.server.Picture.PictureRepository;
 
+import com.memegle.server.DbHelper.SequenceGeneratorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

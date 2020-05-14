@@ -1,7 +1,7 @@
-package com.memegle.server.model;
+package com.memegle.server.Picture;
 
+import com.memegle.server.Picture.Picture;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
