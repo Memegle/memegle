@@ -2,9 +2,8 @@
  * Tutorial for generating auto-incrementing IDs for mongoDB
  * https://www.javaprogramto.com/2019/05/spring-boot-mongodb-auto-generated-field.html
  */
-package com.memegle.server.helper;
+package com.memegle.server.DbHelper;
 
-import com.memegle.server.model.DatabaseSequence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;

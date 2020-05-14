@@ -1,7 +1,5 @@
-package com.memegle.server.controller;
+package com.memegle.server.Picture;
 
-import com.memegle.server.model.Picture;
-import com.memegle.server.model.PictureRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,11 @@ public class PictureController {
     @Autowired
     public PictureController(PictureRepository pictureRepo) {
         this.pictureRepo = pictureRepo;
+    }
+
+    @GetMapping("/")
+    public String greet() {
+        return "Hey Memegle!\n歡迎來到Memegle！";
     }
 
     @GetMapping("/all")
