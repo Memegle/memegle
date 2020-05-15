@@ -8,17 +8,21 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Random;
 
 
 @Controller
 public class PictureController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PictureController.class);
     // Constants
     public final static String DATA_MAPPING = "/data";
 
     private final PictureRepository pictureRepo;
+
+    // Logging
+    private static final Logger LOGGER = LoggerFactory.getLogger(PictureController.class);
+    private static long count = 0;
 
     @Autowired
     public PictureController(PictureRepository pictureRepo) {
@@ -27,11 +31,12 @@ public class PictureController {
 
     @GetMapping("/")
     public String root() {
-        return "redirect:/welcome";
+        return "redirect:/welcome/";
     }
 
     @GetMapping("/welcome")
-    public String welcome() {
+    public String welcome(HttpServletRequest request) {
+        LOGGER.info("GET (/welcome) Request from ip: " + request.getRemoteAddr());
         return "index.html";
     }
 
@@ -39,7 +44,6 @@ public class PictureController {
     @ResponseBody
     public List<Picture> all(){
         LOGGER.info("Request: GET /all");
-
         return pictureRepo.findAll();
     }
 
@@ -47,6 +51,7 @@ public class PictureController {
     @GetMapping("/random")
     @ResponseBody
     public String random() {
+        LOGGER.info("random() called " + ++count + " times.");
         Random random = new Random();
         long id = Math.abs(random.nextLong()) % this.pictureRepo.count();
         Picture picture = this.pictureRepo.findById(id);
