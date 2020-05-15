@@ -31,7 +31,7 @@ public class PictureController {
 
     @GetMapping("/")
     public String root() {
-        return "redirect:/welcome";
+        return "redirect:/welcome/";
     }
 
     @GetMapping("/welcome")
@@ -44,7 +44,6 @@ public class PictureController {
     @ResponseBody
     public List<Picture> all(){
         LOGGER.info("Request: GET /all");
-
         return pictureRepo.findAll();
     }
 
