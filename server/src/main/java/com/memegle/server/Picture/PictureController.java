@@ -3,15 +3,16 @@ package com.memegle.server.Picture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
-@RestController
+@Controller
 public class PictureController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PictureController.class);
     // Constants
@@ -25,22 +26,36 @@ public class PictureController {
     }
 
     @GetMapping("/")
-    public String greet() {
-        return "Hey Memegle!\n歡迎來到Memegle！";
+    public String root() {
+        return "redirect:/welcome";
+    }
+
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "index.html";
     }
 
     @GetMapping("/all")
     @ResponseBody
-    public List<String> all(){
+    public List<Picture> all(){
         LOGGER.info("Request: GET /all");
 
-        List<Picture> pictures = pictureRepo.findAll();
-        ArrayList<String> urls = new ArrayList<>();
+        return pictureRepo.findAll();
+    }
 
-        for (Picture picture : pictures) {
-            urls.add(picture.getUrl());
-        }
+    @CrossOrigin(origins = "http://localhost")
+    @GetMapping("/random")
+    @ResponseBody
+    public String random() {
+        Random random = new Random();
+        long id = Math.abs(random.nextLong()) % this.pictureRepo.count();
+        Picture picture = this.pictureRepo.findById(id);
+        return picture.getUrl();
+    }
 
-        return urls;
+    @GetMapping("/count")
+    @ResponseBody
+    public long count() {
+        return this.pictureRepo.count();
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.util.Date;
 
 
 @Component
@@ -45,6 +46,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
         scanDataPath();
     }
 
+    // TODO: change this to a separate task isolated to server code.
     private void scanDataPath() {
         File dataFolder = new File(STATIC_RESOURCES_PATH + "data");
         if (!dataFolder.exists()) {
@@ -62,6 +64,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
             pic.setName(picFile.getName());
             pic.setUrl(ServerApplication.BASE_URL + PictureController.DATA_MAPPING + "/" + pic.getName());
             pic.setId(sequenceGeneratorService.generateSequence(Picture.SEQUENCE_NAME));
+            pic.setDateUpdated(new Date());
             pictureRepo.save(pic);
         }
     }
