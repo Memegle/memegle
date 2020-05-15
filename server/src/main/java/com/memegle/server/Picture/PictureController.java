@@ -34,7 +34,7 @@ public class PictureController {
         return "redirect:/welcome/";
     }
 
-    @GetMapping(value = "/welcome", produces = "text/html; charset=UTF-8")
+    @GetMapping(value = "/welcome")
     public String welcome(HttpServletRequest request) {
         LOGGER.info("GET (/welcome) Request from ip: " + request.getRemoteAddr());
         return "index.html";
