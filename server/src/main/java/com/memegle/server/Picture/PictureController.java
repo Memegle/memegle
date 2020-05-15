@@ -53,7 +53,11 @@ public class PictureController {
     public String random() {
         LOGGER.info("random() called " + ++count + " times.");
         Random random = new Random();
-        long id = Math.abs(random.nextLong()) % this.pictureRepo.count();
+        long count = this.pictureRepo.count();
+        if (count <= 0) {
+            return "";
+        }
+        long id = Math.abs(random.nextLong()) % count;
         Picture picture = this.pictureRepo.findById(id);
         return picture.getUrl();
     }
