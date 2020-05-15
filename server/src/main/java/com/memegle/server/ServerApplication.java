@@ -7,7 +7,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 @SpringBootApplication
 public class ServerApplication {
-	public static final String BASE_URL = "http://memegle.qicp.vip/:8080";
+	public static final String BASE_URL = "http://memegle.qicp.vip";
 
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
