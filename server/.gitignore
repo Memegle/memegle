@@ -33,3 +33,6 @@ out/
 
 ### mongodb volumes ###
 volumes/
+
+### local raw images ###
+raw/*
