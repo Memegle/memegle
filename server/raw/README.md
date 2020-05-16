@@ -1,0 +1,1 @@
+Don't upload raw image files to Github
