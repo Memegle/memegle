@@ -57,7 +57,7 @@ public class PictureController {
         if (count <= 0) {
             return "";
         }
-        long id = Math.abs(random.nextLong()) % count;
+        long id = Math.abs(random.nextLong()) % count + 1;
         Picture picture = this.pictureRepo.findById(id);
         return picture.getUrl();
     }
