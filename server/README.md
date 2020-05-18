@@ -16,6 +16,7 @@ You can download Gradle and run gradle build to install all dependencies. You're
     - (If this is your first time starting docker compose for memegle, run `docker-compose --build`). Be very careful using this command because it will restart the image for MongoDB, and may cause you to lose your exiting data in MongoDB.
     - Optional: You can download [MongoDB compass](https://www.mongodb.com/products/compass) to inspect  db collections in UI mode. The default port for MongoDB is 27017
     - Optional: You can also use `docker-compose up -d` to run the containers in the background, and use `docker-compose down` to shut down running containers. (CTRL + C will also work if not running with `-d`)
+- After running `docker compose up`, you should be able to access local server at localhost:8080, and mongoDB should also be up at localhost:27017
     
 ### Filling Local Database
 (The current process for db migration is not very efficient. We might use MongoBee to perform migration task in the future)
