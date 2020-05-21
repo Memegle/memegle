@@ -29,6 +29,10 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+
+	// MongoBee dependencies
+	implementation 'org.javassist:javassist:3.18.2-GA'
+	implementation 'com.github.mongobee:mongobee:0.13'
 }
 
 test {
