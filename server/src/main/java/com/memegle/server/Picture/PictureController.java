@@ -47,7 +47,7 @@ public class PictureController {
         return pictureRepo.findAll();
     }
 
-    @CrossOrigin(origins = "http://localhost")
+    @CrossOrigin
     @GetMapping("/random")
     @ResponseBody
     public String random() {
