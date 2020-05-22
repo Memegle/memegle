@@ -6,6 +6,7 @@ WORKDIR /home/gradle/src
 # Exclude test for the time being
 RUN gradle build --no-daemon -x test
 
+# Production environment
 FROM tomcat:9.0.33-jdk8-openjdk-slim
 
 EXPOSE 8080
