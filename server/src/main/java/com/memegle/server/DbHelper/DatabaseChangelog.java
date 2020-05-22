@@ -19,17 +19,12 @@ import java.io.File;
 public class DatabaseChangelog {
     private final static Logger LOGGER = LoggerFactory.getLogger(DatabaseChangelog.class);
 
-    // Provide a default constructor to mongock for the application to be able to start
-    public DatabaseChangelog() {
-    }
-
-    public DatabaseChangelog(ServletContext servletContext) {
-        ServerApplication.STATIC_RESOURCES_PATH = servletContext.getRealPath("WEB-INF/classes/static/");
-    }
-
     @ChangeSet(author = "memegle", id = "applicationStartup", order = "01", runAlways = true)
-    public void initializePictureDatabase(MongoTemplate mongoTemplate, PictureRepository pictureRepo) throws Exception {
+    public void initializePictureDatabase(MongoTemplate mongoTemplate, PictureRepository pictureRepo, ServletContext servletContext)
+            throws Exception {
         LOGGER.info("Reinitializing Data...");
+
+        ServerApplication.STATIC_RESOURCES_PATH = servletContext.getRealPath("WEB-INF/classes/static/");
 
         pictureRepo.deleteAll();
 
@@ -42,6 +37,8 @@ public class DatabaseChangelog {
 
         // TODO: Create another folder for new pictures so that we don't have to repopulate the entire db everytime.
         // TODO: Add some library to compare picture similarity to avoid duplicates in the db.
+
+        LOGGER.info("DATA_PATH: " + dataFolder);
 
         File[] picFiles = dataFolder.listFiles();
 
