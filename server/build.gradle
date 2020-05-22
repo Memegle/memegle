@@ -30,9 +30,10 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 
-	// MongoBee dependencies
+	// Mongock dependencies
+	// https://github.com/cloudyrock/mongock#springBootMongock-build-parameters
 	implementation 'org.javassist:javassist:3.18.2-GA'
-	implementation 'com.github.mongobee:mongobee:0.13'
+	implementation 'com.github.cloudyrock.mongock:mongock-spring:3.2.5'
 }
 
 test {
