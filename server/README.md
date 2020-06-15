@@ -19,7 +19,7 @@ You can download Gradle and run gradle build to install all dependencies. You're
 - After running `docker compose up`, you should be able to access local server at localhost:8080, and mongoDB should also be up at localhost:27017
     
 ### Running scripts
-- You might need to run `pip -r ./scripts/requirements` to install dependencies for the scripts to run properly. 
+- You might need to run `pip install -r ./scripts/requirements` to install dependencies for the scripts to run properly. 
 ### Filling Local Database
 
 - Dataset is uploaded to shared Google Drive
