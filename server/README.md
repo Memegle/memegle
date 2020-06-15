@@ -19,7 +19,6 @@ You can download Gradle and run gradle build to install all dependencies. You're
 - After running `docker compose up`, you should be able to access local server at localhost:8080, and mongoDB should also be up at localhost:27017
     
 ### Filling Local Database
-(The current process for db migration is not very efficient. We might use MongoBee to perform migration task in the future)
 
 - Dataset is uploaded to shared Google Drive
 - The [master](https://drive.google.com/drive/u/0/folders/1Nu1plUq-xfuSrg72PR-MFisYNmTRi_9F) folder contains all processed data
@@ -33,9 +32,9 @@ You can download Gradle and run gradle build to install all dependencies. You're
     
     
 ### Adding images to deployed server
-You can use `MemScrapper.py` to automatically web-scrap meme images from fabiaoqing.com
+You can use `MemeScrapper.py` to automatically web-scrap meme images from fabiaoqing.com
 
-Usage: `python MemeScrapper.py [start_id] [num_pics]`
+Usage: `python ./scripts/MemeScrapper.py [start_id] [num_pics]`
 
 - For example:
     - You start at https://fabiaoqing.com/biaoqing/detail/id/651071.html
