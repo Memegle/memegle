@@ -19,15 +19,15 @@ You can download Gradle and run gradle build to install all dependencies. You're
 - After running `docker compose up`, you should be able to access local server at localhost:8080, and mongoDB should also be up at localhost:27017
     
 ### Running scripts
-- You might need to run `pip install -r ./scripts/requirements` to install dependencies for the scripts to run properly. 
+- You might need to run `pip3 install -r ./scripts/requirements` to install dependencies for the scripts to run properly. 
 ### Filling Local Database
 
 - Dataset is uploaded to shared Google Drive
 - The [master](https://drive.google.com/drive/u/0/folders/1Nu1plUq-xfuSrg72PR-MFisYNmTRi_9F) folder contains all processed data
 - The [raw](https://drive.google.com/drive/u/0/folders/1gOO1qCdqdsBnPriZFc5U_FW-iLYUVorQ) folder contains unprocessed data
 - Put all images you want to add to local database under `./raw/`
-- Run `docker-compose up db` to start the MongoDB container
-- Running `python ./scripts/migrate.py` will all the metadata to the db and move imgs under raw to `./src/main/resources/static/data` to be exposed on the WAR project
+- Run `docker-compose up -d db` to start the MongoDB container
+- Running `python3 ./scripts/migrate.py` will all the metadata to the db and move imgs under raw to `./src/main/resources/static/data` to be exposed on the WAR project
 - Run `docker-compose down` to stop the MongoDB container we just started
 - Notice that the current scanning mechanism handles duplicate by checking filename. Duplicate images with different filename could be added to the db.
     
@@ -35,7 +35,7 @@ You can download Gradle and run gradle build to install all dependencies. You're
 ### Adding images to deployed server
 You can use `MemeScrapper.py` to automatically web-scrap meme images from fabiaoqing.com
 
-Usage: `python ./scripts/MemeScrapper.py [start_id] [num_pics]`
+Usage: `python3 ./scripts/MemeScrapper.py [start_id] [num_pics]`
 
 - For example:
     - You start at https://fabiaoqing.com/biaoqing/detail/id/651071.html
