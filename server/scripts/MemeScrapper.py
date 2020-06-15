@@ -60,7 +60,7 @@ for cid in range(ID, ID + TIMES_RUN, 1):
         print('saving {}'.format(filename))
         success += 1
     except Exception as e:
-        print('failing at {}', cid)
+        print('failing at {}'.format(cid))
         print(e)
         fail += 1
         
