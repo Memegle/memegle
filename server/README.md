@@ -18,24 +18,25 @@ You can download Gradle and run gradle build to install all dependencies. You're
     - Optional: You can also use `docker-compose up -d` to run the containers in the background, and use `docker-compose down` to shut down running containers. (CTRL + C will also work if not running with `-d`)
 - After running `docker compose up`, you should be able to access local server at localhost:8080, and mongoDB should also be up at localhost:27017
     
+### Running scripts
+- You might need to run `pip3 install -r ./scripts/requirements` to install dependencies for the scripts to run properly. 
 ### Filling Local Database
-(The current process for db migration is not very efficient. We might use MongoBee to perform migration task in the future)
 
 - Dataset is uploaded to shared Google Drive
 - The [master](https://drive.google.com/drive/u/0/folders/1Nu1plUq-xfuSrg72PR-MFisYNmTRi_9F) folder contains all processed data
 - The [raw](https://drive.google.com/drive/u/0/folders/1gOO1qCdqdsBnPriZFc5U_FW-iLYUVorQ) folder contains unprocessed data
-    - It often happens that filenames of files in raw folder are too long to be deployed (can't be compressed with tar, as required by tomcat), so don't try to deploy images within the raw folder.
-    - To convert raw image files to valid image files to deploy, you need to shrink their filename (A useful .bat script for windows can be found [here](https://superuser.com/questions/347931/how-do-i-rename-a-bunch-of-files-in-the-command-prompt))
-- To deploy images file on local server, simply copy them to `./src/main/resources/static/data/`.
-    - Every time the server get deployed, it will automatically scan all image files under `/static/data/` and add them to db.
-    - Notice that the current scanning mechanism doesn't handle duplicate, if you add images that have previously been added to the db, a duplicate may occur.
-    - Current mechanism is not efficient, and will be changed later.
+- Put all images you want to add to local database under `./raw/`
+- (Recommended: upload the raw image you got to the Google Drive before running the migration task)
+- Run `docker-compose up -d db` to start the MongoDB container
+- Running `python3 ./scripts/migrate.py` will all the metadata to the db and move imgs under raw to `./src/main/resources/static/data` to be exposed on the WAR project
+- Run `docker-compose down` to stop the MongoDB container we just started
+- Notice that the current scanning mechanism handles duplicate by checking filename. Duplicate images with different filename could be added to the db.
     
     
 ### Adding images to deployed server
-You can use `MemScrapper.py` to automatically web-scrap meme images from fabiaoqing.com
+You can use `MemeScrapper.py` to automatically web-scrap meme images from fabiaoqing.com
 
-Usage: `python MemeScrapper.py [start_id] [num_pics]`
+Usage: `python3 ./scripts/MemeScrapper.py [start_id] [num_pics]`
 
 - For example:
     - You start at https://fabiaoqing.com/biaoqing/detail/id/651071.html
