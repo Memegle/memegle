@@ -1,38 +1,62 @@
 .App {
-  text-align: center;
+  text-align: left;
+  width: 100%;
+  height: 100%;
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 100%;
+  width: 60%;
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: white;
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  height: 100%;
+  width: 100%;
 }
 
-.App-link {
-  color: #61dafb;
+input {
+  align-content: center;
+  min-height: 40px;
+  width: 50%;
+  border-radius: 80px;
+  border-width: 1px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Button-about, .Button-contactUs{
+  border: none;
+  background: none;
+  text-decoration: underline;
+  width: 7%;
 }
+
+.Button-search {
+  position:absolute;
+  transition: .5s ease;
+  top: 70%;
+  left: 35%;
+  height: 5%;
+  width: 10%;
+  border: 5px solid transparent;
+}
+
+.Button-feelingLucky {
+  position:absolute;
+  transition: .5s ease;
+  top: 70%;
+  left: 55%;
+  height: 5%;
+  width: 10%;
+  border: 5px solid transparent;
+}
+
+
+
