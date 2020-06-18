@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Random;
 
-
+@CrossOrigin
 @Controller
 public class PictureController {
     // Constants
@@ -47,7 +47,6 @@ public class PictureController {
         return pictureRepo.findAll();
     }
 
-    @CrossOrigin
     @GetMapping("/random")
     @ResponseBody
     public String random() {
