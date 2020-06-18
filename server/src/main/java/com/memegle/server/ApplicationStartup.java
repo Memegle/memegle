@@ -15,6 +15,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         LOGGER.info("Application Started");
+        LOGGER.info("BASE_URL is: " + ServerApplication.BASE_URL);
     }
 
 }

@@ -6,27 +6,17 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - MONGO_URI=mongodb://mongo1:27017/DB_NAME?replicaSet=rs0
+      - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs0
+      - ES_URI=es:9200
     ports:
       - 8080:8080
     depends_on:
       - mongo1
       - es
+      - monstache
     links:
       - mongo1
 
-#  db:
-#    container_name: mongodb
-#    image: mongo:4.2.5
-##    environment:
-##      - MONGO_INITDB_DATABASE=memegle
-##      - MONGO_INITDB_ROOT_USERNAME=memegle
-##      - MONGO_INITDB_ROOT_PASSWORD=memegle
-#    volumes:
-##      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-#      - mongodata:/data/db
-#    ports:
-#      - 27017:27017
   mongo1:
     hostname: mongo1
     container_name: localmongo1
@@ -62,6 +52,25 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+    restart: always
+
+  monstache:
+    image: rwynn/monstache:latest
+    container_name: monstache
+    working_dir: /app
+    command: -f ./monstache.config.toml
+    volumes:
+      - ./monstache.config.toml:/app/monstache.config.toml
+    depends_on:
+      - mongo1
+      - es
+    ports:
+      - 8081:8080
+    links:
+      - mongo1:mongo1
+      - es:es
+    restart: unless-stopped
+
 
 volumes:
   rs1:

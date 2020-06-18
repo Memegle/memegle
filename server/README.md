@@ -46,3 +46,8 @@ Usage: `python3 ./scripts/MemeScrapper.py [start_id] [num_pics]`
                    successfully download 1 images, failing 0`
 - Upload the newly downloaded images to the raw folder on shared drive and notify Paul to update the database on deployed server.
 - (You're encouraged to write more script and scrap pictures from other CN/EN websites as well)
+
+### Local Development
+- To speed up local development process, I recommend you to keep the MongoDB and ElasticSearch container running (`docker-compose up -d && docker-compose stop web`)
+- Then run gradle build project manually from your IDE. (since gradle build with docker takes a lot of time)
+- Now you have both MongoDB and Elasticsearch available at their respective ports, the only thing you need to do is to rebuild the web project after making code changes.
