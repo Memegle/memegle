@@ -9,7 +9,7 @@ public class PictureBuilder {
     private long id;
     private String name;
     private Date date;
-    private String url;
+    private String urlSuffix;
 
     private boolean idSet;
     private boolean nameSet;
@@ -36,11 +36,21 @@ public class PictureBuilder {
         return this;
     }
 
-    public PictureBuilder withUrl(String url) {
-        this.url = url;
+    public PictureBuilder withUrlSuffix(String urlSuffix) {
+        this.urlSuffix = urlSuffix;
         urlSet = true;
 
         return this;
+    }
+
+    public static Picture fromPictureSearch(PictureSearch search) {
+        Picture pic = new Picture();
+        pic.setUrlSuffix(search.getUrlSuffix());
+        pic.setDateUpdated(search.getDateUpdated());
+        pic.setName(search.getName());
+        pic.setId(search.getId());
+
+        return pic;
     }
 
     public Picture build() throws Exception {
@@ -60,10 +70,10 @@ public class PictureBuilder {
         picture.setDateUpdated(this.date);
 
         if (!urlSet) {
-            this.url = ServerApplication.BASE_URL + PictureController.DATA_MAPPING + "/" + this.name;
+            this.urlSuffix = ServerApplication.BASE_URL + PictureController.DATA_MAPPING + "/" + this.name;
         }
 
-        picture.setUrl(this.url);
+        picture.setUrlSuffix(this.urlSuffix);
 
         return picture;
     }
