@@ -18,7 +18,6 @@ public class RestClientConfig extends AbstractElasticsearchConfiguration {
 
     @Override
     public RestHighLevelClient elasticsearchClient() {
-        System.out.println("ES_URI is: " + System.getenv("ES_URI"));
         final ClientConfiguration clientConfiguration = ClientConfiguration.builder()
                 .connectedTo(System.getenv("ES_URI"))   // need to set env variable for this to work on localhost
                 .build();
