@@ -8,6 +8,7 @@ services:
     environment:
       - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs0
       - ES_URI=es:9200
+      - MEMEGLE_APP_PRODUCTION_MODE=${MEMEGLE_APP_PRODUCTION_MODE}
     ports:
       - 8080:8080
     depends_on:
