@@ -7,11 +7,11 @@ import datetime
 from shutil import copyfile
 
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
-COPY = False
+COPY = True
 
 RAW_DATA_PATH = './raw/'
 STATIC_DATA_PATH = './src/main/resources/static/data/'
-URL_PREFIX = 'http://memegle.qicp.vip/data/'
+URL_PREFIX = '/'
 
 client = MongoClient(port=27017)
 db = client.memegle
@@ -52,7 +52,7 @@ for img in img_files:
         '_id': seq,
         'name': img,
         'dateUpdated': datetime.datetime.utcnow(),
-        'url': URL_PREFIX + str(seq) + ext,
+        'urlSuffix': URL_PREFIX + str(seq) + ext,
         '_class': 'com.memegle.server.Picture.Picture'
     }
     insert_lst.append(d)

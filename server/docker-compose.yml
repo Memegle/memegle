@@ -28,8 +28,18 @@ services:
     restart: always
     volumes:
       - rs1:/data/db
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      #- ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
+
+  mongo-setup:
+    image: mongo
+    links:
+      - mongo1:mongo1
+    depends_on:
+      - mongo1
+    volumes:
+      - ./scripts/sh:/scripts
+    entrypoint: ["sh", "/scripts/mongo_init.sh"]
 
 # https://medium.com/@TimvanBaarsen/how-to-run-an-elasticsearch-7-x-single-node-cluster-for-local-development-using-docker-compose-2b7ab73d8b82
   es:
@@ -62,7 +72,7 @@ services:
     volumes:
       - ./monstache.config.toml:/app/monstache.config.toml
     depends_on:
-      - mongo1
+      - mongo-setup
       - es
     ports:
       - 8081:8080
