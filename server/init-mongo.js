@@ -1,4 +1,5 @@
 // set up a mongo replica set
+// not used for now
 rs.initiate(
     {
         _id : 'rs0',
