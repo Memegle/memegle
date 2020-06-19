@@ -1,0 +1,18 @@
+# https://rwynn.github.io/monstache-site/start/
+mongo-url = "mongodb://mongo1:27017"
+elasticsearch-urls = ["http://es:9200"]
+
+direct-read-namespaces = ["memegle.pictures"]
+
+gzip = true
+stats = true
+index-stats = true
+
+elasticsearch-max-conns = 4
+dropped-collections = true
+dropped-databases = true
+replay = false
+resume = true
+verbose = true
+
+exit-after-direct-reads = false

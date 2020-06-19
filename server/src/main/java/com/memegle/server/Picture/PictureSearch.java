@@ -1,17 +1,16 @@
 package com.memegle.server.Picture;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Score;
 
 import java.util.Date;
 
-@Document(collection = "pictures")
-public class Picture {
-
-    @Transient
-    public static final String SEQUENCE_NAME = "picture_sequence";
-
+/**
+ * We need this new entity bc we can't have 2 repo for Picture class at the same time.
+ */
+@Document(indexName = "memegle.pictures", type = "_doc")
+public class PictureSearch {
     @Id
     private long id;
     private String name;
@@ -19,13 +18,17 @@ public class Picture {
 
     private String urlSuffix;
 
-    public Picture() {
+    @Score
+    private float score;    // Read-only value, auto-populated by elastic repo
+
+    public PictureSearch() {
     }
 
     public long getId() {return this.id;}
     public String getName() {return this.name;}
     public String getUrlSuffix() {return this.urlSuffix;}
     public Date getDateUpdated() {return this.dateUpdated;}
+    public float getScore() {return this.score;}
 
     public void setId(long id) {this.id = id;}
     public void setName(String name) {this.name = name;}

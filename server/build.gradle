@@ -34,6 +34,9 @@ dependencies {
 	// https://github.com/cloudyrock/mongock#springBootMongock-build-parameters
 	implementation 'org.javassist:javassist:3.18.2-GA'
 	implementation 'com.github.cloudyrock.mongock:mongock-spring:3.2.5'
+
+	// Elasticsearch
+	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 }
 
 test {
