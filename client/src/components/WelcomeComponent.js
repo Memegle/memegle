@@ -1,6 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import '../css/Welcome.css';
+import '../css/welcome.css';
 
 class Welcome extends React.Component {
     constructor(props) {
@@ -45,7 +45,7 @@ class Welcome extends React.Component {
                     <button className='Button-about'>About</button>
                     <button className='Button-contactUs'>Contact Us</button>
                     <div className='App-header'>
-                        <img src={require('../assets/Memegle.png')} className='App-logo' />
+                        <img src={require('../assets/Memegle.png')} className='App-logo' alt='none'/>
                         <input type='text' value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
                     </div>
                     <button className='Button-search' onClick={this.handleSubmit}><b>Search</b></button>
