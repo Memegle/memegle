@@ -8,6 +8,7 @@ services:
     environment:
       - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs0
       - ES_URI=es:9200
+      - MEMEGLE_APP_PRODUCTION_MODE=${MEMEGLE_APP_PRODUCTION_MODE}
     ports:
       - 8080:8080
     depends_on:
@@ -28,8 +29,18 @@ services:
     restart: always
     volumes:
       - rs1:/data/db
-      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      #- ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
+
+  mongo-setup:
+    image: mongo:4.0-xenial
+    links:
+      - mongo1:mongo1
+    depends_on:
+      - mongo1
+    volumes:
+      - ./scripts/sh:/scripts
+    entrypoint: ["sh", "/scripts/mongo_init.sh"]
 
 # https://medium.com/@TimvanBaarsen/how-to-run-an-elasticsearch-7-x-single-node-cluster-for-local-development-using-docker-compose-2b7ab73d8b82
   es:
@@ -62,7 +73,7 @@ services:
     volumes:
       - ./monstache.config.toml:/app/monstache.config.toml
     depends_on:
-      - mongo1
+      - mongo-setup
       - es
     ports:
       - 8081:8080

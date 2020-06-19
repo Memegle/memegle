@@ -6,13 +6,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 @SpringBootApplication
 public class ServerApplication {
-	public static final String BASE_URL = System.getenv("MEMEGLE_APP_PRODUCTION_MODE") != null ?
+	public static final String BASE_URL = System.getenv("MEMEGLE_APP_PRODUCTION_MODE") != null &&
+			System.getenv("MEMEGLE_APP_PRODUCTION_MODE").toLowerCase().equals("true") ?
 			"http://memegle.qicp.vip" : "http://localhost:8080";
 	public static final String APP_DBNAME = "memegle";
 	public static String STATIC_RESOURCES_PATH;
