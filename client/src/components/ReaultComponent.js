@@ -7,20 +7,19 @@ class Result extends Component {
         this.state = {
             error: null,
             isLoaded: false,
-            images: []
+            imageUrls: []
         };
     }
 
     componentDidMount() {
-        fetch("http://memegle.qicp.vip/all")
+        let url = "http://memegle.qicp.vip/search/" + this.props.location.state.searchKey + "/0";
+        fetch(url)
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log(result.slice(0, 10));
-                    let fisrtTenItems = result.slice(0, 10);
                     this.setState({
                         isLoaded: true,
-                        images: fisrtTenItems
+                        imageUrls: result
                     });
                 },
                 (error) => {
@@ -42,23 +41,22 @@ class Result extends Component {
     }
     */
 
-    createPhotoSet(images) {
+    createPhotoSet(imageUrls) {
         let photoSet = []
-        for (let i = 0; i < images.length; i++) {
-            console.log(images[i]);
-            photoSet.push({src: images[i].url, width: 1, height: 1});
+        for (let i = 0; i < imageUrls.length; i++) {
+            photoSet.push({src: imageUrls[i], width: 1, height: 1});
         }
         return photoSet;
     }
     
     render() {
-        const { error, isLoaded, images } = this.state;
+        const { error, isLoaded, imageUrls } = this.state;
         if (error) {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
             return <div>Loading...</div>;
         } else {
-            let photoSet = this.createPhotoSet(images);
+            let photoSet = this.createPhotoSet(imageUrls);
             console.log(photoSet);
             return (
                 /*<div className="gallery">
