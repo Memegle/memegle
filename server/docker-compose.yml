@@ -32,7 +32,7 @@ services:
     entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
 
   mongo-setup:
-    image: mongo
+    image: mongo:4.0-xenial
     links:
       - mongo1:mongo1
     depends_on:
