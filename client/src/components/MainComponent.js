@@ -1,34 +1,47 @@
-import React, { Component } from 'react';
+import React from 'react';
+import '../css/Welcome.css';
 
-class Main extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {}
-  }
+class Welcome extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {value: ''};
 
-  getRandMeme() {
-    const Http = new XMLHttpRequest();
-    const url='http://localhost:8080/random';
-    Http.open("GET", url);
-    Http.send();
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.keyPressed = this.keyPressed.bind(this);
+    }
 
-    /* Http.onreadystatechange = (e) => {
-        console.log(Http.responseText);
-        document.getElementById('meme').src = Http.responseText
-    } */
-  }
+    handleChange(event) {
+        this.setState({value: event.target.value});
+    }
 
-  render() {
-    return(
-      <div>
-        <h1>欢迎来到Memegle！</h1>
+    handleSubmit(event) {
+        alert('A name was submitted: ' + this.state.value);
+        event.preventDefault();
+        console.log(this.state.value);
 
-        <p>Memegle仍在开发中，来点表情包？</p>
+    }
 
-        <button type="button" onClick={this.getRandMeme}>来一包！</button>
-      </div>
-    )
-  }
+    keyPressed(event) {
+        if (event.key === 'Enter') {
+            this.handleSubmit(event);
+        }
+    }
+
+    render() {
+        return (
+            <div className='App'>
+                <button className='Button-about'>About</button>
+                <button className='Button-contactUs'>Contact Us</button>
+                <div className='App-header'>
+                    <img src={require('../assets/Memegle.png')} className='App-logo' />
+                    <input type='text' value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
+                </div>
+                <button className='Button-search' onClick={this.handleSubmit}><b>Search</b></button>
+                <button className='Button-feelingLucky'>Feeling Lucky?</button>
+            </div>
+        );
+    }
 }
 
-export default Main;
+export default Welcome;
