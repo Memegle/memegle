@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 //import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import Welcome from './WelcomeComponent';
-import Result from './ReaultComponent';
+import Result from './ResultComponent';
 
 class Main extends Component {
     render() {
