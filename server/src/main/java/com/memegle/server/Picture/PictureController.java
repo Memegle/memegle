@@ -86,7 +86,7 @@ public class PictureController {
     }
 
     // Used for testing
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     @ResponseBody
     public Picture id(@PathVariable long id) {
         return pictureRepo.findById(id);
