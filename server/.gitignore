@@ -36,3 +36,6 @@ volumes/
 
 ### local raw images ###
 raw/*
+
+/bin/main/com/*
+/bin/test/*
