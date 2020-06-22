@@ -20,7 +20,7 @@ class Welcome extends React.Component {
     }
 
     handleSubmit(event) {
-        alert('A name was submitted: ' + this.state.value);
+        // alert('A name was submitted: ' + this.state.value);
         event.preventDefault();
         console.log(this.state.value);
         this.setState({toResult: true});
@@ -34,10 +34,8 @@ class Welcome extends React.Component {
 
     render() {
         if (this.state.toResult) {
-            return <Redirect to={{
-                pathname: '/result',
-                state: { searchKey: this.state.value }
-            }} />;
+            const newRoute = '/search?keyword=' + this.state.value + '&page=0';
+            return <Redirect to={newRoute} />;
         }
         else {
             return (

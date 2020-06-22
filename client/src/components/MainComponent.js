@@ -5,12 +5,20 @@ import Welcome from './WelcomeComponent';
 import Result from './ResultComponent';
 
 class Main extends Component {
+
     render() {
+
+        const SearchResult = ({ location }) => {
+            return (
+                <Result queryString={location.search}/>
+            );
+        }
+
         return (
             <div>
                 <Switch>
-                    <Route path="/welcome" component={() => <Welcome />} />
-                    <Route path="/result" component={(props) => <Result {...props}/>} />
+                    <Route path="/welcome" component={Welcome} />
+                    <Route path="/search/" component={SearchResult} />
                     <Redirect to="/welcome" />
                 </Switch>
             </div>
