@@ -13,7 +13,8 @@ if len(sys.argv) != 3:
 def extractImgInfo(content):
     found = 'not found'
     try:
-        found = re.search('<img class="biaoqingpp"(.+?)/>', content).group(1)
+        # found = re.search('<img class="biaoqingpp"(.+?)/>', content).group(1)
+        found = re.search('src="http://img.doutula.com/production/uploads/image/"', content).group(1)
         url = re.search('src="(.+?)"', found).group(1)
         title = re.search('title="(.+?)"', found).group(1)
         
@@ -42,7 +43,8 @@ def slugify(value, allow_unicode=False):
     return re.sub(r'[-\s]+', '-', value)
 
 
-URL = 'https://fabiaoqing.com/biaoqing/detail/id/'
+# URL = 'https://fabiaoqing.com/biaoqing/detail/id/'
+URL = 'https://www.doutula.com/photo/list/'
 SUFFIX = '.html'
 DOWNLOAD_FOLDER = 'raw/'
 ID = abs(int(sys.argv[1]))
