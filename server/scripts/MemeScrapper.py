@@ -14,9 +14,11 @@ def extractImgInfo(content):
     found = 'not found'
     try:
         # found = re.search('<img class="biaoqingpp"(.+?)/>', content).group(1)
-        found = re.search('src="http://img.doutula.com/production/uploads/image/"', content).group(1)
+        found = re.search(
+            '<img referrerpolicy="no-referrer" src="http://img.doutula.com/production/uploads/image/"(.+?)>',
+            content).group(1)
         url = re.search('src="(.+?)"', found).group(1)
-        title = re.search('title="(.+?)"', found).group(1)
+        title = re.search('alt="(.+?)"', found).group(1)
         
         return url, title
     except AttributeError:
@@ -44,7 +46,7 @@ def slugify(value, allow_unicode=False):
 
 
 # URL = 'https://fabiaoqing.com/biaoqing/detail/id/'
-URL = 'https://www.doutula.com/photo/list/'
+URL = 'https://www.doutula.com/photo/'
 SUFFIX = '.html'
 DOWNLOAD_FOLDER = 'raw/'
 ID = abs(int(sys.argv[1]))
@@ -54,7 +56,10 @@ success = 0
 fail = 0
 for cid in range(ID, ID + TIMES_RUN, 1):
     try:
-        response = requests.get(URL + str(cid) + SUFFIX)
+        # response = requests.get(URL + str(cid) + SUFFIX)
+        print(URL + str(cid))
+        response = requests.get(URL + str(cid))
+        print(response.text)
         img_url, title = extractImgInfo(response.text)
         ext = getExtention(img_url)
         filename = DOWNLOAD_FOLDER + slugify(title, allow_unicode=True) + ext
