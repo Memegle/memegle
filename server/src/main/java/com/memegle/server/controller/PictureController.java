@@ -1,6 +1,9 @@
-package com.memegle.server.Picture;
+package com.memegle.server.controller;
 
-import com.memegle.server.ServerApplication;
+import com.memegle.server.model.PictureSearch;
+import com.memegle.server.repository.PictureRepository;
+import com.memegle.server.repository.PictureSearchRepository;
+import com.memegle.server.model.Picture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -13,11 +16,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-@CrossOrigin
 @Controller
 public class PictureController {
     // Constants
-    public final static String DATA_MAPPING = "/data";
     private final static int ELE_PER_PAGE = 10;
 
     private final PictureRepository pictureRepo;
@@ -62,7 +63,7 @@ public class PictureController {
         }
         long id = Math.abs(random.nextLong()) % count + 1;
         Picture picture = this.pictureRepo.findById(id);
-        return picture.getUrlSuffix();
+        return picture.getFullUrl();
     }
 
     @GetMapping("/count")
@@ -86,7 +87,7 @@ public class PictureController {
     }
 
     // Used for testing
-    @GetMapping("/id/{id}")
+    @GetMapping("/pictures/{id}")
     @ResponseBody
     public Picture id(@PathVariable long id) {
         return pictureRepo.findById(id);
@@ -101,7 +102,7 @@ public class PictureController {
 
         return searchRepo.searchName(keyword, pageable)
                 .stream()
-                .map(pic -> ServerApplication.BASE_URL + DATA_MAPPING + pic.getUrlSuffix())
+                .map(PictureSearch::getFullUrl)
                 .collect(Collectors.toList());
     }
 }
