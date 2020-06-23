@@ -39,3 +39,5 @@ raw/*
 
 /bin/main/com/*
 /bin/test/*
+
+.DS_Store
