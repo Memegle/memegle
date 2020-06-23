@@ -59,11 +59,16 @@ class Result extends Component {
         }
 
         return (
-            <div>
-                <div class='search-bar'>
-                    <input type='text' value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
+            <div className='container'>
+                <div className='row top'>
+                    <div className='col-md-3 img-div'>
+                        <img src={require('../assets/Memegle.png')} className='logo' alt='none' />
+                    </div>
+                    <div className='col-md-9 search-bar-div'>
+                        <input className='search-bar' type='text' value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
+                    </div>
                 </div>
-                <div>
+                <div className="row">
                     <RenderImages error={this.state.error}
                         isLoaded={this.state.isLoaded}
                         imageUrls={this.state.imageUrls} />

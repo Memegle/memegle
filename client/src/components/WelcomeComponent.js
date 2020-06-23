@@ -20,10 +20,12 @@ class Welcome extends React.Component {
     }
 
     handleSubmit(event) {
-        // alert('A name was submitted: ' + this.state.value);
+        if (this.state.value === '') {
+            return;
+        }
         event.preventDefault();
         console.log(this.state.value);
-        this.setState({toResult: true});
+        this.setState({ toResult: true });
     }
 
     keyPressed(event) {
@@ -39,15 +41,19 @@ class Welcome extends React.Component {
         }
         else {
             return (
-                <div className='App'>
-                    <button className='Button-about'>About</button>
-                    <button className='Button-contactUs'>Contact Us</button>
-                    <div className='App-header'>
-                        <img src={require('../assets/Memegle.png')} className='App-logo' alt='none'/>
-                        <input type='text' value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
+                <div>
+                    <div className='top-buttons-div'>
+                        <button className='top-buttons'>About</button>
+                        <button className='top-buttons'>Contact Us</button>
                     </div>
-                    <button className='Button-search' onClick={this.handleSubmit}><b>Search</b></button>
-                    <button className='Button-feelingLucky'>Feeling Lucky?</button>
+                    <div className='home-header'>
+                        <img src={require('../assets/Memegle.png')} className='home-logo' alt='none'/>
+                        <input className='home-search-bar' type='text' value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
+                    </div>
+                    <div className='bottom-buttons-div'>
+                        <button className='Button-search' onClick={this.handleSubmit}><b>Memegle Search</b></button>
+                        <button className='Button-feelingLucky'>Feeling Lucky?</button>
+                    </div>
                 </div>
             );
         }
