@@ -1,6 +1,7 @@
-package com.memegle.server.Picture;
+package com.memegle.server.util;
 
-import com.memegle.server.ServerApplication;
+import com.memegle.server.model.PictureSearch;
+import com.memegle.server.model.Picture;
 
 import java.util.Date;
 
@@ -65,12 +66,20 @@ public class PictureBuilder {
 
         if (!dateSet) {
             this.date = new Date();
+            dateSet = true;
         }
 
         picture.setDateUpdated(this.date);
 
         if (!urlSet) {
-            this.urlSuffix = ServerApplication.BASE_URL + PictureController.DATA_MAPPING + "/" + this.name;
+            String ext = "";
+
+            int i = this.name.lastIndexOf('.');
+            if (i > 0) {
+                ext = this.name.substring(i);
+            }
+
+            this.urlSuffix = "/" + this.id + ext;
         }
 
         picture.setUrlSuffix(this.urlSuffix);

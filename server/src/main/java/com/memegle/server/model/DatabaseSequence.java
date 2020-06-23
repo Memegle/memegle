@@ -1,4 +1,4 @@
-package com.memegle.server.DbHelper;
+package com.memegle.server.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

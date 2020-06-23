@@ -1,4 +1,4 @@
-package com.memegle.server;
+package com.memegle.server.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         LOGGER.info("Application Started");
-        LOGGER.info("BASE_URL is: " + ServerApplication.BASE_URL);
+        LOGGER.info("BASE_URL is: " + Constants.BASE_URL);
     }
 
 }
