@@ -24,8 +24,17 @@ class Result extends Component {
 
     componentDidMount() {
         const qs = QueryString.parse(this.props.queryString);
-        let url = 'http://memegle.qicp.vip/search/' + qs.keyword + '/' + qs.page;
-        fetch(url)
+        const url = 'http://memegle.qicp.vip/search'
+        fetch(url, {
+            method: 'GET',
+            body: JSON.stringify({
+                keyword: qs.keyword,
+                page: qs.page
+            }),
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            }})
             .then(res => res.json())
             .then(
                 (result) => {
