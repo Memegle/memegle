@@ -1,5 +1,6 @@
 package com.memegle.server.controller;
 
+import com.memegle.server.dto.SearchQuery;
 import com.memegle.server.model.PictureSearch;
 import com.memegle.server.repository.PictureRepository;
 import com.memegle.server.repository.PictureSearchRepository;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+/**
+ * PLEASE keep the methods in this class in alphabetical order!!!!!
+ */
 @Controller
 public class PictureController {
     // Constants
@@ -38,18 +43,25 @@ public class PictureController {
         return "redirect:/welcome/";
     }
 
-    @GetMapping(value = "/welcome")
-    public String welcome(HttpServletRequest request) {
-        LOGGER.info("GET (/welcome) Request from ip: " + request.getRemoteAddr());
-        return "index.html";
-    }
-
     @CrossOrigin
     @GetMapping("/all")
     @ResponseBody
     public List<Picture> all(){
         LOGGER.info("Request: GET /all");
         return pictureRepo.findAll();
+    }
+
+    @GetMapping("/count")
+    @ResponseBody
+    public long count() {
+        return this.pictureRepo.count();
+    }
+
+    // Used for testing
+    @GetMapping("/pictures/{id}")
+    @ResponseBody
+    public Picture id(@PathVariable long id) {
+        return pictureRepo.findById(id);
     }
 
     @GetMapping("/random")
@@ -66,43 +78,30 @@ public class PictureController {
         return picture.getFullUrl();
     }
 
-    @GetMapping("/count")
-    @ResponseBody
-    public long count() {
-        return this.pictureRepo.count();
-    }
-
     @CrossOrigin
-    @GetMapping("/search/{keyword}/{page}")
+    @GetMapping(value = "/search",
+            consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<String> pathSearch(@PathVariable String keyword, @PathVariable int page) {
-        return searchResult(keyword, page);
-    }
-
-    @CrossOrigin
-    @GetMapping("/search")
-    @ResponseBody
-    public List<String> urlSearch(@RequestParam(value = "keyword", required = false) String keyword, @RequestParam(value = "page", defaultValue = "0") int page) {
-        return searchResult(keyword, page);
-    }
-
-    // Used for testing
-    @GetMapping("/pictures/{id}")
-    @ResponseBody
-    public Picture id(@PathVariable long id) {
-        return pictureRepo.findById(id);
-    }
-
-    private List<String> searchResult(String keyword, int page) {
-        if (keyword == null || keyword.length() == 0 || page < 0) {
+    public List<String> search(@RequestBody SearchQuery query) {
+        if (query.keyword == null || query.keyword.length() == 0 || query.page < 0) {
+            //TODO: change this to a HTTP error response
             return null;
         }
 
-        Pageable pageable = PageRequest.of(page, ELE_PER_PAGE);
+        Pageable pageable = PageRequest.of(query.page, ELE_PER_PAGE);
 
-        return searchRepo.searchName(keyword, pageable)
+        LOGGER.info("Querying:\n" + query);
+
+        return searchRepo.searchName(query.keyword, pageable)
                 .stream()
                 .map(PictureSearch::getFullUrl)
                 .collect(Collectors.toList());
     }
+
+    @GetMapping(value = "/welcome")
+    public String welcome(HttpServletRequest request) {
+        LOGGER.info("GET (/welcome) Request from ip: " + request.getRemoteAddr());
+        return "index.html";
+    }
+
 }
