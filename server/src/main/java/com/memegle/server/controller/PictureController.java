@@ -79,7 +79,7 @@ public class PictureController {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/search",
+    @PostMapping(value = "/search",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<String> search(@RequestBody SearchQuery query) {
