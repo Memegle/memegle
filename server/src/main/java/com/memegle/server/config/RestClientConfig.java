@@ -1,7 +1,7 @@
 /**
  * Set up the client to connect to Elasticsearch
  */
-package com.memegle.server;
+package com.memegle.server.config;
 
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;

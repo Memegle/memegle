@@ -1,18 +1,8 @@
-package com.memegle.server.DbHelper;
+package com.memegle.server.util;
 
 import com.github.cloudyrock.mongock.ChangeLog;
-import com.github.cloudyrock.mongock.ChangeSet;
-import com.memegle.server.Picture.Picture;
-import com.memegle.server.Picture.PictureBuilder;
-import com.memegle.server.Picture.PictureRepository;
-import com.memegle.server.ServerApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-
-import javax.servlet.ServletContext;
-import java.io.File;
 
 // DON'T use @Autowired annotation in this class as documented on mongock documentation
 // Parameters will be correctly connected to beans declared in the application context

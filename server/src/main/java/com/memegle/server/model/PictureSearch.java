@@ -1,5 +1,6 @@
-package com.memegle.server.Picture;
+package com.memegle.server.model;
 
+import com.memegle.server.util.Constants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Score;
@@ -29,6 +30,9 @@ public class PictureSearch {
     public String getUrlSuffix() {return this.urlSuffix;}
     public Date getDateUpdated() {return this.dateUpdated;}
     public float getScore() {return this.score;}
+    public String getFullUrl() {
+        return Constants.BASE_URL + Constants.DATA_MAPPING + this.urlSuffix;
+    }
 
     public void setId(long id) {this.id = id;}
     public void setName(String name) {this.name = name;}
