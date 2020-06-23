@@ -64,19 +64,6 @@ public class PictureController {
         return pictureRepo.findById(id);
     }
 
-    private List<String> searchResult(String keyword, int page) {
-        if (keyword == null || keyword.length() == 0 || page < 0) {
-            return null;
-        }
-
-        Pageable pageable = PageRequest.of(page, ELE_PER_PAGE);
-
-        return searchRepo.searchName(keyword, pageable)
-                .stream()
-                .map(PictureSearch::getFullUrl)
-                .collect(Collectors.toList());
-    }
-
     @GetMapping("/random")
     @ResponseBody
     public String random() {
