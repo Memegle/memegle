@@ -14,4 +14,7 @@ public class Constants {
     public static String STATIC_RESOURCES_PATH;
 
     public final static String DATA_MAPPING = "/data";
+
+    // Hide constructor
+    private Constants() {}
 }
