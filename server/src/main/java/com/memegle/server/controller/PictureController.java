@@ -90,7 +90,7 @@ public class PictureController {
 
         Pageable pageable = PageRequest.of(query.page, ELE_PER_PAGE);
 
-        LOGGER.info("Querying keyword=" + query.keyword + " page=" + query.page);
+        LOGGER.info("Querying:\n" + query);
 
         return searchRepo.searchName(query.keyword, pageable)
                 .stream()
