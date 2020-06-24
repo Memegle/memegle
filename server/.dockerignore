@@ -8,3 +8,5 @@ raw/**/*
 
 build/**/*
 build
+
+gradle/
