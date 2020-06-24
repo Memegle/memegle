@@ -24,7 +24,7 @@ class Result extends Component {
 
     componentDidMount() {
         const qs = QueryString.parse(this.props.queryString);
-        const url = 'http://memegle.qicp.vip/search'
+        const url = 'http://memegle.qicp.vip:8080/search'
         fetch(url, {
             method: 'POST',
             body: JSON.stringify({
