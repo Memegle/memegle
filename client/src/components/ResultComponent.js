@@ -26,7 +26,7 @@ class Result extends Component {
         const qs = QueryString.parse(this.props.queryString);
         const url = 'http://memegle.qicp.vip/search'
         fetch(url, {
-            method: 'GET',
+            method: 'POST',
             body: JSON.stringify({
                 keyword: qs.keyword,
                 page: qs.page
@@ -50,6 +50,7 @@ class Result extends Component {
                     });
                 }
             )
+            .catch(err => console.log(err))
     }
 
     handleLogoClick(event) {
