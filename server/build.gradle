@@ -37,6 +37,10 @@ dependencies {
 
 	// Elasticsearch
 	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
+	// Spring Actuator
+	// https://www.baeldung.com/spring-boot-actuators
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 test {
