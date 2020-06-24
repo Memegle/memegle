@@ -1,5 +1,6 @@
-package com.memegle.server.Picture;
+package com.memegle.server.model;
 
+import com.memegle.server.util.Constants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -26,6 +27,9 @@ public class Picture {
     public String getName() {return this.name;}
     public String getUrlSuffix() {return this.urlSuffix;}
     public Date getDateUpdated() {return this.dateUpdated;}
+    public String getFullUrl() {
+        return Constants.BASE_URL + Constants.DATA_MAPPING + this.urlSuffix;
+    }
 
     public void setId(long id) {this.id = id;}
     public void setName(String name) {this.name = name;}

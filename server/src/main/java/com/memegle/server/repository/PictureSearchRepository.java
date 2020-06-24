@@ -1,5 +1,6 @@
-package com.memegle.server.Picture;
+package com.memegle.server.repository;
 
+import com.memegle.server.model.PictureSearch;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;

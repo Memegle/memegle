@@ -1,6 +1,17 @@
 # Build ENV base image
 FROM gradle:6.3.0-jdk8 AS build
 COPY --chown=gradle:gradle . /home/gradle/src
+
+# Only copy dependency-related files
+# COPY build.gradle gradle.properties settings.gradle /app/
+
+# Only download dependencies
+# Eat the expected build failure since no source code has been copied yet
+RUN gradle clean build --no-daemon > /dev/null 2>&1 || true
+
+# Copy all files
+COPY ./ /app/
+
 WORKDIR /home/gradle/src
 
 # Exclude test for the time being

@@ -2,7 +2,7 @@
 
 This folder contains the server code for memegle app.
 
-Skim through this [coursera course](https://www.coursera.org/learn/cloud-services-java-spring-framework) for a overview of Java Spring and MongoDB
+Skim through this [coursera course](https://www.coursera.org/learn/cloud-services-java-spring-framework) for an overview of Java Spring and MongoDB
 
 ## Dependencies
 ### Gradle Build
