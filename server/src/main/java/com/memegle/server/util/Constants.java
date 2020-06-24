@@ -7,7 +7,7 @@ package com.memegle.server.util;
 public class Constants {
     public static final String BASE_URL = System.getenv("MEMEGLE_APP_PRODUCTION_MODE") != null &&
             System.getenv("MEMEGLE_APP_PRODUCTION_MODE").toLowerCase().equals("true") ?
-            "http://memegle.qicp.vip" : "http://localhost:8080";
+            "http://memegle.qicp.vip:8080" : "http://localhost:8080";
 
     public static final String APP_DBNAME = "memegle";
 
