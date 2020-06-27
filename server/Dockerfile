@@ -13,7 +13,7 @@ COPY . /home/gradle/src
 WORKDIR /home/gradle/src
 
 # Exclude test for the time being
-RUN gradle build -d -i --no-daemon -x test
+RUN gradle build -i --no-daemon -x test
 
 # Production environment
 FROM tomcat:9.0.33-jdk8-openjdk-slim
