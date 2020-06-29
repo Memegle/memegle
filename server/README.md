@@ -26,7 +26,6 @@ You can download Gradle and run gradle build to install all dependencies. You're
 - The [master](https://drive.google.com/drive/u/0/folders/1Nu1plUq-xfuSrg72PR-MFisYNmTRi_9F) folder contains all processed data
 - The [raw](https://drive.google.com/drive/u/0/folders/1gOO1qCdqdsBnPriZFc5U_FW-iLYUVorQ) folder contains unprocessed data
 - Put all images you want to add to local database under `./raw/`
-- (Recommended: upload the raw image you got to the Google Drive before running the migration task)
 - Run `docker-compose up -d db` to start the MongoDB container
 - Running `python3 ./scripts/migrate.py` will all the metadata to the db and move imgs under raw to `./src/main/resources/static/data` to be exposed on the WAR project
 - Run `docker-compose down` to stop the MongoDB container we just started
