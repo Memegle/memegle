@@ -17,6 +17,7 @@ services:
       - monstache
     links:
       - mongo1
+      - es
 
   mongo1:
     hostname: mongo1
@@ -80,7 +81,7 @@ services:
     links:
       - mongo1:mongo1
       - es:es
-    restart: unless-stopped
+    restart: always
 
 
 volumes:
