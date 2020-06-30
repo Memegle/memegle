@@ -8,6 +8,7 @@ class Result extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            server: null,
             error: null,
             isLoaded: false,
             imageUrls: [],
@@ -24,8 +25,11 @@ class Result extends Component {
 
     componentDidMount() {
         const qs = QueryString.parse(this.props.queryString);
-        const url = 'http://localhost:8080/search'
+        const localServerUrl = 'http://localhost:8080/search';
+        const productionServerUrl = 'http://memegle.qicp.vip:8080/search';
+
         const getImageUrls = (url) => {
+            console.log(url);
             fetch(url, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -37,39 +41,35 @@ class Result extends Component {
                     'Content-Type': 'application/json'
                 }
             })
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        this.setState({
-                            isLoaded: true,
-                            imageUrls: result
-                        });
-                    },
-                    (error) => {
-                        this.setState({
-                            isLoaded: true,
-                            error: error
-                        });
-                    }
-                )
-                .catch(err => console.log(err))
+                .then(response => response.json())
+                .then(result => {
+                    this.setState({
+                        isLoaded: true,
+                        imageUrls: result
+                    });
+                })
+                .catch(error => {
+                    this.setState({
+                        error: error
+                    });
+                })
         }
 
-        const withTimeout = (msecs, promise) => {
+        const get = () => {
             const timeout = new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    reject(new Error('timeout'));
-                }, msecs);
+                setTimeout(reject, 300, 'Request timed out');
             });
-            return Promise.race([timeout, promise]);
+        
+            const request = fetch(localServerUrl);
+        
+            return Promise
+                .race([timeout, request])
+                .then(response => {console.log(response);this.setState({ server: localServerUrl })})
+                .catch(error => {console.log(error);this.setState({ server: productionServerUrl })});
         }
 
-        withTimeout(5000, getImageUrls(url));
+        get().then(getImageUrls(this.state.server));
 
-        if (this.state.imageUrls == null) {
-            getImageUrls('http://memegle.qicp.vip:8080/search')
-        }
-          
     }
 
     handleLogoClick(event) {
