@@ -64,6 +64,7 @@ public class PictureController {
         return pictureRepo.findById(id);
     }
 
+    @CrossOrigin
     @GetMapping("/random")
     @ResponseBody
     public String random() {
