@@ -26,7 +26,6 @@ class Result extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            server: null,
             error: null,
             isLoaded: false,
             imageUrls: [],
