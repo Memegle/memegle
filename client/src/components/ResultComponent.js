@@ -8,6 +8,7 @@ class Result extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            server: null,
             error: null,
             isLoaded: false,
             imageUrls: [],
@@ -24,33 +25,42 @@ class Result extends Component {
 
     componentDidMount() {
         const qs = QueryString.parse(this.props.queryString);
-        const url = 'http://memegle.qicp.vip:8080/search'
-        fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({
-                keyword: qs.keyword,
-                page: qs.page
-            }),
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            }})
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        isLoaded: true,
-                        imageUrls: result
-                    });
-                },
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error: error
-                    });
-                }
-            )
-            .catch(err => console.log(err))
+        const localServerUrl = 'http://localhost:8080/search';
+        const prodServerUrl = 'http://memegle.qicp.vip:8080/search';
+        let url = null;
+
+        const getImageUrls = server => {
+            fetch(server, {
+                method: 'POST',
+                body: JSON.stringify({
+                    keyword: qs.keyword,
+                    page: qs.page
+                }),
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                }})
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        this.setState({
+                            isLoaded: true,
+                            imageUrls: result
+                        });
+                    },
+                    (error) => {
+                        this.setState({
+                            isLoaded: true,
+                            error: error
+                        });
+                    }
+                )
+                .catch(err => console.log(err))
+        }
+
+        fetch('http://localhost:8080')
+        .then(response => {console.log('no error');getImageUrls(localServerUrl)})
+        .catch(error => {console.log('error');getImageUrls(prodServerUrl)});
     }
 
     handleLogoClick(event) {
