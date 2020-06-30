@@ -26,11 +26,11 @@ class Result extends Component {
     componentDidMount() {
         const qs = QueryString.parse(this.props.queryString);
         const localServerUrl = 'http://localhost:8080/search';
-        const productionServerUrl = 'http://memegle.qicp.vip:8080/search';
+        const prodServerUrl = 'http://memegle.qicp.vip:8080/search';
+        let url = null;
 
-        const getImageUrls = (url) => {
-            console.log(url);
-            fetch(url, {
+        const getImageUrls = server => {
+            fetch(server, {
                 method: 'POST',
                 body: JSON.stringify({
                     keyword: qs.keyword,
@@ -39,37 +39,28 @@ class Result extends Component {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
-                }
-            })
-                .then(response => response.json())
-                .then(result => {
-                    this.setState({
-                        isLoaded: true,
-                        imageUrls: result
-                    });
-                })
-                .catch(error => {
-                    this.setState({
-                        error: error
-                    });
-                })
+                }})
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        this.setState({
+                            isLoaded: true,
+                            imageUrls: result
+                        });
+                    },
+                    (error) => {
+                        this.setState({
+                            isLoaded: true,
+                            error: error
+                        });
+                    }
+                )
+                .catch(err => console.log(err))
         }
 
-        const get = () => {
-            const timeout = new Promise((resolve, reject) => {
-                setTimeout(reject, 300, 'Request timed out');
-            });
-        
-            const request = fetch(localServerUrl);
-        
-            return Promise
-                .race([timeout, request])
-                .then(response => {console.log(response);this.setState({ server: localServerUrl })})
-                .catch(error => {console.log(error);this.setState({ server: productionServerUrl })});
-        }
-
-        get().then(getImageUrls(this.state.server));
-
+        fetch('http://localhost:8080')
+        .then(response => {console.log('no error');getImageUrls(localServerUrl)})
+        .catch(error => {console.log('error');getImageUrls(prodServerUrl)});
     }
 
     handleLogoClick(event) {
