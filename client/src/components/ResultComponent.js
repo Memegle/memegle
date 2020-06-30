@@ -63,19 +63,18 @@ class Result extends Component {
                     'Content-Type': 'application/json'
                 }})
                 .then(res => res.json())
-                .catch(err => console.log(err))
                 .then(json => {
                     this.setState({
                         isLoaded: true,
                         imageUrls: json
                     });
-                },
-                    error => {
-                        this.setState({
-                            isLoaded: true,
-                            error: error
-                        });
-                    })
+                })
+                .catch(error => {
+                    this.setState({
+                        isLoaded: true,
+                        error: error
+                    });
+                })
         });
     }
 
