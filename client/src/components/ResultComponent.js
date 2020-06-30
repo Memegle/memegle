@@ -24,33 +24,52 @@ class Result extends Component {
 
     componentDidMount() {
         const qs = QueryString.parse(this.props.queryString);
-        const url = 'http://memegle.qicp.vip:8080/search'
-        fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({
-                keyword: qs.keyword,
-                page: qs.page
-            }),
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            }})
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        isLoaded: true,
-                        imageUrls: result
-                    });
-                },
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error: error
-                    });
+        const url = 'http://localhost:8080/search'
+        const getImageUrls = (url) => {
+            fetch(url, {
+                method: 'POST',
+                body: JSON.stringify({
+                    keyword: qs.keyword,
+                    page: qs.page
+                }),
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
                 }
-            )
-            .catch(err => console.log(err))
+            })
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        this.setState({
+                            isLoaded: true,
+                            imageUrls: result
+                        });
+                    },
+                    (error) => {
+                        this.setState({
+                            isLoaded: true,
+                            error: error
+                        });
+                    }
+                )
+                .catch(err => console.log(err))
+        }
+
+        const withTimeout = (msecs, promise) => {
+            const timeout = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    reject(new Error('timeout'));
+                }, msecs);
+            });
+            return Promise.race([timeout, promise]);
+        }
+
+        withTimeout(5000, getImageUrls(url));
+
+        if (this.state.imageUrls == null) {
+            getImageUrls('http://memegle.qicp.vip:8080/search')
+        }
+          
     }
 
     handleLogoClick(event) {
