@@ -43,31 +43,29 @@ services:
       - ./scripts/sh:/scripts
     entrypoint: ["sh", "/scripts/mongo_init.sh"]
 
-# https://medium.com/@TimvanBaarsen/how-to-run-an-elasticsearch-7-x-single-node-cluster-for-local-development-using-docker-compose-2b7ab73d8b82
+# https://www.docker.elastic.co/r/elasticsearch
   es:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.7
     container_name: elasticsearch
     environment:
+      - cluster.name=docker-cluster
       - xpack.security.enabled=false
       - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
         hard: -1
-      nofile:
-        soft: 65535
-        hard: 65535
-    cap_add:
-      - IPC_LOCK
     volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
+      - esdata:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
       - 9300:9300
     restart: always
 
+  # https://rwynn.github.io/monstache-site/start/
   monstache:
-    image: rwynn/monstache:latest
+    image: rwynn/monstache:rel5
     container_name: monstache
     working_dir: /app
     command: -f ./monstache.config.toml
@@ -86,5 +84,5 @@ services:
 
 volumes:
   rs1:
-  elasticsearch-data:
+  esdata:
     driver: local

@@ -11,8 +11,6 @@ public class Constants {
 
     public static final String APP_DBNAME = "memegle";
 
-    public static String STATIC_RESOURCES_PATH;
-
     public final static String DATA_MAPPING = "/data";
 
     // Hide constructor

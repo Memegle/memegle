@@ -4,6 +4,24 @@ import * as QueryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 import '../css/result.css';
 
+function checkServerStatus() {
+    const timeout = new Promise((resolve, reject) => {
+        setTimeout(reject, 30000, 'Request timed out');
+    });
+
+    const request = fetch('http://localhost:8080/actuator/health');
+
+    console.log('querying localhost...');
+    return Promise.race([timeout, request])
+        .then(response => {
+            return true;
+        })
+        .catch(error => {
+            return false;
+        })
+}
+
+
 class Result extends Component {
     constructor(props) {
         super(props);
@@ -16,41 +34,58 @@ class Result extends Component {
             value: ''
         };
 
+        this.queryString = QueryString.parse(this.props.queryString);
+
         this.handleLogoClick = this.handleLogoClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
+        this.makePostRequest = this.makePostRequest.bind(this);
     }
 
+
     componentDidMount() {
-        const qs = QueryString.parse(this.props.queryString);
-        const url = 'http://memegle.qicp.vip:8080/search'
-        fetch(url, {
+        checkServerStatus().then(localIsUp => {
+            if (localIsUp) {
+                console.log('local server is up, using local.');
+                this.serverUrl = 'http://localhost:8080/search'
+            }
+            else {
+                console.log('can\' reach local server, using \'http://memegle.qicp.vip:8080/search\'');
+                this.serverUrl = 'http://memegle.qicp.vip:8080/search'
+            }
+
+            this.makePostRequest(this.serverUrl)
+                .then(res => res.json())
+                .catch(err => console.log(err))
+                .then(json => {
+                        this.setState({
+                            isLoaded: true,
+                            imageUrls: json
+                        });
+                    },
+                    error => {
+                        this.setState({
+                            isLoaded: true,
+                            error: error
+                        });
+                    })
+        });
+    }
+
+
+    makePostRequest(url) {
+        return fetch(url, {
             method: 'POST',
             body: JSON.stringify({
-                keyword: qs.keyword,
-                page: qs.page
+                keyword: this.queryString.keyword,
+                page: this.queryString.page
             }),
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
-            }})
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    this.setState({
-                        isLoaded: true,
-                        imageUrls: result
-                    });
-                },
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error: error
-                    });
-                }
-            )
-            .catch(err => console.log(err))
+            }
+        })
     }
 
     handleLogoClick(event) {
@@ -134,21 +169,18 @@ class Result extends Component {
 class RenderImages extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.props.imageUrls === nextProps.imageUrls) {
-            return false;
-        }
-        return true;
+        return this.props.imageUrls !== nextProps.imageUrls;
     }
 
     render() {
 
         const createPhotoSet = (imageUrls) => {
-            let photoSet = []
+            let photoSet = [];
             for (let i = 0; i < imageUrls.length; i++) {
                 photoSet.push({src: imageUrls[i], width: 1, height: 1});
             }
             return photoSet;
-        }
+        };
 
         let {error, isLoaded, imageUrls} = this.props;
         if (error) {
