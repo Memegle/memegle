@@ -63,8 +63,9 @@ services:
       - 9300:9300
     restart: always
 
+  # https://rwynn.github.io/monstache-site/start/
   monstache:
-    image: rwynn/monstache:latest
+    image: rwynn/monstache:rel5
     container_name: monstache
     working_dir: /app
     command: -f ./monstache.config.toml
