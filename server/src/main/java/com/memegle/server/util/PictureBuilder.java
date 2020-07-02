@@ -55,7 +55,7 @@ public class PictureBuilder {
         return pic;
     }
 
-    public void clear() {
+    public void reset() {
         this.id = -1;
         this.name = null;
         this.date = null;
@@ -96,7 +96,7 @@ public class PictureBuilder {
 
         picture.setUrlSuffix(this.urlSuffix);
 
-        clear();
+        reset();
 
         return picture;
     }

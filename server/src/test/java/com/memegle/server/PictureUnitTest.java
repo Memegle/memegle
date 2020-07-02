@@ -69,7 +69,7 @@ class PictureUnitTest {
         });
 
         // builder can fail to clear due to previous exception
-        builder.clear();
+        builder.reset();
 
         // Missing name
         assertThrows(Exception.class, () -> {
