@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Controller
 public class PictureController {
     // Constants
-    private final static int ELE_PER_PAGE = 10;
+    public final static int PIC_PER_PAGE = 10;
 
     private final PictureRepository pictureRepo;
     private final PictureSearchRepository searchRepo;
@@ -89,7 +89,7 @@ public class PictureController {
             return null;
         }
 
-        Pageable pageable = PageRequest.of(query.page, ELE_PER_PAGE);
+        Pageable pageable = PageRequest.of(query.page, PIC_PER_PAGE);
 
         LOGGER.info("Querying:\n" + query);
 

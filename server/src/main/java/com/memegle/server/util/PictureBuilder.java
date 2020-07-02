@@ -33,6 +33,7 @@ public class PictureBuilder {
 
     public PictureBuilder withDate(Date date) {
         this.date = date;
+        dateSet = true;
 
         return this;
     }
@@ -52,6 +53,17 @@ public class PictureBuilder {
         pic.setId(search.getId());
 
         return pic;
+    }
+
+    public void clear() {
+        this.id = -1;
+        this.name = null;
+        this.date = null;
+        this.urlSuffix = null;
+        this.idSet = false;
+        this.nameSet = false;
+        this.dateSet = false;
+        this.urlSet = false;
     }
 
     public Picture build() throws Exception {
@@ -83,6 +95,8 @@ public class PictureBuilder {
         }
 
         picture.setUrlSuffix(this.urlSuffix);
+
+        clear();
 
         return picture;
     }
