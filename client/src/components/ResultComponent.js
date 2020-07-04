@@ -31,7 +31,7 @@ class Result extends Component {
             });
         
             const request = fetch('http://localhost:8080/actuator/health');
-        
+
             console.log('querying localhost...');
             return Promise.race([timeout, request])
                 .then(response => {
@@ -93,6 +93,7 @@ class Result extends Component {
         }
         event.preventDefault();
         console.log(this.state.value);
+        document.title = this.state.value + " - Memegle"
         this.setState({ toNewResult: true });
     }
 
@@ -163,7 +164,6 @@ class RenderImages extends Component {
     }
 
     render() {
-
         const createPhotoSet = (imageUrls) => {
             let photoSet = [];
             for (let i = 0; i < imageUrls.length; i++) {
