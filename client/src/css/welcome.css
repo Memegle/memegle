@@ -1,52 +1,59 @@
 .home-header {
-  padding-top: 100px;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
+  border: 4px solid white;
+  border-radius: 10px;
+}
+
+.home-logo-div {
   align-items: center;
   justify-content: center;
 }
 
 .home-logo {
-  width: 50%;
+  padding-top: 50px;
+  width: 70%;
   padding-bottom: 20px;
+}
+
+.home-search-bar-div {
+  padding-bottom: 50px;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 .home-search-bar {
   padding-left: 10px;
   align-content: center;
   min-height: 40px;
-  width: 55%;
-  border-radius: 80px;
-  border-width: 1px;
+  width: 90%;
+  border-color: white;
+  border-radius: 50px;
+  border-width: 2px;
+  background-color:black;
+  color: white;
 }
 
-.top-buttons-div {
-  padding-top: 10px;
-  padding-left: 10px;
+.button-search {
+  background-color: black;
+  color: white;
+  transition: .5s ease;
+  border-radius: 10px;
+  border: 3px solid white;
 }
 
-.top-buttons {
-  border: none;
-  background: none;
-  text-decoration: underline;
-}
-
-.bottom-buttons-div {
-  padding-top: 50px;
+.center {
   display: flex;
+  align-items: center;
   justify-content: center;
 }
 
-.Button-search {
-  transition: .5s ease;
-  border: 5px solid transparent;
+.text {
+  margin-top: 100px;
+  margin-left: 10%;
+  margin-right: 10%;
+  color: white;
 }
-
-.Button-feelingLucky {
-  margin-left: 50px;
-  transition: .5s ease;
-  border: 5px solid transparent;
-}
-
-
-
