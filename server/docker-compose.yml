@@ -75,7 +75,7 @@ services:
       - mongo-setup
       - es
     ports:
-      - 8081:8080
+      - 8081:8080     # host-port:container-port
     links:
       - mongo1:mongo1
       - es:es
