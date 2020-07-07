@@ -74,7 +74,6 @@ class PictureUnitTest {
         // Missing name
         assertThrows(Exception.class, () -> {
             Picture pp = builder.withId(id).withDate(date).withUrlSuffix(urlSuffix).build();
-            System.err.println(pp.getName());
         });
     }
 }
