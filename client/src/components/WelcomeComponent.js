@@ -52,7 +52,7 @@ class Welcome extends React.Component {
                                     value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
                             </div>
                             <div className='col-md-3 center'>
-                                <button className='button-search' onClick={this.handleSubmit}><b>搜图 :)</b></button>
+                                <button className='button-search' onClick={this.handleSubmit}>搜图 :)</button>
                             </div>
                         </div>
                     </div>

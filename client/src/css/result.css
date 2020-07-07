@@ -15,13 +15,20 @@
     border-width: 1px;
     width: 100%;
     height: 80%;
+    border: 3px solid white;
+    box-sizing: border-box;
+    border-radius: 30px;
+    background-color:black;
+    color: white;
 }
 
 .logo {
-    width: 90%;
+    height: 100%;
 }
 
 .img-div {
     display: flex;
     align-items: center;
+    justify-content: center;
+    height: 50px;
 }

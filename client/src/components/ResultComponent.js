@@ -3,6 +3,8 @@ import Gallery from 'react-photo-gallery';
 import * as QueryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 import '../css/result.css';
+import logo from '../assets/logo-mm-hollow.png';
+import coloredLogo from '../assets/logo-mm-transparent.png';
 
 class Result extends Component {
     constructor(props) {
@@ -13,7 +15,8 @@ class Result extends Component {
             imageUrls: [],
             toWelcome: false,
             toNewResult: false,
-            value: ''
+            value: '',
+            logo: logo
         };
 
         this.queryString = QueryString.parse(this.props.queryString);
@@ -22,6 +25,7 @@ class Result extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
+        this.switchLogo = this.switchLogo.bind(this);
     }
 
     componentDidMount() {
@@ -101,6 +105,15 @@ class Result extends Component {
             this.handleSubmit(event);
         }
     }
+
+    switchLogo(event) {
+        if (this.state.logo === logo) {
+            this.setState({ logo: coloredLogo });
+        }
+        else {
+            this.setState({ logo: logo });
+        }
+    }
     
     render() {
 
@@ -138,11 +151,16 @@ class Result extends Component {
             return (
                 <div className='container'>
                     <div className='row top'>
-                        <div className='col-md-3 img-div'>
-                            <img src={require('../assets/Memegle.png')} className='logo' alt='none' onClick={this.handleLogoClick} />
+                        <div className='col-md-1 img-div'>
+                            <img src={this.state.logo} className='logo' alt='none' onClick={this.handleLogoClick}
+                                onMouseEnter={this.switchLogo} onMouseLeave={this.switchLogo}/>
                         </div>
                         <div className='col-md-9 search-bar-div'>
-                            <input className='search-bar' type='text' value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
+                            <input className='search-bar' type='text' value={this.state.value} placeholder='关键词'
+                                onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
+                        </div>
+                        <div className='col-md-2 center'>
+                                <button className='button-search' onClick={this.handleSubmit}><b>搜图 :)</b></button>
                         </div>
                     </div>
                     <div className="row">

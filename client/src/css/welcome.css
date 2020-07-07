@@ -30,9 +30,10 @@
   align-content: center;
   min-height: 40px;
   width: 90%;
-  border-color: white;
-  border-radius: 50px;
-  border-width: 2px;
+  border: 3px solid white;
+  box-sizing: border-box;
+  box-shadow: inset -4px -6px 10px #FFFFFF;
+  border-radius: 30px;
   background-color:black;
   color: white;
 }
@@ -41,7 +42,7 @@
   background-color: black;
   color: white;
   transition: .5s ease;
-  border-radius: 10px;
+  border-radius: 30px;
   border: 3px solid white;
 }
 
@@ -56,4 +57,8 @@
   margin-left: 10%;
   margin-right: 10%;
   color: white;
+}
+
+input:focus {
+  outline: none;
 }
