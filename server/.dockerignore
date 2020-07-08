@@ -10,3 +10,10 @@ build/**/*
 build
 
 gradle/
+
+Dockerfile
+docker-compose.yml
+.gitignore
+init-mongo.js
+monstache.config.toml
+README.md

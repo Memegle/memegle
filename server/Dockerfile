@@ -9,9 +9,14 @@ RUN gradle clean build --no-daemon > /dev/null 2>&1 || true
 # Build ENV base image
 FROM gradle:6.3.0-jdk8 AS build
 COPY --chown=gradle:gradle --from=cache /home/gradle/cache_home /home/gradle/.gradle
-COPY . /home/gradle/src
-WORKDIR /home/gradle/src
 
+COPY build.gradle settings.gradle /home/gradle/src/
+# Separate resources copying for docker to cache it.
+COPY ./src/main/resources /home/gradle/src/src/main/resources
+COPY ./src/main/java /home/gradle/src/src/main/java
+COPY ./src/test /home/gradle/src/src/test
+
+WORKDIR /home/gradle/src
 # Exclude test for the time being
 RUN gradle build -i --no-daemon -x test
 
