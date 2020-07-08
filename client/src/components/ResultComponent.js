@@ -5,6 +5,7 @@ import { Redirect } from 'react-router-dom';
 import '../css/result.css';
 import logo from '../assets/logo-mm-hollow.png';
 import coloredLogo from '../assets/logo-mm-transparent.png';
+import frame from '../assets/frame.png';
 
 class Result extends Component {
     constructor(props) {
@@ -164,9 +165,9 @@ class Result extends Component {
                         </div>
                     </div>
                     <div className="row">
-                        <RenderImages error={this.state.error}
-                            isLoaded={this.state.isLoaded}
-                            imageUrls={this.state.imageUrls} />
+                        <div className='image-div'>
+                            <img src={this.state.imageUrls[0]} className='image' alt='none'/>
+                        </div>
                     </div>
                 </div>
             );
