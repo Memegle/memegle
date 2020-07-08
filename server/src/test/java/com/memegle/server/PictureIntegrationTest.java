@@ -1,13 +1,10 @@
 package com.memegle.server;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import com.memegle.server.controller.PictureController;
 import com.memegle.server.dto.SearchQuery;
 import com.memegle.server.repository.PictureRepository;
 import com.memegle.server.util.Constants;
-import io.micrometer.core.instrument.search.Search;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -67,7 +64,7 @@ class PictureIntegrationTest {
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(query)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(PictureController.PIC_PER_PAGE)))
+                .andExpect(jsonPath("$", hasSize(10)))
                 .andExpect(jsonPath("$[0]", startsWith(Constants.BASE_URL)))
                 .andReturn();
 
