@@ -1,1 +1,0 @@
-You can clearly tell that we need a client side of the project :(
