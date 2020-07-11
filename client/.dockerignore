@@ -1,0 +1,11 @@
+# git
+.git
+.gitignore
+
+# build files
+node_modules
+build
+
+*.md
+*.txt
+Dockerfile

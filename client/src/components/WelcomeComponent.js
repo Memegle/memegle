@@ -35,8 +35,10 @@ class Welcome extends React.Component {
     }
 
     render() {
+        document.title = "Memegle"
         if (this.state.toResult) {
             const newRoute = '/search?keyword=' + this.state.value + '&page=0';
+            document.title = this.state.value + " - Memegle"
             return <Redirect to={newRoute} />;
         }
         else {

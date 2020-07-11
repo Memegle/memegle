@@ -24,14 +24,13 @@ import java.util.stream.Collectors;
 @Controller
 public class PictureController {
     // Constants
-    private final static int ELE_PER_PAGE = 10;
+    private final static int PIC_PER_PAGE = 10;
 
     private final PictureRepository pictureRepo;
     private final PictureSearchRepository searchRepo;
 
     // Logging
     private static final Logger LOGGER = LoggerFactory.getLogger(PictureController.class);
-    private static long count = 0;
 
     public PictureController(PictureRepository pictureRepo, PictureSearchRepository searchRepository) {
         this.pictureRepo = pictureRepo;
@@ -47,7 +46,6 @@ public class PictureController {
     @GetMapping("/all")
     @ResponseBody
     public List<Picture> all(){
-        LOGGER.info("Request: GET /all");
         return pictureRepo.findAll();
     }
 
@@ -68,7 +66,6 @@ public class PictureController {
     @GetMapping("/random")
     @ResponseBody
     public String random() {
-        LOGGER.info("random() called " + ++count + " times.");
         Random random = new Random();
         long count = this.pictureRepo.count();
         if (count <= 0) {
@@ -89,7 +86,7 @@ public class PictureController {
             return null;
         }
 
-        Pageable pageable = PageRequest.of(query.page, ELE_PER_PAGE);
+        Pageable pageable = PageRequest.of(query.page, PIC_PER_PAGE);
 
         LOGGER.info("Querying:\n" + query);
 
@@ -101,7 +98,6 @@ public class PictureController {
 
     @GetMapping(value = "/welcome")
     public String welcome(HttpServletRequest request) {
-        LOGGER.info("GET (/welcome) Request from ip: " + request.getRemoteAddr());
         return "index.html";
     }
 

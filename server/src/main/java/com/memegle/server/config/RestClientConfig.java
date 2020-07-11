@@ -3,7 +3,10 @@
  */
 package com.memegle.server.config;
 
+import org.apache.http.HttpHost;
+import org.apache.http.client.config.RequestConfig;
 import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +21,18 @@ public class RestClientConfig extends AbstractElasticsearchConfiguration {
 
     @Override
     public RestHighLevelClient elasticsearchClient() {
-        final ClientConfiguration clientConfiguration = ClientConfiguration.builder()
-                .connectedTo(System.getenv("ES_URI"))   // need to set env variable for this to work on localhost
-                .build();
+        String url = System.getenv("ES_URI");
+        if (url == null) {
+            url = "localhost:9200";
+        }
 
-        return RestClients.create(clientConfiguration).rest();
+        RestClientBuilder builder = RestClient.builder(HttpHost.create(url))
+                .setRequestConfigCallback(requestConfigBuilder -> requestConfigBuilder
+                        .setConnectTimeout(5000)
+                        .setSocketTimeout(120000)
+                );
+
+        return new RestHighLevelClient(builder);
     }
 
     @Bean

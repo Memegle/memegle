@@ -3,7 +3,6 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 	id 'war'
-	id 'base'
 }
 
 group = 'com.memegle'
@@ -27,9 +26,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
 
 	// Mongock dependencies
 	// https://github.com/cloudyrock/mongock#springBootMongock-build-parameters
@@ -42,6 +38,12 @@ dependencies {
 	// Spring Actuator
 	// https://www.baeldung.com/spring-boot-actuators
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+
+	testImplementation 'org.hamcrest:hamcrest:2.2'
 }
 
 test {

@@ -1,27 +1,39 @@
-version: '3'
+version: '3.6'
 
 services:
-  web:
+  client:
     build:
-      context: .
+      context: ./client
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+    ports:
+      - 80:80
+    depends_on:
+      - server
+    restart: on-failure
+    entrypoint: ["serve", "-s", "build", "-l", "80"]
+
+  server:
+    build:
+      context: ./server
       dockerfile: Dockerfile
     environment:
       - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs0
       - ES_URI=es:9200
-      - MEMEGLE_APP_PRODUCTION_MODE=${MEMEGLE_APP_PRODUCTION_MODE}
+      - MEMEGLE_APP_PRODUCTION_MODE=true
     ports:
       - 8080:8080
     depends_on:
-      - mongo1
-      - es
       - monstache
     links:
       - mongo1
       - es
+    entrypoint: ["sh", "init-boot.sh"]
 
   mongo1:
     hostname: mongo1
-    container_name: localmongo1
+    container_name: mongo1
     image: mongo:4.0-xenial
     expose:
       - 27017
@@ -30,20 +42,18 @@ services:
     restart: always
     volumes:
       - rs1:/data/db
-      #- ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
 
-  mongo-setup:
+  init-mongo-rs:
     image: mongo:4.0-xenial
     links:
-      - mongo1:mongo1
+      - mongo1
     depends_on:
       - mongo1
     volumes:
-      - ./scripts/sh:/scripts
+      - ./scripts:/scripts
     entrypoint: ["sh", "/scripts/mongo_init.sh"]
 
-# https://www.docker.elastic.co/r/elasticsearch
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.8.7
     container_name: elasticsearch
@@ -63,6 +73,7 @@ services:
       - 9300:9300
     restart: always
 
+
   # https://rwynn.github.io/monstache-site/start/
   monstache:
     image: rwynn/monstache:rel5
@@ -72,15 +83,14 @@ services:
     volumes:
       - ./monstache.config.toml:/app/monstache.config.toml
     depends_on:
-      - mongo-setup
+      - init-mongo-rs
       - es
     ports:
-      - 8081:8080
+      - 8081:8080     # host-port:container-port
     links:
       - mongo1:mongo1
       - es:es
     restart: always
-
 
 volumes:
   rs1:
