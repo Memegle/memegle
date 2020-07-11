@@ -49,11 +49,11 @@ class Welcome extends React.Component {
                             <img src={require('../assets/Memegle.png')} className='home-logo' alt='none'/>
                         </div>
                         <div className='row home-search-bar-div'>
-                            <div className='col-md-9 center'>
+                            <div className='col-9 center'>
                                 <input className='home-search-bar' type='text' placeholder='热门关键词...'
                                        value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
                             </div>
-                            <div className='col-md-offset-1 center'>
+                            <div className='center'>
                                 <button className='button-search' onClick={this.handleSubmit}>搜图 :)</button>
                             </div>
                         </div>
