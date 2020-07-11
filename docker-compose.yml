@@ -4,21 +4,33 @@ services:
   client:
     build:
       context: ./client
-      dockerfile: Dockerfile
-    environment:
-      - NODE_ENV=production
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./client:/app
+      - ./client/node_modules:/app/node_modules
     ports:
-      - 80:80
-    depends_on:
+      - 3000:3000
+    links:
       - server
-    restart: on-failure
-    entrypoint: ["serve", "-s", "build", "-l", "80"]
+    tty: true
+    command: npm start
 
-  server:
+  build_server:
     build:
       context: ./server
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./server/build:/home/gradle/src/build
+      - ./server/.gradle:/home/gradle/src/.gradle
+
+  server:
+    image: tomcat:9-jdk8-openjdk
+    volumes:
+      # TODO: I think this could be handled better, e.g. change .war filename
+      - ./server/build/libs/server-0.0.1-SNAPSHOT.war:/usr/local/tomcat/webapps/ROOT.war
+      - ./server/scripts/init-boot.sh:/usr/local/tomcat/init-boot.sh
     environment:
+      - CATALINA_OPTS=-Dsecurerandom.source=file:/dev/urandom
       - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs0
       - ES_URI=es:9200
       - MEMEGLE_APP_PRODUCTION_MODE=true
