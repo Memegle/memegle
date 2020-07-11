@@ -48,10 +48,10 @@ class Welcome extends React.Component {
                         </div>
                         <div className='row home-search-bar-div'>
                             <div className='col-md-9 center'>
-                                <input className='home-search-bar' type='text' placeholder='热门关键词' 
-                                    value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
+                                <input className='home-search-bar' type='text' placeholder='热门关键词...'
+                                       value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
                             </div>
-                            <div className='col-md-3 center'>
+                            <div className='col-md-offset-1 center'>
                                 <button className='button-search' onClick={this.handleSubmit}>搜图 :)</button>
                             </div>
                         </div>
