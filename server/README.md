@@ -3,6 +3,8 @@ source code for Memegle server
 
 ## Running Scripts
 We have a few python scripts of various purposes.
+
+(All paths are relative to current directory)
 ### MemeScrapper
 `python3 ./scripts/MemeScrapper.py [start_id] [num_pics]`
 
