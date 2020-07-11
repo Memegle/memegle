@@ -1,7 +1,6 @@
 #!/bin/bash
 
 docker-compose stop server
-docker-copmose stop client
 pip3 install -r ./server/scripts/requirement.txt
 docker-compose build
 docker-compose run --rm build_server gradle build -i --no-daemon -x test
