@@ -30,6 +30,8 @@ class Result extends Component {
     }
 
     componentDidMount() {
+        this.setState({ value: this.queryString.keyword });
+
         const checkServerStatus = () => {
             const timeout = new Promise((resolve, reject) => {
                 setTimeout(reject, 30000, 'Request timed out');
@@ -54,7 +56,7 @@ class Result extends Component {
             }
             else {
                 console.log('can\'t reach local server, using \'http://memegle.qicp.vip:8080/search\'');
-                this.serverUrl = 'http://memegle.qicp.vip:8080/search'
+                this.serverUrl = 'http://memegle.live:8080/search'
             }
 
             fetch(this.serverUrl, {
@@ -119,21 +121,26 @@ class Result extends Component {
     
     render() {
 
-        /*const RenderImages = ({error, isLoaded, imageUrls}) => {
+        const RenderImages = ({error, isLoaded, imageUrls}) => {
             if (error) {
                 return <div>Error: {error.message}</div>;
             } else if (!isLoaded) {
                 return <div>Loading...</div>;
             } else {
-                let photoSet = createPhotoSet(imageUrls);
-                console.log(photoSet);
                 return (
-                    <Gallery photos={photoSet} />
+                    <React.Fragment>
+                        {imageUrls.map(url => 
+                            <div className='image-div' key={url}>
+                                <img src={url} className='image' alt='none' />
+                                <div className='frame'></div>
+                            </div>
+                        )}
+                    </React.Fragment>
                 );
             }
         }
         
-        const createPhotoSet = (imageUrls) => {
+        /*const createPhotoSet = (imageUrls) => {
             let photoSet = []
             for (let i = 0; i < imageUrls.length; i++) {
                 photoSet.push({src: imageUrls[i], width: 1, height: 1});
@@ -165,11 +172,8 @@ class Result extends Component {
                                 <button className='result-search-button' onClick={this.handleSubmit}><b>搜图 :)</b></button>
                         </div>
                     </div>
-                    <div className="row">
-                        <div className='image-div'>
-                            <img src={require('../assets/33.jpg')} className='image' alt='none'/>
-                            <div className='frame'></div>
-                        </div>
+                    <div className="row gallery">
+                        <RenderImages error={this.state.error} isLoaded={this.state.isLoaded} imageUrls={this.state.imageUrls}/>
                     </div>
                 </div>
             );
@@ -177,7 +181,7 @@ class Result extends Component {
     }
 }
 
-class RenderImages extends Component {
+/*class RenderImages extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.imageUrls !== nextProps.imageUrls;
@@ -205,6 +209,6 @@ class RenderImages extends Component {
             );
         }
     }
-}
+}*/
 
 export default Result;

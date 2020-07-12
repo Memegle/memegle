@@ -43,6 +43,7 @@
 }
 
 .image-div {
+    margin: 10px;
     width: 200px;
     height: 200px;
     display: flex;
@@ -61,4 +62,9 @@
     background-size: contain;
     width: 200px;
     height: 200px;
+}
+
+.gallery {
+    display: inline-flex;
+    flex-direction: row;
 }
