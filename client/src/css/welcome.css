@@ -34,7 +34,7 @@
   width: 90%;
   border: 3px solid white;
   box-sizing: border-box;
-  box-shadow: inset -4px -6px 10px #FFFFFF;
+  box-shadow: inset -2px -3px 5px #FFFFFF;
   border-radius: 30px;
   background-color:black;
   color: white;
@@ -51,6 +51,7 @@
   transition: .5s ease;
   border-radius: 30px;
   border: 3px solid white;
+  height: 40px;
 }
 
 .center {

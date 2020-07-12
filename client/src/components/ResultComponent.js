@@ -153,7 +153,7 @@ class Result extends Component {
             return (
                 <div className='container'>
                     <div className='row top'>
-                        <div className='col-1 img-div'>
+                        <div className='img-div'>
                             <img src={this.state.logo} className='logo' alt='none' onClick={this.handleLogoClick}
                                 onMouseEnter={this.switchLogo} onMouseLeave={this.switchLogo}/>
                         </div>
@@ -161,13 +161,14 @@ class Result extends Component {
                             <input className='search-bar' type='text' value={this.state.value} placeholder='关键词'
                                 onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
                         </div>
-                        <div className='col-2 center'>
-                                <button className='button-search' onClick={this.handleSubmit}><b>搜图 :)</b></button>
+                        <div className='center'>
+                                <button className='result-search-button' onClick={this.handleSubmit}><b>搜图 :)</b></button>
                         </div>
                     </div>
                     <div className="row">
                         <div className='image-div'>
-                            <img src={require('../assets/logo-mm-transparent.png')} className='image' alt='none'/>
+                            <img src={require('../assets/33.jpg')} className='image' alt='none'/>
+                            <div className='frame'></div>
                         </div>
                     </div>
                 </div>
