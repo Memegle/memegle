@@ -1,3 +1,8 @@
+.container {
+  width:auto;
+  height:auto;
+}
+
 .home-header {
   margin-left: 10%;
   margin-right: 10%;
@@ -34,10 +39,13 @@
   width: 90%;
   border: 3px solid white;
   box-sizing: border-box;
-  box-shadow: inset -2px -3px 5px #FFFFFF;
   border-radius: 30px;
   background-color:black;
   color: white;
+}
+
+.home-search-bar:focus {
+  box-shadow: inset -2px -3px 5px #FFFFFF;
 }
 
 ::placeholder {
@@ -52,6 +60,10 @@
   border-radius: 30px;
   border: 3px solid white;
   height: 40px;
+}
+
+.button-search:focus {
+  box-shadow: inset -2px -3px 5px #FFFFFF;
 }
 
 .center {
