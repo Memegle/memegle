@@ -33,7 +33,6 @@ services:
       - CATALINA_OPTS=-Dsecurerandom.source=file:/dev/urandom
       - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs0
       - ES_URI=es:9200
-      - MEMEGLE_APP_PRODUCTION_MODE=true
     ports:
       - 8080:8080
     depends_on:
