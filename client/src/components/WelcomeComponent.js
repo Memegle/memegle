@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import '../css/welcome.css';
+import '../index.css'
 
 class Welcome extends React.Component {
     constructor(props) {

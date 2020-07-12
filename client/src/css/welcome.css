@@ -3,6 +3,11 @@
   height:auto;
 }
 
+body {
+  font-family: "ZCOOL KuaiLe";
+  font-size: 16px;
+}
+
 .home-header {
   margin-left: 10%;
   margin-right: 10%;
@@ -27,7 +32,7 @@
 .home-search-bar-div {
   padding-top: 5%;
   padding-bottom: 8%;
-  padding-left: 13%;
+  padding-left: 14%;
   padding-right: 4%;
   position: relative;
 }
@@ -50,7 +55,6 @@
 
 ::placeholder {
   color: white;
-  font-family: ZCOOL KuaiLe;
 }
 
 .button-search {
@@ -60,16 +64,19 @@
   border-radius: 30px;
   border: 3px solid white;
   height: 40px;
+  width: 70px;
 }
 
 .button-search:focus {
   box-shadow: inset -2px -3px 5px #FFFFFF;
+  outline: none
 }
 
 .center {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: -1%;
 }
 
 .text {
@@ -77,7 +84,6 @@
   margin-left: 10%;
   margin-right: 10%;
   color: white;
-  font-family: ZCOOL KuaiLe;
   font-weight: normal;
   font-style: normal;
 }
