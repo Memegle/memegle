@@ -23,3 +23,8 @@ Client will be up on [localhost:3000]() and Server should be up on [localhost:80
 Default ports: 27017 for MongoDB; 9200 for ElasticSearch.
 
 (hot reload should be working for client, i.e. changes in the client code should be directly reflected on localhost:3000)
+
+## Other Notices
+- If you see on terminal that monstache complains query to elasticsearch is FORBIDDEN with messages similar to something like READ_ONLY is set, it's probably because you're using up the space in your docker virtual machine. To fix this run the following commands (with elasticsearch container running).
+    - `docker system prune` (this will remove unused images/containers/volumes)
+    - `./scripts/reset-es-readonly.sh` (this will disable read-only property on elasticsearch)
