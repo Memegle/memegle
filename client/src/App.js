@@ -20,14 +20,12 @@ const setServerUrl = () => {
     LOG('querying localhost...');
     Promise.race([timeout, request])
         .then(response => {
-            LOG('Local is up, using localhost');
             serverUrl = 'http://localhost:8080';
-            urlChecked = true;
+            LOG('Local is up, using ' + serverUrl);
         })
         .catch(error => {
-            LOG('Can\'t connect to localhost, using memegle.live');
             serverUrl = 'http://www.memegle.live:8080';
-            urlChecked = true;
+            LOG('Can\'t connect to localhost, using ' + serverUrl);
         })
 };
 
