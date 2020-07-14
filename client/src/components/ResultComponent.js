@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import Gallery from 'react-photo-gallery';
 import * as QueryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 import '../css/result.css';
 import logo from '../assets/logo-mm-hollow.png';
 import coloredLogo from '../assets/logo-mm-transparent.png';
-import frame from '../assets/frame.png';
 
 class Result extends Component {
     constructor(props) {
@@ -55,8 +53,8 @@ class Result extends Component {
                 this.serverUrl = 'http://localhost:8080/search'
             }
             else {
-                console.log('can\'t reach local server, using \'http://memegle.qicp.vip:8080/search\'');
-                this.serverUrl = 'http://memegle.live:8080/search'
+                this.serverUrl = 'http://memegle.live:8080/search';
+                console.log('can\'t reach local server, using ' + this.serverUrl);
             }
 
             fetch(this.serverUrl, {
@@ -100,7 +98,7 @@ class Result extends Component {
         }
         event.preventDefault();
         console.log(this.state.value);
-        document.title = this.state.value + " - Memegle"
+        document.title = this.state.value + " - Memegle";
         this.setState({ toNewResult: true });
     }
 
@@ -139,14 +137,6 @@ class Result extends Component {
                 );
             }
         }
-        
-        /*const createPhotoSet = (imageUrls) => {
-            let photoSet = []
-            for (let i = 0; i < imageUrls.length; i++) {
-                photoSet.push({src: imageUrls[i], width: 1, height: 1});
-            }
-            return photoSet;
-        }*/
 
 
         if (this.state.toWelcome) {
@@ -181,34 +171,5 @@ class Result extends Component {
     }
 }
 
-/*class RenderImages extends Component {
-
-    shouldComponentUpdate(nextProps, nextState) {
-        return this.props.imageUrls !== nextProps.imageUrls;
-    }
-
-    render() {
-        const createPhotoSet = (imageUrls) => {
-            let photoSet = [];
-            for (let i = 0; i < imageUrls.length; i++) {
-                photoSet.push({src: imageUrls[i], width: 1, height: 1});
-            }
-            return photoSet;
-        };
-
-        let {error, isLoaded, imageUrls} = this.props;
-        if (error) {
-            return <div>Error: {error.message}</div>;
-        } else if (!isLoaded) {
-            return <div>Loading...</div>;
-        } else {
-            let photoSet = createPhotoSet(imageUrls);
-            console.log(photoSet);
-            return (
-                <Gallery photos={photoSet} />
-            );
-        }
-    }
-}*/
 
 export default Result;
