@@ -96,6 +96,11 @@ public class PictureController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/secrets/{name}")
+    public String secrets(HttpServletRequest request, @PathVariable String name) {
+        return name + "/index.html";
+    }
+
     @GetMapping(value = "/welcome")
     public String welcome(HttpServletRequest request) {
         return "index.html";
