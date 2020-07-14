@@ -3,6 +3,9 @@ import Gallery from 'react-photo-gallery';
 import * as QueryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 import '../css/result.css';
+import logo from '../assets/logo-mm-hollow.png';
+import coloredLogo from '../assets/logo-mm-transparent.png';
+import frame from '../assets/frame.png';
 
 class Result extends Component {
     constructor(props) {
@@ -13,7 +16,8 @@ class Result extends Component {
             imageUrls: [],
             toWelcome: false,
             toNewResult: false,
-            value: ''
+            value: '',
+            logo: logo
         };
 
         this.queryString = QueryString.parse(this.props.queryString);
@@ -22,9 +26,12 @@ class Result extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
+        this.switchLogo = this.switchLogo.bind(this);
     }
 
     componentDidMount() {
+        this.setState({ value: this.queryString.keyword });
+
         const checkServerStatus = () => {
             const timeout = new Promise((resolve, reject) => {
                 setTimeout(reject, 30000, 'Request timed out');
@@ -49,7 +56,7 @@ class Result extends Component {
             }
             else {
                 console.log('can\'t reach local server, using \'http://memegle.qicp.vip:8080/search\'');
-                this.serverUrl = 'http://memegle.qicp.vip:8080/search'
+                this.serverUrl = 'http://memegle.live:8080/search'
             }
 
             fetch(this.serverUrl, {
@@ -102,24 +109,38 @@ class Result extends Component {
             this.handleSubmit(event);
         }
     }
+
+    switchLogo(event) {
+        if (this.state.logo === logo) {
+            this.setState({ logo: coloredLogo });
+        }
+        else {
+            this.setState({ logo: logo });
+        }
+    }
     
     render() {
 
-        /*const RenderImages = ({error, isLoaded, imageUrls}) => {
+        const RenderImages = ({error, isLoaded, imageUrls}) => {
             if (error) {
                 return <div>Error: {error.message}</div>;
             } else if (!isLoaded) {
                 return <div>Loading...</div>;
             } else {
-                let photoSet = createPhotoSet(imageUrls);
-                console.log(photoSet);
                 return (
-                    <Gallery photos={photoSet} />
+                    <React.Fragment>
+                        {imageUrls.map(url => 
+                            <div className='image-div' key={url}>
+                                <img src={url} className='image' alt='none' />
+                                <div className='frame'></div>
+                            </div>
+                        )}
+                    </React.Fragment>
                 );
             }
         }
         
-        const createPhotoSet = (imageUrls) => {
+        /*const createPhotoSet = (imageUrls) => {
             let photoSet = []
             for (let i = 0; i < imageUrls.length; i++) {
                 photoSet.push({src: imageUrls[i], width: 1, height: 1});
@@ -139,17 +160,20 @@ class Result extends Component {
             return (
                 <div className='container'>
                     <div className='row top'>
-                        <div className='col-md-3 img-div'>
-                            <img src={require('../assets/Memegle.png')} className='logo' alt='none' onClick={this.handleLogoClick} />
+                        <div className='img-div'>
+                            <img src={this.state.logo} className='logo' alt='none' onClick={this.handleLogoClick}
+                                onMouseEnter={this.switchLogo} onMouseLeave={this.switchLogo}/>
                         </div>
-                        <div className='col-md-9 search-bar-div'>
-                            <input className='search-bar' type='text' value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
+                        <div className='col-9 search-bar-div'>
+                            <input className='search-bar' type='text' value={this.state.value} placeholder='关键词'
+                                onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
+                        </div>
+                        <div className='center'>
+                                <button className='result-search-button' onClick={this.handleSubmit}><b>搜图 :)</b></button>
                         </div>
                     </div>
-                    <div className="row">
-                        <RenderImages error={this.state.error}
-                            isLoaded={this.state.isLoaded}
-                            imageUrls={this.state.imageUrls} />
+                    <div className="row gallery">
+                        <RenderImages error={this.state.error} isLoaded={this.state.isLoaded} imageUrls={this.state.imageUrls}/>
                     </div>
                 </div>
             );
@@ -157,7 +181,7 @@ class Result extends Component {
     }
 }
 
-class RenderImages extends Component {
+/*class RenderImages extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.imageUrls !== nextProps.imageUrls;
@@ -185,6 +209,6 @@ class RenderImages extends Component {
             );
         }
     }
-}
+}*/
 
 export default Result;

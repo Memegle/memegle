@@ -1,52 +1,93 @@
+.container {
+  width:auto;
+  height:auto;
+}
+
+body {
+  font-family: "ZCOOL KuaiLe";
+  font-size: 16px;
+}
+
 .home-header {
-  padding-top: 100px;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
+  border: 4px solid white;
+  border-radius: 10px;
+}
+
+.home-logo-div {
   align-items: center;
   justify-content: center;
 }
 
 .home-logo {
-  width: 50%;
+  padding-top: 50px;
+  width: 70%;
   padding-bottom: 20px;
+}
+
+.home-search-bar-div {
+  padding-top: 5%;
+  padding-bottom: 8%;
+  padding-left: 14%;
+  padding-right: 4%;
+  position: relative;
 }
 
 .home-search-bar {
   padding-left: 10px;
   align-content: center;
   min-height: 40px;
-  width: 55%;
-  border-radius: 80px;
-  border-width: 1px;
+  width: 90%;
+  border: 3px solid white;
+  box-sizing: border-box;
+  border-radius: 30px;
+  background-color:black;
+  color: white;
 }
 
-.top-buttons-div {
-  padding-top: 10px;
-  padding-left: 10px;
+.home-search-bar:focus {
+  box-shadow: inset -2px -3px 5px #FFFFFF;
 }
 
-.top-buttons {
-  border: none;
-  background: none;
-  text-decoration: underline;
+::placeholder {
+  color: white;
 }
 
-.bottom-buttons-div {
-  padding-top: 50px;
+.button-search {
+  background-color: black;
+  color: white;
+  transition: .5s ease;
+  border-radius: 30px;
+  border: 3px solid white;
+  height: 40px;
+  width: 70px;
+}
+
+.button-search:focus {
+  box-shadow: inset -2px -3px 5px #FFFFFF;
+  outline: none
+}
+
+.center {
   display: flex;
+  align-items: center;
   justify-content: center;
+  margin-left: -1%;
 }
 
-.Button-search {
-  transition: .5s ease;
-  border: 5px solid transparent;
+.text {
+  margin-top: 100px;
+  margin-left: 10%;
+  margin-right: 10%;
+  color: white;
+  font-weight: normal;
+  font-style: normal;
 }
 
-.Button-feelingLucky {
-  margin-left: 50px;
-  transition: .5s ease;
-  border: 5px solid transparent;
+input:focus {
+  outline: none;
 }
-
-
-

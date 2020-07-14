@@ -6,7 +6,7 @@
 .search-bar-div {
     display: flex;
     align-items: center;
-    height: 50px;
+    justify-content: center;
 }
 
 .search-bar {
@@ -14,14 +14,57 @@
     border-radius: 80px;
     border-width: 1px;
     width: 100%;
-    height: 80%;
+    height: 40px;
+    border: 3px solid white;
+    box-sizing: border-box;
+    border-radius: 30px;
+    background-color:black;
+    color: white;
 }
 
 .logo {
-    width: 90%;
+    height: 100%;
+}
+
+.result-search-button {
+    background-color: black;
+    color: white;
+    transition: .5s ease;
+    border-radius: 30px;
+    border: 3px solid white;
+    height: 40px;
 }
 
 .img-div {
     display: flex;
     align-items: center;
+    justify-content: center;
+    height: 50px;
+}
+
+.image-div {
+    margin: 10px;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image {
+    width: 78%;
+    height: 78%;
+}
+
+.frame {
+    position: absolute;
+    background: url(../assets/frame.png) no-repeat center;
+    background-size: contain;
+    width: 200px;
+    height: 200px;
+}
+
+.gallery {
+    display: inline-flex;
+    flex-direction: row;
 }

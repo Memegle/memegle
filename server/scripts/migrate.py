@@ -8,7 +8,7 @@ from shutil import copyfile
 from PIL import Image
 
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
-COPY = True
+COPY = False
 
 RAW_DATA_PATH = './raw/'
 STATIC_DATA_PATH = './src/main/resources/static/data/'
