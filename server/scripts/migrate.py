@@ -49,7 +49,7 @@ for img in img_files:
 
     seq += 1
 
-    picture = Image.open(img)
+    picture = Image.open(RAW_DATA_PATH + img)
     width, height = picture.size
 
     d = {
