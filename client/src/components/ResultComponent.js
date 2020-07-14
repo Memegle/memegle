@@ -5,7 +5,8 @@ import {Redirect} from 'react-router-dom';
 import '../css/result.css';
 import logo from '../assets/logo-mm-hollow.png';
 import coloredLogo from '../assets/logo-mm-transparent.png';
-import { LOG, getServerUrl } from "../util";
+import { LOG } from "../util";
+import { serverUrl } from "../App";
 
 class Result extends Component {
     constructor(props) {
@@ -20,9 +21,7 @@ class Result extends Component {
             logo: logo
         };
 
-
         this.queryString = QueryString.parse(this.props.queryString);
-        this.searchApi = getServerUrl() + '/search';
 
         this.handleLogoClick = this.handleLogoClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -35,7 +34,10 @@ class Result extends Component {
         LOG('In result page');
         this.setState({value: this.queryString.keyword});
 
-        fetch(this.searchApi, {
+        const searchApi = serverUrl + '/search';
+
+        LOG('querying ' + searchApi);
+        fetch(searchApi, {
             method: 'POST',
             body: JSON.stringify({
                 keyword: this.queryString.keyword,
@@ -47,13 +49,8 @@ class Result extends Component {
             }
         })
             .then(res => res.json())
-            .catch(err => {
-                this.setState({
-                    isLoaded: true,
-                    error: err
-                });
-            })
             .then(json => {
+                LOG(json);
                 this.setState({
                     isLoaded: true,
                     imageUrls: json

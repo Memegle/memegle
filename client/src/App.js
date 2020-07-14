@@ -1,9 +1,12 @@
 import React, {Component} from 'react';
 import {BrowserRouter} from 'react-router-dom';
-import config from 'react-global-configuration';
 
 import Main from './components/MainComponent';
 import {isInDevelopmentMode, LOG} from "./util";
+
+export var serverUrl = 'http://www.memegle.live:8080';
+
+let urlChecked = false;
 
 const setServerUrl = () => {
     const timeout = new Promise((resolve, reject) => {
@@ -16,20 +19,23 @@ const setServerUrl = () => {
     Promise.race([timeout, request])
         .then(response => {
             LOG('Local is up, using localhost');
-            config.set({serverUrl: 'http://localhost:8080'});
+            serverUrl = 'http://localhost:8080';
+            urlChecked = true;
         })
         .catch(error => {
             LOG('Can\'t connect to localhost, using memegle.live');
-            config.set({serverUrl: 'http://www.memegle.live:8080'})
+            serverUrl = 'http://www.memegle.live:8080';
+            urlChecked = true;
         })
 };
 
 class App extends Component {
-    componentWillMount() {
-        // server startup tasks
-        // need better ways, bc call to componentWillMount is causing warnings.
-        if (isInDevelopmentMode()) {
-            setServerUrl()
+    constructor(props) {
+        super(props);
+
+        if (isInDevelopmentMode() && !urlChecked) {
+            setServerUrl();
+            urlChecked = true;
         }
     }
 

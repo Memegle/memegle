@@ -1,5 +1,3 @@
-import config from 'react-global-configuration';
-
 export const isInDevelopmentMode = () => {
     return process.env.NODE_ENV !== 'production';
 };
@@ -10,7 +8,3 @@ export const LOG = (msg) => {
         console.log(msg);
     }
 };
-
-export const getServerUrl = () => {
-    return config.get('serverUrl');
-}
