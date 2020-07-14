@@ -58,7 +58,7 @@
 
 .frame {
     position: absolute;
-    background: url(../assets/frame.png) no-repeat center;
+    background: url(../../assets/frame.png) no-repeat center;
     background-size: contain;
     width: 200px;
     height: 200px;

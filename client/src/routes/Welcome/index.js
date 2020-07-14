@@ -1,9 +1,9 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { LOG } from '../util'
-import '../css/welcome.css';
-import '../index.css'
+import { LOG } from '../../util'
+import './welcome.css';
+import '../../index.css'
 
 class Welcome extends React.Component {
     constructor(props) {
@@ -52,7 +52,7 @@ class Welcome extends React.Component {
                 <div className='container'>
                     <div className='row home-header'>
                         <div className='row home-logo-div'>
-                            <img src={require('../assets/Memegle.png')} className='home-logo' alt='none'/>
+                            <img src={require('../../assets/Memegle.png')} className='home-logo' alt='none'/>
                         </div>
                         <div className='row home-search-bar-div'>
                             <div className='col-9 center'>

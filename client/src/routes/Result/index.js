@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import * as QueryString from 'query-string';
 import {Redirect} from 'react-router-dom';
 
-import '../css/result.css';
-import logo from '../assets/logo-mm-hollow.png';
-import coloredLogo from '../assets/logo-mm-transparent.png';
-import { LOG } from "../util";
-import { serverUrl } from "../App";
+import './result.css';
+import logo from '../../assets/logo-mm-hollow.png';
+import coloredLogo from '../../assets/logo-mm-transparent.png';
+import { LOG } from "../../util";
+import { serverUrl } from "../../App";
 
 class Result extends Component {
     constructor(props) {
