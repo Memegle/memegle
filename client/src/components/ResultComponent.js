@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import * as QueryString from 'query-string';
 import {Redirect} from 'react-router-dom';
+
 import '../css/result.css';
 import logo from '../assets/logo-mm-hollow.png';
 import coloredLogo from '../assets/logo-mm-transparent.png';
+import { LOG, getServerUrl } from "../util";
 
 class Result extends Component {
     constructor(props) {
@@ -18,7 +20,9 @@ class Result extends Component {
             logo: logo
         };
 
+
         this.queryString = QueryString.parse(this.props.queryString);
+        this.searchApi = getServerUrl() + '/search';
 
         this.handleLogoClick = this.handleLogoClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -28,60 +32,41 @@ class Result extends Component {
     }
 
     componentDidMount() {
+        LOG('In result page');
         this.setState({value: this.queryString.keyword});
 
-        const checkServerStatus = () => {
-            const timeout = new Promise((resolve, reject) => {
-                setTimeout(reject, 30000, 'Request timed out');
-            });
-
-            const request = fetch('http://localhost:8080/actuator/health');
-
-            console.log('querying localhost...');
-            return Promise.race([timeout, request])
-                .then(response => {
-                    return true;
-                })
-                .catch(error => {
-                    return false;
-                })
-        };
-
-        checkServerStatus().then(localIsUp => {
-            if (localIsUp) {
-                this.serverUrl = 'http://localhost:8080/search';
-                console.log('local server is up, using local.');
-            } else {
-                this.serverUrl = 'http://memegle.live:8080/search';
-                console.log('can\'t reach local server, using ' + this.serverUrl);
+        fetch(this.searchApi, {
+            method: 'POST',
+            body: JSON.stringify({
+                keyword: this.queryString.keyword,
+                page: this.queryString.page
+            }),
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
             }
-
-            fetch(this.serverUrl, {
-                method: 'POST',
-                body: JSON.stringify({
-                    keyword: this.queryString.keyword,
-                    page: this.queryString.page
-                }),
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                }
+        })
+            .then(res => res.json())
+            .catch(err => {
+                this.setState({
+                    isLoaded: true,
+                    error: err
+                });
             })
-                .then(res => res.json())
-                .then(json => {
-                    this.setState({
-                        isLoaded: true,
-                        imageUrls: json
-                    });
-                })
-                .catch(error => {
-                    this.setState({
-                        isLoaded: true,
-                        error: error
-                    });
-                })
-        });
+            .then(json => {
+                this.setState({
+                    isLoaded: true,
+                    imageUrls: json
+                });
+            })
+            .catch(error => {
+                this.setState({
+                    isLoaded: true,
+                    error: error
+                });
+            })
     }
+
 
     handleLogoClick(event) {
         event.preventDefault();
@@ -97,7 +82,6 @@ class Result extends Component {
             return;
         }
         event.preventDefault();
-        console.log(this.state.value);
         document.title = this.state.value + " - Memegle";
         this.setState({toNewResult: true});
     }
@@ -135,7 +119,7 @@ class Result extends Component {
                     </React.Fragment>
                 );
             }
-        }
+        };
 
 
         if (this.state.toWelcome) {
