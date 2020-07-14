@@ -19,7 +19,7 @@ const setServerUrl = () => {
             config.set({serverUrl: 'http://localhost:8080'});
         })
         .catch(error => {
-            LOG('Can\' connect to localhost, using memegle.live');
+            LOG('Can\'t connect to localhost, using memegle.live');
             config.set({serverUrl: 'http://www.memegle.live:8080'})
         })
 };
