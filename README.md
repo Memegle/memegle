@@ -3,7 +3,7 @@
 A search engine for Meme Pictures
 
 ## Dependencies
-**To run this app, the following dependencies are quired.**
+**To run this app, the following dependencies are required.**
 1. Python3 (and pip3)
 2. [Docker](https://www.docker.com/products/docker-desktop) and Docker-Compose
 
