@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import * as QueryString from 'query-string';
-import { Redirect } from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import '../css/result.css';
 import logo from '../assets/logo-mm-hollow.png';
 import coloredLogo from '../assets/logo-mm-transparent.png';
@@ -28,13 +28,13 @@ class Result extends Component {
     }
 
     componentDidMount() {
-        this.setState({ value: this.queryString.keyword });
+        this.setState({value: this.queryString.keyword});
 
         const checkServerStatus = () => {
             const timeout = new Promise((resolve, reject) => {
                 setTimeout(reject, 30000, 'Request timed out');
             });
-        
+
             const request = fetch('http://localhost:8080/actuator/health');
 
             console.log('querying localhost...');
@@ -45,14 +45,13 @@ class Result extends Component {
                 .catch(error => {
                     return false;
                 })
-        }
+        };
 
         checkServerStatus().then(localIsUp => {
             if (localIsUp) {
+                this.serverUrl = 'http://localhost:8080/search';
                 console.log('local server is up, using local.');
-                this.serverUrl = 'http://localhost:8080/search'
-            }
-            else {
+            } else {
                 this.serverUrl = 'http://memegle.live:8080/search';
                 console.log('can\'t reach local server, using ' + this.serverUrl);
             }
@@ -66,7 +65,8 @@ class Result extends Component {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
-                }})
+                }
+            })
                 .then(res => res.json())
                 .then(json => {
                     this.setState({
@@ -85,11 +85,11 @@ class Result extends Component {
 
     handleLogoClick(event) {
         event.preventDefault();
-        this.setState({ toWelcome: true });
+        this.setState({toWelcome: true});
     }
 
     handleChange(event) {
-        this.setState({ value: event.target.value });
+        this.setState({value: event.target.value});
     }
 
     handleSubmit(event) {
@@ -99,7 +99,7 @@ class Result extends Component {
         event.preventDefault();
         console.log(this.state.value);
         document.title = this.state.value + " - Memegle";
-        this.setState({ toNewResult: true });
+        this.setState({toNewResult: true});
     }
 
     keyPressed(event) {
@@ -110,13 +110,12 @@ class Result extends Component {
 
     switchLogo(event) {
         if (this.state.logo === logo) {
-            this.setState({ logo: coloredLogo });
-        }
-        else {
-            this.setState({ logo: logo });
+            this.setState({logo: coloredLogo});
+        } else {
+            this.setState({logo: logo});
         }
     }
-    
+
     render() {
 
         const RenderImages = ({error, isLoaded, imageUrls}) => {
@@ -127,10 +126,10 @@ class Result extends Component {
             } else {
                 return (
                     <React.Fragment>
-                        {imageUrls.map(url => 
+                        {imageUrls.map(url =>
                             <div className='image-div' key={url}>
-                                <img src={url} className='image' alt='none' />
-                                <div className='frame'></div>
+                                <img src={url} className='image' alt='none'/>
+                                <div className='frame'/>
                             </div>
                         )}
                     </React.Fragment>
@@ -140,30 +139,29 @@ class Result extends Component {
 
 
         if (this.state.toWelcome) {
-            return <Redirect to='welcome' />;
-        }
-        else if (this.state.toNewResult) {
+            return <Redirect to='welcome'/>;
+        } else if (this.state.toNewResult) {
             const newRoute = '/search?keyword=' + this.state.value + '&page=0';
-            return <Redirect to={newRoute} />;
-        }
-        else {
+            return <Redirect to={newRoute}/>;
+        } else {
             return (
                 <div className='container'>
                     <div className='row top'>
                         <div className='img-div'>
                             <img src={this.state.logo} className='logo' alt='none' onClick={this.handleLogoClick}
-                                onMouseEnter={this.switchLogo} onMouseLeave={this.switchLogo}/>
+                                 onMouseEnter={this.switchLogo} onMouseLeave={this.switchLogo}/>
                         </div>
                         <div className='col-9 search-bar-div'>
                             <input className='search-bar' type='text' value={this.state.value} placeholder='关键词'
-                                onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
+                                   onKeyPress={this.keyPressed} onChange={this.handleChange}/>
                         </div>
                         <div className='center'>
-                                <button className='result-search-button' onClick={this.handleSubmit}><b>搜图 :)</b></button>
+                            <button className='result-search-button' onClick={this.handleSubmit}><b>搜图 :)</b></button>
                         </div>
                     </div>
                     <div className="row gallery">
-                        <RenderImages error={this.state.error} isLoaded={this.state.isLoaded} imageUrls={this.state.imageUrls}/>
+                        <RenderImages error={this.state.error} isLoaded={this.state.isLoaded}
+                                      imageUrls={this.state.imageUrls}/>
                     </div>
                 </div>
             );
