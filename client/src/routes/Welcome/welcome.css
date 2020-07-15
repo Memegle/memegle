@@ -4,7 +4,7 @@
 }
 
 body {
-  font-family: "ZCOOL KuaiLe";
+  font-family: "ZCOOL KuaiLe", serif;
   font-size: 16px;
 }
 
@@ -50,6 +50,7 @@ body {
 }
 
 .home-search-bar:focus {
+  transition: .5s ease;
   box-shadow: inset -2px -3px 5px #FFFFFF;
 }
 

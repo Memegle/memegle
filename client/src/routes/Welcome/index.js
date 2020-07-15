@@ -1,7 +1,9 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import '../css/welcome.css';
-import '../index.css'
+
+import { LOG } from '../../util'
+import './welcome.css';
+import '../../index.css'
 
 class Welcome extends React.Component {
     constructor(props) {
@@ -16,6 +18,10 @@ class Welcome extends React.Component {
         this.keyPressed = this.keyPressed.bind(this);
     }
 
+    componentDidMount() {
+        LOG('In welcome page')
+    }
+
     handleChange(event) {
         this.setState({ value: event.target.value });
     }
@@ -25,7 +31,6 @@ class Welcome extends React.Component {
             return;
         }
         event.preventDefault();
-        console.log(this.state.value);
         this.setState({ toResult: true });
     }
 
@@ -36,10 +41,10 @@ class Welcome extends React.Component {
     }
 
     render() {
-        document.title = "Memegle"
+        document.title = "Memegle";
         if (this.state.toResult) {
             const newRoute = '/search?keyword=' + this.state.value + '&page=0';
-            document.title = this.state.value + " - Memegle"
+            document.title = this.state.value + " - Memegle";
             return <Redirect to={newRoute} />;
         }
         else {
@@ -47,12 +52,12 @@ class Welcome extends React.Component {
                 <div className='container'>
                     <div className='row home-header'>
                         <div className='row home-logo-div'>
-                            <img src={require('../assets/Memegle.png')} className='home-logo' alt='none'/>
+                            <img src={require('../../assets/Memegle.png')} className='home-logo' alt='none'/>
                         </div>
                         <div className='row home-search-bar-div'>
                             <div className='col-9 center'>
                                 <input className='home-search-bar' type='text' placeholder='热门关键词...'
-                                       value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}></input>
+    value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}/>
                             </div>
                             <div className='center'>
                                 <button className='button-search' onClick={this.handleSubmit}>搜图 :)</button>
