@@ -13,7 +13,7 @@ services:
     links:
       - server
     tty: true
-    command: npm start
+    command: yarn start
 
   build_server:
     build:
@@ -29,6 +29,7 @@ services:
       # TODO: I think this could be handled better, e.g. change .war filename
       - ./server/build/libs/server-0.0.1-SNAPSHOT.war:/usr/local/tomcat/webapps/ROOT.war
       - ./server/scripts/init-boot.sh:/usr/local/tomcat/init-boot.sh
+      - ./server/build/classes/java/main/com/memegle/server:/usr/local/tomcat/webapps/ROOT/WEB-INF/classes/com/memegle/server
     environment:
       - CATALINA_OPTS=-Dsecurerandom.source=file:/dev/urandom
       - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs0

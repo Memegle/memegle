@@ -6,11 +6,11 @@ RUN mkdir /app
 WORKDIR /app
 
 # Copy package.json
-COPY package.json package-lock.json yarn.lock /app/
+COPY package.json yarn.lock /app/
 
-RUN npm install --production --silent
-RUN npm install -g serve
+RUN yarn install --production --silent
+RUN yarn global add serve
 
 # Actual build
 COPY . /app
-RUN npm run build
+RUN yarn build
