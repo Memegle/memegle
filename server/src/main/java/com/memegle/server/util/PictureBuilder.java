@@ -11,11 +11,15 @@ public class PictureBuilder {
     private String name;
     private Date date;
     private String urlSuffix;
+    private int width;
+    private int height;
 
     private boolean idSet;
     private boolean nameSet;
     private boolean dateSet;
     private boolean urlSet;
+    private boolean widthSet;
+    private boolean heightSet;
 
     public PictureBuilder withId(long id) {
         this.id = id;
@@ -45,6 +49,20 @@ public class PictureBuilder {
         return this;
     }
 
+    public PictureBuilder withHeight(int h) {
+        this.height = h;
+        this.heightSet = true;
+
+        return this;
+    }
+
+    public PictureBuilder withWidth(int w) {
+        this.width = w;
+        this.widthSet = true;
+
+        return this;
+    }
+
     public static Picture fromPictureSearch(PictureSearch search) {
         Picture pic = new Picture();
         pic.setUrlSuffix(search.getUrlSuffix());
@@ -64,6 +82,11 @@ public class PictureBuilder {
         this.nameSet = false;
         this.dateSet = false;
         this.urlSet = false;
+    }
+
+    public Picture fromPicSearch(PictureSearch ps) {
+        // retrieve info from ps, then call build
+        return null;
     }
 
     public Picture build() throws Exception {

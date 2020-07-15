@@ -17,11 +17,11 @@ public class Picture {
     private long id;
     private String name;
     private Date dateUpdated;
-
     private String urlSuffix;
+    private int width;
+    private int height;
 
-    public Picture() {
-    }
+    public Picture() {}
 
     public long getId() {return this.id;}
     public String getName() {return this.name;}
@@ -30,9 +30,13 @@ public class Picture {
     public String getFullUrl() {
         return Constants.BASE_URL + Constants.DATA_MAPPING + this.urlSuffix;
     }
+    public int getWidth() {return this.width;}
+    public int getHeight() {return this.height;}
 
     public void setId(long id) {this.id = id;}
     public void setName(String name) {this.name = name;}
     public void setUrlSuffix(String urlSuffix) {this.urlSuffix = urlSuffix;}
     public void setDateUpdated(Date date) {this.dateUpdated = date;}
+    public void setWidth(int w) {this.width = w;}
+    public void setHeight(int h) {this.height = h;}
 }
