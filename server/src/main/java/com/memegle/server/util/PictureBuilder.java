@@ -69,7 +69,8 @@ public class PictureBuilder {
         pic.setDateUpdated(search.getDateUpdated());
         pic.setName(search.getName());
         pic.setId(search.getId());
-
+        pic.setWidth(search.getWidth());
+        pic.setHeight(search.getHeight());
         return pic;
     }
 
@@ -82,11 +83,8 @@ public class PictureBuilder {
         this.nameSet = false;
         this.dateSet = false;
         this.urlSet = false;
-    }
-
-    public Picture fromPicSearch(PictureSearch ps) {
-        // retrieve info from ps, then call build
-        return null;
+        this.heightSet = false;
+        this.widthSet = false;
     }
 
     public Picture build() throws Exception {
