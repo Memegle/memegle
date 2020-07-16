@@ -1,0 +1,6 @@
+FROM gradle:6.3.0-jdk8
+
+# Download project dependencies
+COPY build.gradle settings.gradle /home/gradle/server/
+WORKDIR /home/gradle/server
+RUN gradle build --project-cache-dir=/home/gradle/cache > /dev/null 2>&1 || true

@@ -4,7 +4,7 @@ services:
   client:
     build:
       context: ./client
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile-dev
     volumes:
       - ./client:/app
       - ./client/node_modules:/app/node_modules
@@ -16,31 +16,33 @@ services:
     command: yarn start
 
   build_server:
-    build:
-      context: ./server
-      dockerfile: Dockerfile.dev
+    image: gradle:6.3.0-jdk8
+    working_dir: /home/gradle/server
     volumes:
-      - ./server/build:/home/gradle/src/build
-      - ./server/.gradle:/home/gradle/src/.gradle
+      - ./server:/home/gradle/server
+    command: ["gradle", "build", "--continuous", "-x", "test"]
 
   server:
-    image: tomcat:9-jdk8-openjdk
+    build:
+      context: ./server
+      dockerfile: Dockerfile-dev
+    working_dir: /home/gradle/server
     volumes:
-      # TODO: I think this could be handled better, e.g. change .war filename
-      - ./server/build/libs/server-0.0.1-SNAPSHOT.war:/usr/local/tomcat/webapps/ROOT.war
-      - ./server/scripts/init-boot.sh:/usr/local/tomcat/init-boot.sh
+      - ./server:/home/gradle/server
+      - gradle-cache:/home/gradle/cache
     environment:
-      - CATALINA_OPTS=-Dsecurerandom.source=file:/dev/urandom
       - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs0
       - ES_URI=es:9200
     ports:
       - 8080:8080
     depends_on:
+      - build_server
       - monstache
     links:
       - mongo1
       - es
-    entrypoint: ["sh", "init-boot.sh"]
+    restart: on-failure
+    command: ["gradle", "bootRun", "--project-cache-dir=/home/gradle/cache"]
 
   mongo1:
     hostname: mongo1
@@ -107,3 +109,4 @@ volumes:
   rs1:
   esdata:
     driver: local
+  gradle-cache:
