@@ -22,8 +22,13 @@ Client will be up on [localhost:3000]() and Server should be up on [localhost:80
 
 Default ports: 27017 for MongoDB; 9200 for ElasticSearch.
 
-(hot reload should be working for client, i.e. changes in the client code should be directly reflected on localhost:3000)
+(hot reload should be working for client both client and server now, reload for client will be relatively faster)
 
+If you have made changes to server code, watch the terminal and look for the following logging message (which indicates the auto reload has been completed and you should be able to see the new changes on localhost:8080)
+```$xslt
+server_1         | 2020-07-16 09:26:22.483  INFO 114 --- [  restartedMain] c.m.server.util.ApplicationStartup       : BASE_URL is: http://localhost:8080
+server_1         | 2020-07-16 09:26:22.485  INFO 114 --- [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
+```
 ## Other Notices
 - If you see on terminal that monstache complains query to elasticsearch is FORBIDDEN with messages similar to something like READ_ONLY is set, it's probably because you're using up the space in your docker virtual machine. To fix this run the following commands (with elasticsearch container running).
     - `docker system prune` (this will remove unused images/containers/volumes)

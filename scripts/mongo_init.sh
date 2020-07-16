@@ -1,8 +1,15 @@
 #!/bin/bash
 
 echo "Starting replica set intialization"
+PING_COUNT=0
 until mongo --host mongo1 --eval "print(\"waited for connection\")"
 do
+  PING_COUNT=$((PING_COUNT+1))
+  if [ $PING_COUNT -gt 30 ]
+  then
+    echo Connection failed, stopping...
+    exit 1
+  fi
   sleep 2
 done
 echo "Connection finished"
