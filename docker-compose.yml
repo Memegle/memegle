@@ -15,34 +15,23 @@ services:
     tty: true
     command: yarn start
 
-  build_server:
-    image: gradle:6.3.0-jdk8
-    working_dir: /home/gradle/server
-    volumes:
-      - ./server:/home/gradle/server
-    command: ["gradle", "build", "--continuous", "-x", "test"]
-
   server:
     build:
       context: ./server
       dockerfile: Dockerfile-dev
-    working_dir: /home/gradle/server
     volumes:
       - ./server:/home/gradle/server
-      - gradle-cache:/home/gradle/cache
     environment:
       - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs0
       - ES_URI=es:9200
     ports:
       - 8080:8080
     depends_on:
-      - build_server
       - monstache
     links:
       - mongo1
       - es
-    restart: on-failure
-    command: ["gradle", "bootRun", "--project-cache-dir=/home/gradle/cache"]
+    command: ["sh", "./scripts/init-dev.sh"]
 
   mongo1:
     hostname: mongo1
