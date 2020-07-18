@@ -5,6 +5,7 @@ import {Redirect} from 'react-router-dom';
 import './result.css';
 import logo from '../../assets/logo-mm-hollow.png';
 import coloredLogo from '../../assets/logo-mm-transparent.png';
+import { useBottomScrollListener } from 'react-bottom-scroll-listener';
 import { LOG } from "../../util";
 import { serverUrl } from "../../App";
 
@@ -28,6 +29,9 @@ class Result extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
         this.switchLogo = this.switchLogo.bind(this);
+        this.handleScroll = this.handleScroll.bind(this);
+        //this.loadImages = this.loadImages.bind(this);
+        this.handleScrollToBottom = this.handleScrollToBottom.bind(this);
     }
 
     componentDidMount() {
@@ -36,12 +40,14 @@ class Result extends Component {
 
         const searchApi = serverUrl + '/search';
 
+        this.pageNum = this.queryString.page;
+
         LOG('querying ' + searchApi);
         fetch(searchApi, {
             method: 'POST',
             body: JSON.stringify({
                 keyword: this.queryString.keyword,
-                page: this.queryString.page
+                page: this.pageNum
             }),
             headers: {
                 Accept: 'application/json',
@@ -61,7 +67,9 @@ class Result extends Component {
                     isLoaded: true,
                     error: error
                 });
-            })
+            });
+
+            window.addEventListener('scroll', this.handleScrollToBottom, false);
     }
 
 
@@ -97,6 +105,57 @@ class Result extends Component {
         }
     }
 
+    handleScroll(event) {
+        const target = event.target;
+        if (target.scrollHeight - target.scrollTop === target.clientHeight) {
+            console.log('reach bottom');
+        }
+    }
+
+    handleScrollToBottom = () => {
+        console.log(document.body.scrollHeight, document.body.scrollTop, document.body.clientHeight);
+        if (document.body.scrollHeight - document.body.scrollTop === document.body.clientHeight) {
+            console.log('header bottom reached');
+        }
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("scroll", this.handleScrollToBottom, false);
+    }
+
+    /*loadImages() {
+        this.pageNum++;
+
+        const searchApi = serverUrl + '/search';
+
+        LOG('querying ' + searchApi);
+        fetch(searchApi, {
+            method: 'POST',
+            body: JSON.stringify({
+                keyword: this.queryString.keyword,
+                page: this.pageNum
+            }),
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res.json())
+            .then(json => {
+                LOG(json);
+                this.setState({
+                    isLoaded: true,
+                    imageUrls: this.state.imageUrls.concat(json)
+                });
+            })
+            .catch(error => {
+                this.setState({
+                    isLoaded: true,
+                    error: error
+                });
+            });
+    }*/
+
     render() {
 
         const RenderImages = ({error, isLoaded, imageUrls}) => {
@@ -117,7 +176,6 @@ class Result extends Component {
                 );
             }
         };
-
 
         if (this.state.toWelcome) {
             return <Redirect to='welcome'/>;

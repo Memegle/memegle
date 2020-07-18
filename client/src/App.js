@@ -48,13 +48,13 @@ class App extends Component {
 
         return (
             <BrowserRouter>
-                <div>
+                <React.Fragment>
                     <Switch>
                         <Route path={paths.welcome} component={Welcome} />
                         <Route path={paths.search} component={SearchResult} />
                         <Redirect to={paths.default} />
                     </Switch>
-                </div>
+                </React.Fragment>
             </BrowserRouter>
         )
     }
