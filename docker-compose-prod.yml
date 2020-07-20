@@ -18,6 +18,8 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
+    volumes:
+      - ./server/processed:/root/memegle/images
     environment:
       - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs0
       - ES_URI=es:9200

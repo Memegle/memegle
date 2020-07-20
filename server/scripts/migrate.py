@@ -10,7 +10,7 @@ from shutil import copyfile
 COPY = False
 
 RAW_DATA_PATH = './raw/'
-STATIC_DATA_PATH = './src/main/resources/static/data/'
+STATIC_DATA_PATH = './processed/'
 URL_PREFIX = '/'
 
 client = MongoClient(port=27017)
