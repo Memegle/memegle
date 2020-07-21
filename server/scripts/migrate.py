@@ -10,8 +10,8 @@ import sys
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
 COPY = True
 
-RAW_DATA_PATH = './raw/'
-PROCESSED_DATA_PATH = './processed/'
+RAW_DATA_PATH = '../data/raw/'
+PROCESSED_DATA_PATH = '../data/processed/'
 URL_PREFIX = '/'
 
 if not (exists(RAW_DATA_PATH) and isdir(RAW_DATA_PATH)):

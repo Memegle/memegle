@@ -35,8 +35,8 @@ out/
 volumes/
 
 ### local raw images ###
-raw/*
-processed/*
+data/raw/*
+data/processed/*
 
 /bin/main/com/*
 /bin/test/*
