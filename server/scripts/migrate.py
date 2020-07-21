@@ -10,9 +10,14 @@ import sys
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
 COPY = True
 
+DATA_PATH = './data/'
 RAW_DATA_PATH = './data/raw/'
 PROCESSED_DATA_PATH = './data/processed/'
 URL_PREFIX = '/'
+
+if not (exists(DATA_PATH) and isdir(DATA_PATH)):
+    print('creating data folder...')
+    mkdir(DATA_PATH)
 
 if not (exists(RAW_DATA_PATH) and isdir(RAW_DATA_PATH)):
     print('./data/raw/ does not exist, creating and exiting')
