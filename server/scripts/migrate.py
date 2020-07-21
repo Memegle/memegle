@@ -10,17 +10,17 @@ import sys
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
 COPY = True
 
-RAW_DATA_PATH = '../data/raw/'
-PROCESSED_DATA_PATH = '../data/processed/'
+RAW_DATA_PATH = './data/raw/'
+PROCESSED_DATA_PATH = './data/processed/'
 URL_PREFIX = '/'
 
 if not (exists(RAW_DATA_PATH) and isdir(RAW_DATA_PATH)):
-    print('./raw/ does not exist, creating and exiting')
+    print('./data/raw/ does not exist, creating and exiting')
     mkdir(RAW_DATA_PATH)
     sys.exit()
 
 if not (exists(PROCESSED_DATA_PATH) and isdir(PROCESSED_DATA_PATH)):
-    print('./processed/ does not exist, creating')
+    print('./data/processed/ does not exist, creating')
     mkdir(PROCESSED_DATA_PATH)
 
 client = MongoClient(port=27017)
