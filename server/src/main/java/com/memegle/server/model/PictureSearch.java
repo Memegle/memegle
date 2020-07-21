@@ -31,7 +31,7 @@ public class PictureSearch {
     public Date getDateUpdated() {return this.dateUpdated;}
     public float getScore() {return this.score;}
     public String getFullUrl() {
-        return Constants.BASE_URL + Constants.DATA_MAPPING + this.urlSuffix;
+        return Constants.BASE_URL + Constants.IMAGE_MAPPING + this.urlSuffix;
     }
 
     public void setId(long id) {this.id = id;}

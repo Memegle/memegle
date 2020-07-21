@@ -2,6 +2,7 @@ package com.memegle.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import com.memegle.server.controller.PictureController;
 import com.memegle.server.dto.SearchQuery;
 import com.memegle.server.repository.PictureRepository;
 import com.memegle.server.util.Constants;
@@ -64,7 +65,7 @@ class PictureIntegrationTest {
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(query)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(10)))
+                .andExpect(jsonPath("$", hasSize(PictureController.PIC_PER_PAGE)))
                 .andExpect(jsonPath("$[0]", startsWith(Constants.BASE_URL)))
                 .andReturn();
 
