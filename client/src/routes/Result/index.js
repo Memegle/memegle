@@ -5,7 +5,7 @@ import {Redirect} from 'react-router-dom';
 import './result.css';
 import logo from '../../assets/logo-mm-hollow.png';
 import coloredLogo from '../../assets/logo-mm-transparent.png';
-import { LOG } from "../../util";
+import { LOG } from "../../utils";
 import { serverUrl } from "../../App";
 
 class Result extends Component {

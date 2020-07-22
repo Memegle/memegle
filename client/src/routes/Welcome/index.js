@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { LOG } from '../../util'
+import { LOG } from '../../utils'
 import './welcome.css';
 import '../../index.css'
 

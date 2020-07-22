@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
-import {isInDevelopmentMode, LOG} from "./util";
+import {isInDevelopmentMode, LOG} from "./utils";
 import Welcome from './routes/Welcome';
 import Result from './routes/Result';
 import paths from './routes/paths'
