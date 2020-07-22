@@ -1,5 +1,7 @@
 package com.memegle.server.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.memegle.server.util.Constants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -17,9 +19,10 @@ public class Picture {
     private long id;
     private String name;
     private Date dateUpdated;
-    private String urlSuffix;
     private int width;
     private int height;
+    @JsonIgnore
+    private String urlSuffix;
 
     public Picture() {}
 
@@ -27,11 +30,12 @@ public class Picture {
     public String getName() {return this.name;}
     public String getUrlSuffix() {return this.urlSuffix;}
     public Date getDateUpdated() {return this.dateUpdated;}
+    public int getWidth() {return this.width;}
+    public int getHeight() {return this.height;}
+    @JsonProperty("fullUrl")
     public String getFullUrl() {
         return Constants.BASE_URL + Constants.IMAGE_MAPPING + this.urlSuffix;
     }
-    public int getWidth() {return this.width;}
-    public int getHeight() {return this.height;}
 
     public void setId(long id) {this.id = id;}
     public void setName(String name) {this.name = name;}

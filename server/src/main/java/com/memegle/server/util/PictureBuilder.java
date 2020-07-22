@@ -63,17 +63,6 @@ public class PictureBuilder {
         return this;
     }
 
-    public static Picture fromPictureSearch(PictureSearch search) {
-        Picture pic = new Picture();
-        pic.setUrlSuffix(search.getUrlSuffix());
-        pic.setDateUpdated(search.getDateUpdated());
-        pic.setName(search.getName());
-        pic.setId(search.getId());
-        pic.setWidth(search.getWidth());
-        pic.setHeight(search.getHeight());
-        return pic;
-    }
-
     public void reset() {
         this.id = -1;
         this.name = null;
@@ -116,6 +105,18 @@ public class PictureBuilder {
         }
 
         picture.setUrlSuffix(this.urlSuffix);
+
+        if (!this.heightSet) {
+            this.height = -1;
+        }
+
+        picture.setHeight(this.height);
+
+        if (!this.widthSet) {
+            this.width = -1;
+        }
+
+        picture.setWidth(this.width);
 
         reset();
 

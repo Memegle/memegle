@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface PictureSearchRepository extends ElasticsearchRepository<PictureSearch, Long> {
     @Query("{\"match\": {\"name\": \"?0\"}}")
-    public List<PictureSearch> searchName(String name, Pageable pageable);
+    List<PictureSearch> searchName(String name, Pageable pageable);
 }

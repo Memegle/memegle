@@ -12,6 +12,7 @@ import java.util.Date;
 class PictureUnitTest {
 
     @Test
+    //TODO: add tests for withHeight and withWidth
     void testPictureBuilder() throws Exception {
         PictureBuilder builder = new PictureBuilder();
         long id = 1;

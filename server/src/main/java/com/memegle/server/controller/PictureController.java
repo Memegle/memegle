@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Controller
 public class PictureController {
     // Constants
-    public final static int PIC_PER_PAGE = 30;
+    public final static int PIC_PER_PAGE = 5;
 
     private final PictureRepository pictureRepo;
     private final PictureSearchRepository searchRepo;
@@ -89,6 +89,11 @@ public class PictureController {
         Pageable pageable = PageRequest.of(query.page, PIC_PER_PAGE);
 
         LOGGER.info("Querying:\n" + query);
+
+        for (PictureSearch pictureSearch : searchRepo.searchName(query.keyword, pageable)) {
+            System.out.println(pictureSearch.toString());
+
+        }
 
         return searchRepo.searchName(query.keyword, pageable)
                 .stream()
