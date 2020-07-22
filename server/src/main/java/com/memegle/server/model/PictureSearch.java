@@ -27,7 +27,7 @@ public class PictureSearch {
 
     public Picture toPicture() {
         try {
-            // muse use getter method (they are overridden by spring and will return the correct value from repo)
+            // must use getter method (they are overridden by spring and will return the correct value from repo)
             return new PictureBuilder()
                     .withId(getId())
                     .withName(getName())
