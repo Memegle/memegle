@@ -11,14 +11,25 @@ public class PictureBuilder {
     private String name;
     private Date date;
     private String urlSuffix;
+    private int width;
+    private int height;
 
     private boolean idSet;
     private boolean nameSet;
     private boolean dateSet;
     private boolean urlSet;
+    private boolean widthSet;
+    private boolean heightSet;
 
     public PictureBuilder withId(long id) {
         this.id = id;
+        idSet = true;
+
+        return this;
+    }
+
+    public PictureBuilder withId(String id) {
+        this.id = Long.parseLong(id);
         idSet = true;
 
         return this;
@@ -45,14 +56,18 @@ public class PictureBuilder {
         return this;
     }
 
-    public static Picture fromPictureSearch(PictureSearch search) {
-        Picture pic = new Picture();
-        pic.setUrlSuffix(search.getUrlSuffix());
-        pic.setDateUpdated(search.getDateUpdated());
-        pic.setName(search.getName());
-        pic.setId(search.getId());
+    public PictureBuilder withHeight(int h) {
+        this.height = h;
+        this.heightSet = true;
 
-        return pic;
+        return this;
+    }
+
+    public PictureBuilder withWidth(int w) {
+        this.width = w;
+        this.widthSet = true;
+
+        return this;
     }
 
     public void reset() {
@@ -64,6 +79,8 @@ public class PictureBuilder {
         this.nameSet = false;
         this.dateSet = false;
         this.urlSet = false;
+        this.heightSet = false;
+        this.widthSet = false;
     }
 
     public Picture build() throws Exception {
@@ -95,6 +112,18 @@ public class PictureBuilder {
         }
 
         picture.setUrlSuffix(this.urlSuffix);
+
+        if (!this.heightSet) {
+            this.height = -1;
+        }
+
+        picture.setHeight(this.height);
+
+        if (!this.widthSet) {
+            this.width = -1;
+        }
+
+        picture.setWidth(this.width);
 
         reset();
 

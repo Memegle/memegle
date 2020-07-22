@@ -1,6 +1,6 @@
 package com.memegle.server.model;
 
-import com.memegle.server.util.Constants;
+import com.memegle.server.util.PictureBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Score;
@@ -13,29 +13,41 @@ import java.util.Date;
 @Document(indexName = "memegle.pictures", type = "_doc")
 public class PictureSearch {
     @Id
-    private long id;
+    private String id;   // id is stored as a string in elasticsearch
     private String name;
     private Date dateUpdated;
-
     private String urlSuffix;
+    private int width;
+    private int height;
 
     @Score
     private float score;    // Read-only value, auto-populated by elastic repo
 
-    public PictureSearch() {
+    public PictureSearch() {}
+
+    public Picture toPicture() {
+        try {
+            // must use getter method (they are overridden by spring and will return the correct value from repo)
+            return new PictureBuilder()
+                    .withId(getId())
+                    .withName(getName())
+                    .withUrlSuffix(getUrlSuffix())
+                    .withDate(getDateUpdated())
+                    .withWidth(getWidth())
+                    .withHeight(getHeight())
+                    .build();
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
-    public long getId() {return this.id;}
-    public String getName() {return this.name;}
-    public String getUrlSuffix() {return this.urlSuffix;}
-    public Date getDateUpdated() {return this.dateUpdated;}
+    public String getId() {return id;}
+    public String getName() {return name;}
+    public int getWidth() {return width;}
+    public int getHeight() {return height;}
+    public String getUrlSuffix() {return urlSuffix;}
+    public Date getDateUpdated() {return dateUpdated;}
+
     public float getScore() {return this.score;}
-    public String getFullUrl() {
-        return Constants.BASE_URL + Constants.IMAGE_MAPPING + this.urlSuffix;
-    }
-
-    public void setId(long id) {this.id = id;}
-    public void setName(String name) {this.name = name;}
-    public void setUrlSuffix(String urlSuffix) {this.urlSuffix = urlSuffix;}
-    public void setDateUpdated(Date date) {this.dateUpdated = date;}
 }

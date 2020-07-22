@@ -5,6 +5,7 @@ from os import listdir, rename, remove, mkdir
 from os.path import isfile, join, exists, splitext, isdir
 import datetime
 from shutil import copyfile
+from PIL import Image
 import sys
 
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
@@ -63,12 +64,18 @@ for img in img_files:
 
     seq += 1
 
+    picture = Image.open(RAW_DATA_PATH + img)
+    width, height = picture.size
+
     d = {
         '_id': seq,
         'name': img,
         'dateUpdated': datetime.datetime.utcnow(),
         'urlSuffix': URL_PREFIX + str(seq) + ext,
-        '_class': 'com.memegle.server.Picture.Picture'
+        '_class': 'com.memegle.server.Picture.Picture',
+        'width': width,
+        'height': height
+        # add height & width
     }
     insert_lst.append(d)
 
