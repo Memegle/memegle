@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Controller
 public class PictureController {
     // Constants
-    public final static int PIC_PER_PAGE = 5;
+    public final static int PIC_PER_PAGE = 30;
 
     private final PictureRepository pictureRepo;
     private final PictureSearchRepository searchRepo;
