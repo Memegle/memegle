@@ -14,7 +14,7 @@ class Result extends Component {
         this.state = {
             error: null,
             isLoaded: false,
-            imageUrls: [],
+            images: [],
             toWelcome: false,
             toNewResult: false,
             value: '',
@@ -53,7 +53,7 @@ class Result extends Component {
                 LOG(json);
                 this.setState({
                     isLoaded: true,
-                    imageUrls: json
+                    images: json
                 });
             })
             .catch(error => {
@@ -99,7 +99,7 @@ class Result extends Component {
 
     render() {
 
-        const RenderImages = ({error, isLoaded, imageUrls}) => {
+        const RenderImages = ({error, isLoaded, images}) => {
             if (error) {
                 return <div>Error: {error.message}</div>;
             } else if (!isLoaded) {
@@ -107,12 +107,25 @@ class Result extends Component {
             } else {
                 return (
                     <React.Fragment>
-                        {imageUrls.map(url =>
-                            <div className='image-div' key={url}>
-                                <img src={url} className='image' alt='none'/>
-                                <div className='frame'/>
-                            </div>
-                        )}
+                        {images.map(image => {
+
+                            var height, width;
+                            if (image.height > image.width) {
+                                height = 78;
+                                width = 78 * image.width / image.height;
+                            }
+                            else {
+                                width = 78;
+                                height = 78 * image.height / image.width;
+                            }
+
+                            return (
+                                <div className='image-div' key={image.id}>
+                                    <img src={image.fullUrl} style={{height: height+'%', width: width+'%'}} alt='none' />
+                                    <div className='frame' />
+                                </div>
+                            );
+                        })}
                     </React.Fragment>
                 );
             }
@@ -142,7 +155,7 @@ class Result extends Component {
                     </div>
                     <div className="row gallery">
                         <RenderImages error={this.state.error} isLoaded={this.state.isLoaded}
-                                      imageUrls={this.state.imageUrls}/>
+                                      images={this.state.images}/>
                     </div>
                 </div>
             );
