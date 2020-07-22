@@ -80,7 +80,7 @@ public class PictureController {
     @PostMapping(value = "/search",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<String> search(@RequestBody SearchQuery query) {
+    public List<Picture> search(@RequestBody SearchQuery query) {
         if (query.keyword == null || query.keyword.length() == 0 || query.page < 0) {
             //TODO: change this to a HTTP error response
             return null;
@@ -92,7 +92,7 @@ public class PictureController {
 
         return searchRepo.searchName(query.keyword, pageable)
                 .stream()
-                .map(PictureSearch::getFullUrl)
+                .map(PictureSearch::toPicture)
                 .collect(Collectors.toList());
     }
 
