@@ -28,6 +28,13 @@ public class PictureBuilder {
         return this;
     }
 
+    public PictureBuilder withId(String id) {
+        this.id = Long.parseLong(id);
+        idSet = true;
+
+        return this;
+    }
+
     public PictureBuilder withName(String name) {
         this.name = name;
         nameSet = true;

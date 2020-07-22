@@ -1,6 +1,5 @@
 package com.memegle.server.model;
 
-import com.memegle.server.util.Constants;
 import com.memegle.server.util.PictureBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -15,7 +14,7 @@ import java.util.Date;
 public class PictureSearch {
     // These fields need to be public for searchRepo to populate them
     @Id
-    public long id;
+    public String id;   // id is stored as a string in elasticsearch
     public String name;
     public Date dateUpdated;
     public String urlSuffix;

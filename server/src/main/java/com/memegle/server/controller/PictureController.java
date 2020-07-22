@@ -90,11 +90,6 @@ public class PictureController {
 
         LOGGER.info("Querying:\n" + query);
 
-        for (PictureSearch pictureSearch : searchRepo.searchName(query.keyword, pageable)) {
-            System.out.println(pictureSearch.toString());
-
-        }
-
         return searchRepo.searchName(query.keyword, pageable)
                 .stream()
                 .map(PictureSearch::toPicture)
