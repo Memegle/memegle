@@ -43,7 +43,7 @@ public class PictureSearch {
     public String getUrlSuffix() {return this.urlSuffix;}
     public Date getDateUpdated() {return this.dateUpdated;}
     public String getFullUrl() {
-        return Constants.BASE_URL + Constants.DATA_MAPPING + this.urlSuffix;
+        return Constants.BASE_URL + Constants.IMAGE_MAPPING + this.urlSuffix;
     }
     public int getWidth() {return this.width;}
     public int getHeight() {return this.height;}

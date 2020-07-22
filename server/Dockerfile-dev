@@ -1,10 +1,9 @@
-# Build ENV base image
-FROM gradle:6.3.0-jdk8 AS build
+FROM gradle:6.3.0-jdk8
 
 ENV GRADLE_USER_HOME /home/gradle/cache_home
 
-COPY build.gradle settings.gradle /home/gradle/src/
-WORKDIR /home/gradle/src
+COPY build.gradle settings.gradle /home/gradle/server/
+WORKDIR /home/gradle/server
 RUN gradle clean build --no-daemon > /dev/null 2>&1 || true
 
 # Separate resources copying for docker to cache it.

@@ -3,7 +3,6 @@ raw/
 .idea/
 build/
 .gradle/
-scripts/
 
 *.md
 *.txt

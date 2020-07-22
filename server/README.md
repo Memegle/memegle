@@ -23,6 +23,6 @@ will web-scrap Chinese meme pictures from fabiaoqing.com and weixinbqb.com
 
 ### Database Operations
 1. `python3 ./scripts/clear.py` will drop the existing Picture table in MongoDB
-2. `python3 ./scripts/migrate.py` will add all pictures under `./raw/` to `./src/main/java/resources/static/data/` to be exposed on the Spring web app. The pictures will also be added to MongoDB table.
+2. `python3 ./scripts/migrate.py` will add all pictures under `./data/raw/` to `./data/processed` to be exposed on the Spring web app. The pictures will also be added to MongoDB table. (After running migrate.py, the you should be able to directly see new pictures on `http://localhost:8080/img/{filename}`)
 ## References/Links
 - Skim through this [coursera course](https://www.coursera.org/learn/cloud-services-java-spring-framework) for an overview of Java Spring and MongoDB

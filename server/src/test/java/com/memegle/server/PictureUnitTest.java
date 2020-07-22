@@ -30,7 +30,7 @@ class PictureUnitTest {
         assertEquals(date, pic1.getDateUpdated());
         assertEquals(name, pic1.getName());
         assertEquals(urlSuffix, pic1.getUrlSuffix());
-        assertEquals(Constants.BASE_URL + Constants.DATA_MAPPING + urlSuffix, pic1.getFullUrl());
+        assertEquals(Constants.BASE_URL + Constants.IMAGE_MAPPING + urlSuffix, pic1.getFullUrl());
 
         // Picture builder should have been cleared
         assertThrows(Exception.class, () -> {

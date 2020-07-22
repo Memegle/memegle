@@ -1,18 +1,33 @@
 # https://www.mongodb.com/blog/post/getting-started-with-python-and-mongodb
 from pymongo import MongoClient
 from pprint import pprint
-from os import listdir, rename, remove
-from os.path import isfile, join, exists, splitext
+from os import listdir, rename, remove, mkdir
+from os.path import isfile, join, exists, splitext, isdir
 import datetime
 from shutil import copyfile
 from PIL import Image
+import sys
 
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
-COPY = False
+COPY = True
 
-RAW_DATA_PATH = './raw/'
-STATIC_DATA_PATH = './src/main/resources/static/data/'
+DATA_PATH = './data/'
+RAW_DATA_PATH = './data/raw/'
+PROCESSED_DATA_PATH = './data/processed/'
 URL_PREFIX = '/'
+
+if not (exists(DATA_PATH) and isdir(DATA_PATH)):
+    print('creating data folder...')
+    mkdir(DATA_PATH)
+
+if not (exists(RAW_DATA_PATH) and isdir(RAW_DATA_PATH)):
+    print('./data/raw/ does not exist, creating and exiting')
+    mkdir(RAW_DATA_PATH)
+    sys.exit()
+
+if not (exists(PROCESSED_DATA_PATH) and isdir(PROCESSED_DATA_PATH)):
+    print('./data/processed/ does not exist, creating')
+    mkdir(PROCESSED_DATA_PATH)
 
 client = MongoClient(port=27017)
 db = client.memegle
@@ -76,7 +91,8 @@ if len(insert_lst) > 0:
         _, ext = splitext(img)
         # move file to static
         source = join(RAW_DATA_PATH, img)
-        dest = join(STATIC_DATA_PATH, str(id) + ext)
+        dest = join(PROCESSED_DATA_PATH, str(id) + ext)
+
         if exists(dest):
             remove(dest)
 
