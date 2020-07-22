@@ -12,14 +12,13 @@ import java.util.Date;
  */
 @Document(indexName = "memegle.pictures", type = "_doc")
 public class PictureSearch {
-    // These fields need to be public for searchRepo to populate them
     @Id
-    public String id;   // id is stored as a string in elasticsearch
-    public String name;
-    public Date dateUpdated;
-    public String urlSuffix;
-    public int width;
-    public int height;
+    private String id;   // id is stored as a string in elasticsearch
+    private String name;
+    private Date dateUpdated;
+    private String urlSuffix;
+    private int width;
+    private int height;
 
     @Score
     private float score;    // Read-only value, auto-populated by elastic repo
@@ -28,19 +27,27 @@ public class PictureSearch {
 
     public Picture toPicture() {
         try {
+            // muse use getter method (they are overridden by spring and will return the correct value from repo)
             return new PictureBuilder()
-                    .withId(id)
-                    .withName(name)
-                    .withUrlSuffix(urlSuffix)
-                    .withDate(dateUpdated)
-                    .withWidth(width)
-                    .withHeight(height)
+                    .withId(getId())
+                    .withName(getName())
+                    .withUrlSuffix(getUrlSuffix())
+                    .withDate(getDateUpdated())
+                    .withWidth(getWidth())
+                    .withHeight(getHeight())
                     .build();
         }
         catch (Exception e) {
             return null;
         }
     }
+
+    public String getId() {return id;}
+    public String getName() {return name;}
+    public int getWidth() {return width;}
+    public int getHeight() {return height;}
+    public String getUrlSuffix() {return urlSuffix;}
+    public Date getDateUpdated() {return dateUpdated;}
 
     public float getScore() {return this.score;}
 }
