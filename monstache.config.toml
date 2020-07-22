@@ -13,6 +13,6 @@ dropped-collections = true
 dropped-databases = true
 replay = false
 resume = true
-verbose = true
+verbose = false
 
 exit-after-direct-reads = false
