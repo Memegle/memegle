@@ -130,11 +130,14 @@ class Result extends Component {
                             <img src={this.state.logo} className='logo' alt='none' onClick={this.handleLogoClick}
                                  onMouseEnter={this.switchLogo} onMouseLeave={this.switchLogo}/>
                         </div>
-                        <div className='col-9 search-bar-div'>
-                            <input className='search-bar' type='text' value={this.state.value} placeholder='关键词'
+                        <div className='col-10 search-bar-div'>
+                            <input className='search-bar' type='text' value={this.state.value} placeholder='请输入关键词'
                                    onKeyPress={this.keyPressed} onChange={this.handleChange}/>
+
+                            <img src={require('../../assets/icon-magnifier-white.png')}
+                                 className='result-magnifier' alt='none'/>
                         </div>
-                        <div className='center'>
+                        <div className='col search-button-div'>
                             <button className='result-search-button' onClick={this.handleSubmit}><b>搜图 :)</b></button>
                         </div>
                     </div>

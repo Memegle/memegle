@@ -1,9 +1,9 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 
-import { LOG } from '../../utils'
+import {LOG} from '../../utils'
 import './welcome.css';
-import { getSearchRoute } from "../../actions/search";
+import {getSearchRoute} from "../../actions/search";
 
 class Welcome extends React.Component {
     constructor(props) {
@@ -23,7 +23,7 @@ class Welcome extends React.Component {
     }
 
     handleChange(event) {
-        this.setState({ value: event.target.value });
+        this.setState({value: event.target.value});
     }
 
     handleSubmit(event) {
@@ -31,7 +31,7 @@ class Welcome extends React.Component {
             return;
         }
         event.preventDefault();
-        this.setState({ toResult: true });
+        this.setState({toResult: true});
     }
 
     keyPressed(event) {
@@ -45,9 +45,8 @@ class Welcome extends React.Component {
         if (this.state.toResult) {
             const newRoute = getSearchRoute(this.state.value)
             document.title = this.state.value + " - Memegle";
-            return <Redirect to={newRoute} />;
-        }
-        else {
+            return <Redirect to={newRoute}/>;
+        } else {
             return (
                 <div className='container'>
                     <div className='row home-header'>
@@ -60,7 +59,11 @@ class Welcome extends React.Component {
 
                             <div className='col-10 search-box-div'>
                                 <input className='home-search-bar' type='text' placeholder='请输入关键词'
-    value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}/>
+                                       value={this.state.value} onKeyPress={this.keyPressed}
+                                       onChange={this.handleChange}/>
+
+                                <img src={require('../../assets/icon-magnifier-white.png')}
+                                     className='home-magnifier' alt='none'/>
                             </div>
 
                             <div className='col button-search-div'>
