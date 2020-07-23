@@ -61,9 +61,9 @@
 }
 
 .image-div {
-    margin: 10px;
-    width: 200px;
-    height: 200px;
+    margin: 20px;
+    width: 300px;
+    height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -79,15 +79,16 @@
     position: absolute;
     background: url(../../assets/frame.png) no-repeat center;
     background-size: contain;
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
 }
 
 .gallery {
     display: inline-flex;
     flex-direction: row;
     padding-top: 1%;
-    margin-left: 1%;
+    margin-left: 3%;
+    justify-content: flex-start;
 }
 
 .error {
