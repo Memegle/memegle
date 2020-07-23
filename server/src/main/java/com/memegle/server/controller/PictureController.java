@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 /**
  * PLEASE keep the methods in this class in alphabetical order!!!!!
  */
+@CrossOrigin
 @Controller
 public class PictureController {
     // Constants
@@ -42,7 +43,6 @@ public class PictureController {
         return "redirect:/welcome/";
     }
 
-    @CrossOrigin
     @GetMapping("/all")
     @ResponseBody
     public List<Picture> all(){
@@ -62,7 +62,6 @@ public class PictureController {
         return pictureRepo.findById(id);
     }
 
-    @CrossOrigin
     @GetMapping("/random")
     @ResponseBody
     public String random() {
@@ -76,7 +75,6 @@ public class PictureController {
         return picture.getFullUrl();
     }
 
-    @CrossOrigin
     @PostMapping(value = "/search",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

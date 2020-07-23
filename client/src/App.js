@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
-import {isInDevelopmentMode, LOG} from "./util";
-import Welcome from './routes/Welcome';
-import Result from './routes/Result';
-import paths from './routes/paths'
+import {isInDevelopmentMode, LOG} from "./utils";
+import Main from './Main'
 
 export var serverUrl = 'http://www.memegle.live:8080';
 
@@ -40,21 +38,9 @@ class App extends Component {
     }
 
     render() {
-        const SearchResult = ({ location }) => {
-            return (
-                <Result queryString={location.search}/>
-            );
-        };
-
         return (
             <BrowserRouter>
-                <div>
-                    <Switch>
-                        <Route path={paths.welcome} component={Welcome} />
-                        <Route path={paths.search} component={SearchResult} />
-                        <Redirect to={paths.default} />
-                    </Switch>
-                </div>
+                <Main/>
             </BrowserRouter>
         )
     }
