@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { LOG } from '../../utils'
 import './welcome.css';
 import '../../index.css'
+import { getSearchRoute } from "../../actions/search";
 
 class Welcome extends React.Component {
     constructor(props) {
@@ -43,7 +44,7 @@ class Welcome extends React.Component {
     render() {
         document.title = "Memegle";
         if (this.state.toResult) {
-            const newRoute = '/search?keyword=' + this.state.value + '&page=1';
+            const newRoute = getSearchRoute(this.state.value)
             document.title = this.state.value + " - Memegle";
             return <Redirect to={newRoute} />;
         }

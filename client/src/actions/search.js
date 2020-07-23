@@ -10,13 +10,11 @@ import { LOG } from '../utils'
  */
 const performSearch = async (keyword, page=1) => {
    let error = validateQuery(keyword, page);
-   if (error) {
-      throw Error(error);
-   }
+   if (error) throw Error(error);
 
    const url =  serverUrl + "/search";
 
-   LOG("Using " + url)
+   LOG("searching at: " + url)
 
    LOG(
        "Dispatching Search Query:\n" +
@@ -29,10 +27,24 @@ const performSearch = async (keyword, page=1) => {
       body: JSON.stringify({
          keyword: keyword,
          page: page - 1,
-      })
+      }),
+      headers: {
+         Accept: 'application/json',
+         'Content-Type': 'application/json'
+      }
    });
 
-   return response.json()
+   const json = await response.json();
+   LOG("search result is:");
+   LOG(json);
+   return json
+}
+
+export const getSearchRoute = (keyword, page=1) => {
+   const error = validateQuery(keyword, page)
+   if (error) throw Error(error);
+
+   return '/search?keyword=' + keyword + (page > 1 ? '&page=' + page : '');
 }
 
 const validateQuery = (keyword, page) => {

@@ -6,7 +6,7 @@ import './result.css';
 import logo from '../../assets/logo-mm-hollow.png';
 import coloredLogo from '../../assets/logo-mm-transparent.png';
 import { LOG } from '../../utils';
-import performSearch from '../../actions/search';
+import performSearch, { getSearchRoute } from '../../actions/search';
 
 class Result extends Component {
     constructor(props) {
@@ -36,7 +36,6 @@ class Result extends Component {
 
         performSearch(this.queryString.keyword, this.queryString.page)
             .then(images => {
-                LOG("Search result: " + images)
                 this.setState({
                     isLoaded: true,
                     images: images,
@@ -121,7 +120,7 @@ class Result extends Component {
         if (this.state.toWelcome) {
             return <Redirect to='welcome'/>;
         } else if (this.state.toNewResult) {
-            const newRoute = '/search?keyword=' + this.state.value + '&page=1';
+            const newRoute = getSearchRoute(this.state.value)
             return <Redirect to={newRoute}/>;
         } else {
             return (
