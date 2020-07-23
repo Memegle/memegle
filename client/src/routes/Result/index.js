@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import * as QueryString from 'query-string';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import './result.css';
 import logo from '../../assets/logo-mm-hollow.png';
 import coloredLogo from '../../assets/logo-mm-transparent.png';
-import { LOG } from "../../utils";
-import { serverUrl } from "../../App";
+import { LOG } from '../../utils';
+import performSearch from '../../actions/search';
 
 class Result extends Component {
     constructor(props) {
@@ -34,33 +34,19 @@ class Result extends Component {
         LOG('In result page');
         this.setState({value: this.queryString.keyword});
 
-        const searchApi = serverUrl + '/search';
-
-        LOG('querying ' + searchApi);
-        fetch(searchApi, {
-            method: 'POST',
-            body: JSON.stringify({
-                keyword: this.queryString.keyword,
-                page: this.queryString.page
-            }),
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(res => res.json())
-            .then(json => {
-                LOG(json);
+        performSearch(this.queryString.keyword, this.queryString.page)
+            .then(images => {
+                LOG("Search result: " + images)
                 this.setState({
                     isLoaded: true,
-                    images: json
-                });
+                    images: images,
+                })
             })
             .catch(error => {
                 this.setState({
                     isLoaded: true,
-                    error: error
-                });
+                    error: error,
+                })
             })
     }
 
@@ -101,7 +87,7 @@ class Result extends Component {
 
         const RenderImages = ({error, isLoaded, images}) => {
             if (error) {
-                return <div>Error: {error.message}</div>;
+                return <div className="error">Error: {error.message}</div>;
             } else if (!isLoaded) {
                 return <div>Loading...</div>;
             } else {
@@ -135,7 +121,7 @@ class Result extends Component {
         if (this.state.toWelcome) {
             return <Redirect to='welcome'/>;
         } else if (this.state.toNewResult) {
-            const newRoute = '/search?keyword=' + this.state.value + '&page=0';
+            const newRoute = '/search?keyword=' + this.state.value + '&page=1';
             return <Redirect to={newRoute}/>;
         } else {
             return (

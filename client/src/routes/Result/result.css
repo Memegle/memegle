@@ -69,3 +69,8 @@
     display: inline-flex;
     flex-direction: row;
 }
+
+.error {
+    color: #FFFFFF;
+    font-size: 24px;
+}
