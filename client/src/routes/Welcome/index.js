@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom';
 
 import { LOG } from '../../utils'
 import './welcome.css';
-import '../../index.css'
 import { getSearchRoute } from "../../actions/search";
 
 class Welcome extends React.Component {
@@ -52,20 +51,26 @@ class Welcome extends React.Component {
             return (
                 <div className='container'>
                     <div className='row home-header'>
+
                         <div className='row home-logo-div'>
                             <img src={require('../../assets/Memegle.png')} className='home-logo' alt='none'/>
                         </div>
+
                         <div className='row home-search-bar-div'>
-                            <div className='col-9 center'>
-                                <input className='home-search-bar' type='text' placeholder='热门关键词...'
+
+                            <div className='col-10 search-box-div'>
+                                <input className='home-search-bar' type='text' placeholder='请输入关键词'
     value={this.state.value} onKeyPress={this.keyPressed} onChange={this.handleChange}/>
                             </div>
-                            <div className='center'>
+
+                            <div className='col button-search-div'>
                                 <button className='button-search' onClick={this.handleSubmit}>搜图 :)</button>
                             </div>
+
                         </div>
+
                     </div>
-                    <div className='row text center'>
+                    <div className='row text'>
                         网络表情符号最早来自于1982年美国卡内基梅隆大学Scott E·Fahlman教授在BBS上首次使用的ASCII码”:-)”表示微笑。
                     </div>
                 </div>

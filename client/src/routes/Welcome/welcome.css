@@ -1,52 +1,60 @@
 .container {
-  width:auto;
-  height:auto;
+  min-width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
   font-family: "ZCOOL KuaiLe", serif;
-  font-size: 16px;
 }
 
 .home-header {
-  margin-left: 10%;
-  margin-right: 10%;
-  margin-top: 100px;
+  margin: 5% auto;
+  width: 72%;
   display: flex;
-  flex-direction: column;
-  border: 4px solid white;
-  border-radius: 10px;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 7px solid white;
+  border-radius: 30px;
 }
 
 .home-logo-div {
+  justify-content: center;
+  width: 80%;
+}
+
+.home-logo {
+  padding-top: 5%;
+  width: 100%;
+}
+
+.home-search-bar-div {
+  padding-top: 10%;
+  padding-bottom: 10%;
+  width: 75%;
+  min-height: 60px;
+  position: relative;
+}
+
+.search-box-div {
+  padding: 0;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.home-logo {
-  padding-top: 50px;
-  width: 70%;
-  padding-bottom: 20px;
-}
-
-.home-search-bar-div {
-  padding-top: 5%;
-  padding-bottom: 8%;
-  padding-left: 14%;
-  padding-right: 4%;
-  position: relative;
-}
-
 .home-search-bar {
-  padding-left: 10px;
+  padding-left: 15px;
   align-content: center;
-  min-height: 40px;
-  width: 90%;
+  width: 100%;
+  height: 100%;
   border: 3px solid white;
   box-sizing: border-box;
   border-radius: 30px;
   background-color:black;
   color: white;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .home-search-bar:focus {
@@ -56,6 +64,13 @@ body {
 
 ::placeholder {
   color: white;
+  opacity: 0.80;
+}
+
+.button-search-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .button-search {
@@ -64,8 +79,10 @@ body {
   transition: .5s ease;
   border-radius: 30px;
   border: 3px solid white;
-  height: 40px;
-  width: 70px;
+  height: 50px;
+  width: 80px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .button-search:focus {
@@ -73,20 +90,14 @@ body {
   outline: none
 }
 
-.center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: -1%;
-}
-
 .text {
-  margin-top: 100px;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5%;
+  width: 72%;
   color: white;
-  font-weight: normal;
-  font-style: normal;
+  justify-content: center;
+  font-size: 24px;
 }
 
 input:focus {
