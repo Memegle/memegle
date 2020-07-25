@@ -12,7 +12,8 @@ const performSearch = async (keyword, page=1) => {
    let error = validateQuery(keyword, page);
    if (error) throw Error(error);
 
-   const url =  serverUrl + "/search";
+   let u = 'http://www.memegle.live:8080'
+   const url =  u + "/search";
 
    LOG("searching at: " + url)
 
@@ -33,6 +34,8 @@ const performSearch = async (keyword, page=1) => {
          'Content-Type': 'application/json'
       }
    });
+
+   LOG(response);
 
    const json = await response.json();
    LOG("search result is:");

@@ -18,7 +18,8 @@ class Result extends Component {
             toWelcome: false,
             toNewResult: false,
             value: '',
-            logo: logo
+            logo: logo,
+            page: 1
         };
 
         this.queryString = QueryString.parse(this.props.queryString);
@@ -28,17 +29,18 @@ class Result extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
         this.switchLogo = this.switchLogo.bind(this);
+        this.loadImages = this.loadImages.bind(this);
+        this.handleScroll = this.handleScroll.bind(this);
     }
 
-    componentDidMount() {
-        LOG('In result page');
-        this.setState({value: this.queryString.keyword});
-
-        performSearch(this.queryString.keyword, this.queryString.page)
+    loadImages() {
+        performSearch(this.queryString.keyword, this.state.page)
             .then(images => {
                 this.setState({
                     isLoaded: true,
-                    images: images,
+                    images: this.state.images.concat(images),
+                    value: this.queryString.keyword,
+                    page: this.state.page + 1
                 })
             })
             .catch(error => {
@@ -49,6 +51,20 @@ class Result extends Component {
             })
     }
 
+    handleScroll() {
+        if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement.scrollHeight) {
+            LOG("YAY");
+            this.loadImages();
+        }
+    }
+
+    componentDidMount() {
+        LOG('In result page');
+        this.setState({value: this.queryString.keyword});
+
+        this.loadImages();
+        window.addEventListener('scroll', this.handleScroll)
+    }
 
     handleLogoClick(event) {
         event.preventDefault();
