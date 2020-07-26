@@ -19,7 +19,6 @@ class Result extends Component {
             toNewResult: false,
             value: '',
             logo: logo,
-            page: 1
         };
 
         this.queryString = QueryString.parse(this.props.queryString);
