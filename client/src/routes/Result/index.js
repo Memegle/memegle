@@ -34,13 +34,12 @@ class Result extends Component {
     }
 
     loadImages() {
-        performSearch(this.queryString.keyword, this.state.page)
+        performSearch(this.queryString.keyword)
             .then(images => {
                 this.setState({
                     isLoaded: true,
                     images: this.state.images.concat(images),
                     value: this.queryString.keyword,
-                    page: this.state.page + 1
                 })
             })
             .catch(error => {
