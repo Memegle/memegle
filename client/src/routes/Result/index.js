@@ -130,7 +130,7 @@ class Result extends Component {
                             <img src={this.state.logo} className='logo' alt='none' onClick={this.handleLogoClick}
                                  onMouseEnter={this.switchLogo} onMouseLeave={this.switchLogo}/>
                         </div>
-                        <div className='col-10 search-bar-div'>
+                        <div className='col-5 search-bar-div'>
                             <input className='search-bar' type='text' value={this.state.value} placeholder='请输入关键词'
                                    onKeyPress={this.keyPressed} onChange={this.handleChange}/>
 
