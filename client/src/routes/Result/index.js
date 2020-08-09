@@ -15,14 +15,17 @@ class Result extends Component {
             error: null,
             isLoaded: false,
             images: [],
+            rawImages: [],
             toWelcome: false,
             toNewResult: false,
             value: '',
             logo: logo,
+            isDesktop: false,
         };
 
         this.queryString = QueryString.parse(this.props.queryString);
 
+        this.calculateScreenSize = this.calculateScreenSize.bind(this);
         this.handleLogoClick = this.handleLogoClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,20 +36,41 @@ class Result extends Component {
     }
 
     loadImages() {
-        performSearch(this.queryString.keyword)
-            .then(images => {
-                this.setState({
-                    isLoaded: true,
-                    images: this.state.images.concat(images),
-                    value: this.queryString.keyword,
+        this.calculateScreenSize();
+
+        if (this.state.rawImages === undefined || this.state.rawImages.length === 0) {
+            performSearch(this.queryString.keyword)
+                .then(images => {
+                    this.setState({
+                        isLoaded: true,
+                        rawImages: this.state.rawImages.concat(images.splice(30, images.length)),
+                        images: this.state.isDesktop ? this.state.images.concat(images) : this.state.images.concat(images.splice(0, 30)),
+                        value: this.queryString.keyword,
+                    })
                 })
-            })
-            .catch(error => {
-                this.setState({
-                    isLoaded: true,
-                    error: error,
+                .catch(error => {
+                    this.setState({
+                        isLoaded: true,
+                        error: error,
+                    })
                 })
-            })
+        }
+        else {
+            if (this.state.isDesktop) {
+                this.setState({ images: this.state.images.concat(this.state.rawImages) });
+                this.setState( { rawImages: [] });
+            }
+            else {
+                this.setState({ images: this.state.images.concat(this.state.rawImages.splice(0, 30)) });
+            }
+        }
+
+        LOG(this.state.isDesktop);
+        LOG(this.state.rawImages.length);
+    }
+
+    calculateScreenSize() {
+        this.setState({ isDesktop: window.innerWidth > 1450 });
     }
 
     handleScroll() {
@@ -62,6 +86,7 @@ class Result extends Component {
 
         this.loadImages();
         window.addEventListener('scroll', this.handleScroll)
+        window.addEventListener("resize", this.calculateScreenSize);
     }
 
     handleLogoClick(event) {
@@ -164,6 +189,5 @@ class Result extends Component {
         }
     }
 }
-
 
 export default Result;
