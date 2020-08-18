@@ -35,6 +35,10 @@ const performSearch = async (keyword, page=1) => {
    });
 
    const json = await response.json();
+   if (json.length === 0) {
+      throw Error('Empty result')
+   }
+
    LOG("search result is:");
    LOG(json);
    return json
