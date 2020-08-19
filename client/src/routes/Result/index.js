@@ -8,8 +8,6 @@ import coloredLogo from '../../assets/logo-mm-transparent.png';
 import { LOG } from '../../utils';
 import performSearch, { getSearchRoute } from '../../actions/search';
 
-let numImagesToFetch = 30;
-
 class Result extends Component {
     constructor(props) {
         super(props);
@@ -17,14 +15,15 @@ class Result extends Component {
             error: null,
             isLoaded: false,
             images: [],
-            allImages: [],
             toWelcome: false,
             toNewResult: false,
             value: '',
             logo: logo,
         };
 
+        this.allImages = []
         this.queryString = QueryString.parse(this.props.queryString);
+        this.numImagesToFetch = 30;
 
         this.calculateScreenSize = this.calculateScreenSize.bind(this);
         this.handleLogoClick = this.handleLogoClick.bind(this);
@@ -32,46 +31,9 @@ class Result extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
         this.switchLogo = this.switchLogo.bind(this);
-        this.loadImages = this.loadImages.bind(this);
+        this.displayMoreImages = this.displayMoreImages.bind(this);
         this.handleScroll = this.handleScroll.bind(this);
-    }
-
-    loadImages() {
-        performSearch(this.queryString.keyword)
-            .then(images => {
-                this.setState({
-                    isLoaded: true,
-                    images: this.state.images.concat(images.slice(this.state.images.length, numImagesToFetch)),
-                    allImages: this.state.allImages.concat(images),
-                    value: this.queryString.keyword,
-                })
-            })
-            .catch(error => {
-                this.setState({
-                    isLoaded: true,
-                    error: error,
-                })
-            })
-
-        var allImagesCopy = this.state.allImages.map((x) => x);
-        this.setState({ images: this.state.images.concat(allImagesCopy.splice(this.state.images.length, numImagesToFetch)) });
-
-        LOG("Number of images to fetch: " + numImagesToFetch);
-        LOG(this.state.images.length);
-        LOG(this.state.allImages.length);
-    }
-
-    calculateScreenSize() {
-        LOG(window.innerHeight / 215.0);
-        LOG(window.innerWidth / 215.0);
-        numImagesToFetch = Math.floor(window.innerHeight / 215.0) * Math.floor(window.innerWidth / 215.0);
-    }
-
-    handleScroll() {
-        if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement.scrollHeight) {
-            LOG("YAY");
-            this.loadImages();
-        }
+        this.retrieveImages = this.retrieveImages.bind(this);
     }
 
     componentDidMount() {
@@ -79,9 +41,57 @@ class Result extends Component {
         this.setState({value: this.queryString.keyword});
 
         this.calculateScreenSize();
-        this.loadImages();
-        window.addEventListener('scroll', this.handleScroll)
+        this.retrieveImages();
+
+        window.addEventListener('scroll', this.handleScroll);
         window.addEventListener("resize", this.calculateScreenSize);
+    }
+
+    retrieveImages() {
+        performSearch(this.queryString.keyword).then(result => {
+            this.allImages = result;
+            this.displayMoreImages();
+            this.setState({isLoaded: true})
+        }).catch(error => {
+            this.setState({
+                error: error,
+            });
+        })
+    }
+
+    displayMoreImages() {
+        const startIndex = this.state.images.length;
+        const endIndex = startIndex + this.numImagesToFetch;
+
+        if (startIndex >= this.allImages.length) {
+            return;
+        }
+
+        let newImages = this.state.images.concat(this.allImages.slice(startIndex, endIndex))
+
+        this.setState({
+            images: newImages
+        })
+
+        LOG(this.allImages);
+        LOG(this.state.images);
+
+        LOG("Number of images to fetch: " + this.numImagesToFetch);
+    }
+
+    calculateScreenSize() {
+        const picPerRow = Math.floor(window.innerWidth / 230.0);
+        const picPerCol = Math.floor(window.innerHeight / 230.0);
+        LOG('pic per row: ' + picPerRow);
+        LOG('pic per col: ' + picPerCol);
+        this.numImagesToFetch = picPerRow * picPerCol;
+    }
+
+    handleScroll() {
+        if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement.scrollHeight) {
+            LOG('yay')
+            this.displayMoreImages();
+        }
     }
 
     handleLogoClick(event) {
