@@ -9,7 +9,6 @@ import { LOG } from '../../utils';
 import performSearch, { getSearchRoute } from '../../actions/search';
 
 let numImagesToFetch = 30;
-let retrieveFromDB = true;
 
 class Result extends Component {
     constructor(props) {
@@ -38,31 +37,24 @@ class Result extends Component {
     }
 
     loadImages() {
-        if (retrieveFromDB) {
-            performSearch(this.queryString.keyword)
-                .then(images => {
-                    this.setState({
-                        isLoaded: true,
-                        images: this.state.images.concat(images.slice(this.state.images.length, numImagesToFetch)),
-                        allImages: this.state.allImages.concat(images),
-                        value: this.queryString.keyword,
-                    })
+        performSearch(this.queryString.keyword)
+            .then(images => {
+                this.setState({
+                    isLoaded: true,
+                    images: this.state.images.concat(images.slice(this.state.images.length, numImagesToFetch)),
+                    allImages: this.state.allImages.concat(images),
+                    value: this.queryString.keyword,
                 })
-                .catch(error => {
-                    this.setState({
-                        isLoaded: true,
-                        error: error,
-                    })
+            })
+            .catch(error => {
+                this.setState({
+                    isLoaded: true,
+                    error: error,
                 })
-            retrieveFromDB = false;
-        }
+            })
 
         var allImagesCopy = this.state.allImages.map((x) => x);
         this.setState({ images: this.state.images.concat(allImagesCopy.splice(this.state.images.length, numImagesToFetch)) });
-
-        if (this.state.images.length == this.state.allImages.length) {
-            retrieveFromDB = true;
-        }
 
         LOG("Number of images to fetch: " + numImagesToFetch);
         LOG(this.state.images.length);
