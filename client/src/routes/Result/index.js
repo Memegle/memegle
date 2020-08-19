@@ -88,7 +88,7 @@ class Result extends Component {
     }
 
     handleScroll() {
-        if (window.innerHeight + document.documentElement.scrollTop === document.scrollingElement.scrollHeight) {
+        if (window.innerHeight + document.documentElement.scrollTop >= document.scrollingElement.scrollHeight) {
             LOG('yay')
             this.displayMoreImages();
         }
