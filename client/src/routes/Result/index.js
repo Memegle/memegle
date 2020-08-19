@@ -8,6 +8,9 @@ import coloredLogo from '../../assets/logo-mm-transparent.png';
 import { LOG } from '../../utils';
 import performSearch, { getSearchRoute } from '../../actions/search';
 
+let numImagesToFetch = 30;
+let retrieveFromDB = true;
+
 class Result extends Component {
     constructor(props) {
         super(props);
@@ -15,12 +18,11 @@ class Result extends Component {
             error: null,
             isLoaded: false,
             images: [],
-            rawImages: [],
+            allImages: [],
             toWelcome: false,
             toNewResult: false,
             value: '',
             logo: logo,
-            isDesktop: false,
         };
 
         this.queryString = QueryString.parse(this.props.queryString);
@@ -36,15 +38,13 @@ class Result extends Component {
     }
 
     loadImages() {
-        this.calculateScreenSize();
-
-        if (this.state.rawImages === undefined || this.state.rawImages.length === 0) {
+        if (retrieveFromDB) {
             performSearch(this.queryString.keyword)
                 .then(images => {
                     this.setState({
                         isLoaded: true,
-                        rawImages: this.state.rawImages.concat(images.splice(30, images.length)),
-                        images: this.state.isDesktop ? this.state.images.concat(images) : this.state.images.concat(images.splice(0, 30)),
+                        images: this.state.images.concat(images.slice(this.state.images.length, numImagesToFetch)),
+                        allImages: this.state.allImages.concat(images),
                         value: this.queryString.keyword,
                     })
                 })
@@ -54,23 +54,23 @@ class Result extends Component {
                         error: error,
                     })
                 })
-        }
-        else {
-            if (this.state.isDesktop) {
-                this.setState({ images: this.state.images.concat(this.state.rawImages) });
-                this.setState( { rawImages: [] });
-            }
-            else {
-                this.setState({ images: this.state.images.concat(this.state.rawImages.splice(0, 30)) });
-            }
+            retrieveFromDB = false;
         }
 
-        LOG(this.state.isDesktop);
-        LOG(this.state.rawImages.length);
+        var allImagesCopy = this.state.allImages.map((x) => x);
+        this.setState({ images: this.state.images.concat(allImagesCopy.splice(this.state.images.length, numImagesToFetch)) });
+
+        if (this.state.images.length == this.state.allImages.length) {
+            retrieveFromDB = true;
+        }
+
+        LOG("Number of images to fetch: " + numImagesToFetch);
+        LOG(this.state.images.length);
+        LOG(this.state.allImages.length);
     }
 
     calculateScreenSize() {
-        this.setState({ isDesktop: window.innerWidth > 1450 });
+        numImagesToFetch = Math.ceil((window.innerHeight / 250.0) * (window.innerWidth / 250.0));
     }
 
     handleScroll() {
@@ -84,6 +84,7 @@ class Result extends Component {
         LOG('In result page');
         this.setState({value: this.queryString.keyword});
 
+        this.calculateScreenSize();
         this.loadImages();
         window.addEventListener('scroll', this.handleScroll)
         window.addEventListener("resize", this.calculateScreenSize);
