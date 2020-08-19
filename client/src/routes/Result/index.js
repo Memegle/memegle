@@ -62,7 +62,9 @@ class Result extends Component {
     }
 
     calculateScreenSize() {
-        numImagesToFetch = Math.ceil((window.innerHeight / 250.0) * (window.innerWidth / 250.0));
+        LOG(window.innerHeight / 215.0);
+        LOG(window.innerWidth / 215.0);
+        numImagesToFetch = Math.floor(window.innerHeight / 215.0) * Math.floor(window.innerWidth / 215.0);
     }
 
     handleScroll() {
