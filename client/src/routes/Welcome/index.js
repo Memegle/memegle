@@ -73,7 +73,7 @@ class Welcome extends React.Component {
                         </div>
 
                     </div>
-                    <div className='row text'>
+                    <div className='text'>
                         网络表情符号最早来自于1982年美国卡内基梅隆大学Scott E·Fahlman教授在BBS上首次使用的ASCII码”:-)”表示微笑。
                     </div>
                 </div>
