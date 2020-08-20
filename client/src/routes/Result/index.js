@@ -51,7 +51,8 @@ class Result extends Component {
         performSearch(this.queryString.keyword).then(result => {
             this.allImages = result;
             this.displayMoreImages();
-            this.setState({isLoaded: true})
+            this.setState({isLoaded: true});
+            this.handleScroll(); // Load more images if no scroll bar is present
         }).catch(error => {
             this.setState({
                 error: error,
@@ -88,6 +89,9 @@ class Result extends Component {
     }
 
     handleScroll() {
+        LOG(window.innerHeight);
+        LOG(document.documentElement.scrollTop);
+        LOG(document.scrollingElement.scrollHeight);
         if (window.innerHeight + document.documentElement.scrollTop >= document.scrollingElement.scrollHeight) {
             LOG('yay')
             this.displayMoreImages();
