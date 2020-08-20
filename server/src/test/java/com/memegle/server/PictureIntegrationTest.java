@@ -59,13 +59,11 @@ class PictureIntegrationTest {
     void testPictureSearch() throws Exception {
         SearchQuery query = new SearchQuery();
         query.keyword = "哈哈";
-        query.page = 0;
 
         MvcResult result = mockMvc.perform(post("/search")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(query)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(PictureController.PIC_PER_PAGE)))
                 .andExpect(jsonPath("$[0]", startsWith(Constants.BASE_URL)))
                 .andReturn();
 
@@ -78,7 +76,6 @@ class PictureIntegrationTest {
     void testPictureSearchWithNoResult() throws Exception {
         SearchQuery query = new SearchQuery();
         query.keyword = "嫑";
-        query.page = 0;
 
         mockMvc.perform(post("/search")
                 .contentType("application/json")
@@ -87,7 +84,6 @@ class PictureIntegrationTest {
                 .andExpect(jsonPath("$", hasSize(0)));
 
         query.keyword = "哈哈";
-        query.page = 100;
 
         mockMvc.perform(post("/search")
                 .contentType("application/json")

@@ -24,8 +24,9 @@ import java.util.stream.Collectors;
 @CrossOrigin
 @Controller
 public class PictureController {
+    // TODO: put this param in the db
     // Constants
-    public final static int PIC_PER_PAGE = 30;
+    public final static int PIC_PER_PAGE = 200;
 
     private final PictureRepository pictureRepo;
     private final PictureSearchRepository searchRepo;
@@ -79,12 +80,12 @@ public class PictureController {
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Picture> search(@RequestBody SearchQuery query) {
-        if (query.keyword == null || query.keyword.length() == 0 || query.page < 0) {
+        if (query.keyword == null || query.keyword.length() == 0) {
             //TODO: change this to a HTTP error response
             return null;
         }
 
-        Pageable pageable = PageRequest.of(query.page, PIC_PER_PAGE);
+        Pageable pageable = PageRequest.of(0, PIC_PER_PAGE);
 
         LOGGER.info("Querying:\n" + query);
 

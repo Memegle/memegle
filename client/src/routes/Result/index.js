@@ -18,37 +18,85 @@ class Result extends Component {
             toWelcome: false,
             toNewResult: false,
             value: '',
-            logo: logo
+            logo: logo,
         };
 
+        this.allImages = []
         this.queryString = QueryString.parse(this.props.queryString);
+        this.numImagesToFetch = 30;
 
+        this.calculateScreenSize = this.calculateScreenSize.bind(this);
         this.handleLogoClick = this.handleLogoClick.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
         this.switchLogo = this.switchLogo.bind(this);
+        this.displayMoreImages = this.displayMoreImages.bind(this);
+        this.handleScroll = this.handleScroll.bind(this);
+        this.retrieveImages = this.retrieveImages.bind(this);
     }
 
     componentDidMount() {
         LOG('In result page');
         this.setState({value: this.queryString.keyword});
 
-        performSearch(this.queryString.keyword, this.queryString.page)
-            .then(images => {
-                this.setState({
-                    isLoaded: true,
-                    images: images,
-                })
-            })
-            .catch(error => {
-                this.setState({
-                    isLoaded: true,
-                    error: error,
-                })
-            })
+        this.calculateScreenSize();
+        this.retrieveImages();
+
+        window.addEventListener('scroll', this.handleScroll);
+        window.addEventListener("resize", this.calculateScreenSize);
     }
 
+    retrieveImages() {
+        performSearch(this.queryString.keyword).then(result => {
+            this.allImages = result;
+            this.displayMoreImages();
+            this.setState({isLoaded: true});
+            this.handleScroll(); // Load more images if no scroll bar is present
+        }).catch(error => {
+            this.setState({
+                error: error,
+            });
+        })
+    }
+
+    displayMoreImages() {
+        const startIndex = this.state.images.length;
+        const endIndex = startIndex + this.numImagesToFetch;
+
+        if (startIndex >= this.allImages.length) {
+            return;
+        }
+
+        let newImages = this.state.images.concat(this.allImages.slice(startIndex, endIndex))
+
+        this.setState({
+            images: newImages
+        })
+
+        LOG(this.allImages);
+        LOG(this.state.images);
+
+        LOG("Number of images to fetch: " + this.numImagesToFetch);
+    }
+
+    calculateScreenSize() {
+        const picPerRow = Math.floor(window.innerWidth / 230.0);
+        const picPerCol = Math.floor(window.innerHeight / 230.0);
+        LOG('pic per row: ' + picPerRow);
+        LOG('pic per col: ' + picPerCol);
+        this.numImagesToFetch = picPerRow * picPerCol;
+    }
+
+    handleScroll() {
+        LOG(window.innerHeight);
+        LOG(document.documentElement.scrollTop);
+        LOG(document.scrollingElement.scrollHeight);
+        if (window.innerHeight + document.documentElement.scrollTop >= document.scrollingElement.scrollHeight) {
+            LOG('yay')
+            this.displayMoreImages();
+        }
+    }
 
     handleLogoClick(event) {
         event.preventDefault();
@@ -150,6 +198,5 @@ class Result extends Component {
         }
     }
 }
-
 
 export default Result;
