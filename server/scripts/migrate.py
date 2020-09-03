@@ -9,7 +9,7 @@ import sys
 from memegle_cnstd import CnStd
 from memegle_cnocr import CnOcr
 
-cnstd = CnStd(model_name='mobilenetv3')
+cnstd = CnStd()
 cnocr = CnOcr()
 
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
@@ -20,6 +20,7 @@ DATA_PATH = './data/'
 RAW_DATA_PATH = './data/raw/'
 PROCESSED_DATA_PATH = './data/processed/'
 TEST_DATA_PATH = './data/test/'
+GIF_DATA_PATH = './data/gif/'
 URL_PREFIX = '/'
 
 OUTPUT_DATA_PATH = PROCESSED_DATA_PATH if not TEST_MODE else TEST_DATA_PATH
@@ -36,8 +37,12 @@ if not (exists(RAW_DATA_PATH) and isdir(RAW_DATA_PATH)):
     sys.exit()
 
 if not (exists(OUTPUT_DATA_PATH) and isdir(OUTPUT_DATA_PATH)):
-    print('./data/processed/ does not exist, creating')
+    print('{} does not exist, creating'.format(OUTPUT_DATA_PATH))
     mkdir(OUTPUT_DATA_PATH)
+
+if not (exists(GIF_DATA_PATH and isdir(GIF_DATA_PATH))):
+    print('creating gif folder...')
+    mkdir(GIF_DATA_PATH)
 
 # db config
 client = MongoClient(port=27017)
@@ -63,6 +68,7 @@ print('starting at seq {}'.format(seq))
 img_files = [f for f in listdir(RAW_DATA_PATH) if isfile(join(RAW_DATA_PATH, f))]
 insert_lst = []
 already_exist = []
+gifs = []
 
 for filename in img_files:
     if pic_col.find_one({'name': filename}) is not None:
@@ -71,8 +77,12 @@ for filename in img_files:
 
     img_name, ext = splitext(filename)
 
+    if ext == '.gif':
+        gifs.append(filename)
+        continue
+
     seq += 1
-    print('processing seq', seq)
+    print('Processing {} at seq {}'.format(filename, seq))
 
     picture = cv2.imread(RAW_DATA_PATH + filename)
     width, height, channels = picture.shape
@@ -86,6 +96,8 @@ for filename in img_files:
         lines.append(''.join(line))
         confs.append(conf.tolist())
 
+    print('found text:', lines)
+
     d = {
         '_id': seq,
         'name': img_name,
@@ -98,6 +110,7 @@ for filename in img_files:
         'text': lines,
         'confidence': confs,
     }
+
     insert_lst.append(d)
 
 
@@ -105,7 +118,8 @@ if len(insert_lst) > 0:
     pic_col.insert_many(insert_lst)
     seq_col.update_one({'_id': 'picture_sequence'}, {'$set': {'seq': seq}})
 
-    print('start copying')
+    print('successfully updated mongodb.')
+    print('start copying...')
 
     for to_insert in insert_lst:
         filename = to_insert['name'] + '.' + to_insert['filetype']
@@ -123,7 +137,15 @@ if len(insert_lst) > 0:
             rename(source, dest)
 
 if len(already_exist) > 0:
-    print('The following imgs already exists in the db:')
-for to_insert in already_exist:
-    print(to_insert)
+    print('Skipped {} images that are already in the db'.format(len(already_exist)))
+
+if len(gifs) > 0:
+    print('Skipped {} gif images'.format(len(gifs)))
+
+    for filename in gifs:
+        source = join(RAW_DATA_PATH, filename)
+        dest = join(GIF_DATA_PATH, filename)
+
+        rename(source, dest)
+
 print('Total {}, inserted {} to the db'.format(len(img_files), len(insert_lst)))
