@@ -24,6 +24,8 @@ URL_PREFIX = '/'
 
 OUTPUT_DATA_PATH = PROCESSED_DATA_PATH if not TEST_MODE else TEST_DATA_PATH
 
+print('Running', 'Real Migration' if not TEST_MODE else 'Test Migration', 'with COPY =', COPY)
+
 if not (exists(DATA_PATH) and isdir(DATA_PATH)):
     print('creating data folder...')
     mkdir(DATA_PATH)
