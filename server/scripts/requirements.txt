@@ -2,4 +2,4 @@ urllib3
 requests
 pymongo
 pytest-shutil
-pillow
+opencv-python
