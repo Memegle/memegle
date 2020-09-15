@@ -7,7 +7,7 @@ from shutil import copyfile
 import cv2
 import sys
 import subprocess
-
+from ast import literal_eval
 
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
 COPY = False
@@ -96,8 +96,18 @@ for filename in img_files:
     resultStr = stdout.decode('utf-8')
     result = resultStr.splitlines()
     lines = result[0]
-    confs = result[1]
-    boundingBoxes = result[2]
+    boundingBoxes = literal_eval(result[1])
+    confs = result[2]
+    convertedBoundingBoxes = []
+
+    for box in boundingBoxes:
+        yCoord = (height - box[1] * height) - (box[1] * height)
+        convertedDim = (box[0] * width, yCoord, box[2] * width, box[3] * height)
+        convertedBoundingBoxes.append(convertedDim)
+
+    print("Height: " + str(height))
+    print("Width: " + str(width))
+    print(convertedBoundingBoxes)
 
     print('found text:', resultStr)
 
@@ -112,7 +122,7 @@ for filename in img_files:
         'height': height,
         'text': lines,
         'confidence': confs,
-        'boundingBoxes': boundingBoxes
+        'boundingBoxes': convertedBoundingBoxes
     }
 
     insert_lst.append(d)
