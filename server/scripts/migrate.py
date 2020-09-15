@@ -101,8 +101,8 @@ for filename in img_files:
     convertedBoundingBoxes = []
 
     for box in boundingBoxes:
-        yCoord = (height - box[1] * height) - (box[1] * height)
-        convertedDim = (box[0] * width, yCoord, box[2] * width, box[3] * height)
+        yCoord = (height - box[1] * height) - (box[3] * height)
+        convertedDim = (round(box[0] * width), round(yCoord), round(box[2] * width), round(box[3] * height))
         convertedBoundingBoxes.append(convertedDim)
 
     print("Height: " + str(height))
@@ -121,7 +121,7 @@ for filename in img_files:
         'width': width,
         'height': height,
         'text': lines,
-        'confidence': confs,
+        'confidence': None,
         'boundingBoxes': convertedBoundingBoxes
     }
 
