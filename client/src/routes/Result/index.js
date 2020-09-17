@@ -133,13 +133,12 @@ class Result extends Component {
             if (error) {
                 return <div className="error">Error: {error.message}</div>;
             } else if (!isLoaded) {
-                return <div>Loading...</div>;
+                return <div style={{ color: 'white' }}>Loading...</div>;
             } else {
                 return (
                     <React.Fragment>
                         {images.map(image => {
-
-                            var height, width;
+                            let height, width;
                             if (image.height > image.width) {
                                 height = 78;
                                 width = 78 * image.width / image.height;
