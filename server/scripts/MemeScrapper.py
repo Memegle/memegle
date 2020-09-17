@@ -44,7 +44,7 @@ def slugify(value, allow_unicode=False):
 
 URL = 'https://fabiaoqing.com/biaoqing/detail/id/'
 SUFFIX = '.html'
-DOWNLOAD_FOLDER = 'raw/'
+DOWNLOAD_FOLDER = 'data/raw/'
 ID = abs(int(sys.argv[1]))
 TIMES_RUN = int(sys.argv[2])
 
