@@ -8,6 +8,7 @@ import cv2
 import sys
 import subprocess
 from ast import literal_eval
+from PIL import Image
 
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
 COPY = False
@@ -19,6 +20,7 @@ PROCESSED_DATA_PATH = './data/processed/'
 TEST_DATA_PATH = './data/test/'
 GIF_DATA_PATH = './data/gif/'
 URL_PREFIX = '/'
+ERROR_PATH = './data/error'
 
 OUTPUT_DATA_PATH = PROCESSED_DATA_PATH if not TEST_MODE else TEST_DATA_PATH
 
@@ -40,6 +42,10 @@ if not (exists(OUTPUT_DATA_PATH) and isdir(OUTPUT_DATA_PATH)):
 if not (exists(GIF_DATA_PATH) and isdir(GIF_DATA_PATH)):
     print('creating gif folder...')
     mkdir(GIF_DATA_PATH)
+
+if not (exists(ERROR_PATH) and isdir(ERROR_PATH)):
+    print('creating error folder...')
+    mkdir(ERROR_PATH)
 
 # db config
 client = MongoClient(port=27017)
@@ -66,6 +72,7 @@ img_files = [f for f in listdir(RAW_DATA_PATH) if isfile(join(RAW_DATA_PATH, f))
 insert_lst = []
 already_exist = []
 gifs = []
+error_lst = []
 
 for filename in img_files:
 
@@ -74,9 +81,9 @@ for filename in img_files:
     if ext not in ['.jpg', '.jpeg', '.png', '.gif']:
         continue
 
-    if ext == '.gif':
-        gifs.append(filename)
-        continue
+    #if ext == '.gif':
+    #    gifs.append(filename)
+    #    continue
 
     if pic_col.find_one({'name': filename}) is not None:
         already_exist.append(filename)
@@ -85,46 +92,52 @@ for filename in img_files:
     seq += 1
     print('Processing {} at seq {}'.format(filename, seq))
 
-    picture = cv2.imread(RAW_DATA_PATH + filename)
-    width, height, channels = picture.shape
+    try:
+        picture = Image.open(RAW_DATA_PATH + filename)
+        width, height = picture.size
 
-    lines = []
-    confs = []
-    process = subprocess.Popen(['./scripts/MemesOCR', (RAW_DATA_PATH + filename)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = process.communicate()
+        lines = []
+        confs = []
+        process = subprocess.Popen(['./scripts/MemesOCR', (RAW_DATA_PATH + filename)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
 
-    resultStr = stdout.decode('utf-8')
-    result = resultStr.splitlines()
-    lines = result[0]
-    boundingBoxes = literal_eval(result[1])
-    confs = result[2]
-    convertedBoundingBoxes = []
+        resultStr = stdout.decode('utf-8')
+        result = resultStr.splitlines()
+        lines = literal_eval(result[0])
+        boundingBoxes = literal_eval(result[1])
+        confs = literal_eval(result[2])
+        convertedBoundingBoxes = []
 
-    for box in boundingBoxes:
-        yCoord = (height - box[1] * height) - (box[3] * height)
-        convertedDim = (round(box[0] * width), round(yCoord), round(box[2] * width), round(box[3] * height))
-        convertedBoundingBoxes.append(convertedDim)
+        for box in boundingBoxes:
+            yCoord = (height - box[1] * height) - (box[3] * height)
+            convertedDim = (round(box[0] * width), round(yCoord), round(box[2] * width), round(box[3] * height))
+            convertedBoundingBoxes.append(convertedDim)
 
-    print("Height: " + str(height))
-    print("Width: " + str(width))
-    print(convertedBoundingBoxes)
+        print("Height: " + str(height))
+        print("Width: " + str(width))
+        print(convertedBoundingBoxes)
 
-    print('found text:', resultStr)
+        print('found text:', resultStr)
 
-    d = {
-        '_id': seq,
-        'name': img_name,
-        'filetype': ext[1:],
-        'dateUpdated': datetime.datetime.utcnow(),
-        'urlSuffix': URL_PREFIX + seq + ext,
-        'width': width,
-        'height': height,
-        'text': lines,
-        'confidence': None,
-        'boundingBoxes': convertedBoundingBoxes
-    }
+        d = {
+            '_id': seq,
+            'name': img_name,
+            'filetype': ext[1:],
+            'dateUpdated': datetime.datetime.utcnow(),
+            'urlSuffix': URL_PREFIX + seq + ext,
+            'width': width,
+            'height': height,
+            'text': lines,
+            'confidence': None,
+            'boundingBoxes': convertedBoundingBoxes
+        }
 
-    insert_lst.append(d)
+        insert_lst.append(d)
+
+    except:
+        error_lst.append(filename)
+        seq -= 1
+        continue
 
 
 if len(insert_lst) > 0:
@@ -151,6 +164,15 @@ if len(insert_lst) > 0:
 
 if len(already_exist) > 0:
     print('Skipped {} images that are already in the db'.format(len(already_exist)))
+
+if len(error_lst) > 0:
+    print('Had problem reading {} images'.format(len(error_lst)))
+
+    for filename in error_lst:
+        source = join(RAW_DATA_PATH, filename)
+        dest = join(ERROR_PATH, filename)
+
+        rename(source, dest)
 
 if len(gifs) > 0:
     print('Skipped {} gif images'.format(len(gifs)))
