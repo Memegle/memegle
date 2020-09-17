@@ -68,7 +68,7 @@ already_exist = []
 gifs = []
 
 for filename in img_files:
-    
+
     img_name, ext = splitext(filename)
 
     if ext not in ['.jpg', '.jpeg', '.png', '.gif']:
@@ -92,7 +92,7 @@ for filename in img_files:
     confs = []
     process = subprocess.Popen(['./scripts/MemesOCR', (RAW_DATA_PATH + filename)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
-    
+
     resultStr = stdout.decode('utf-8')
     result = resultStr.splitlines()
     lines = result[0]
@@ -116,8 +116,7 @@ for filename in img_files:
         'name': img_name,
         'filetype': ext[1:],
         'dateUpdated': datetime.datetime.utcnow(),
-        'urlSuffix': URL_PREFIX + filename,
-        '_class': 'com.memegle.server.Picture.Picture',
+        'urlSuffix': URL_PREFIX + seq + ext,
         'width': width,
         'height': height,
         'text': lines,
@@ -136,7 +135,7 @@ if len(insert_lst) > 0:
     print('start copying...')
 
     for to_insert in insert_lst:
-        filename = to_insert['name'] + '.' + to_insert['filetype']
+        filename = to_insert['_id'] + '.' + to_insert['filetype']
 
         # move file to output folder
         source = join(RAW_DATA_PATH, filename)
