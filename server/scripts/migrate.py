@@ -85,7 +85,7 @@ for filename in img_files:
     #    gifs.append(filename)
     #    continue
 
-    if pic_col.find_one({'name': filename}) is not None:
+    if pic_col.find_one({'name': img_name}) is not None:
         already_exist.append(filename)
         continue
 
