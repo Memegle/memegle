@@ -10,6 +10,12 @@ import subprocess
 from ast import literal_eval
 from PIL import Image
 
+if len(sys.argv) != 2:
+    sys.exit('Require one int argument: [num_pics_to_migrate]')
+
+NUM_PICS = int(sys.argv[1])
+count = 0
+
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
 COPY = False
 TEST_MODE = True
@@ -76,6 +82,10 @@ error_lst = []
 
 for filename in img_files:
 
+    count += 1
+    if (count > NUM_PICS):
+        break
+
     img_name, ext = splitext(filename)
 
     if ext not in ['.jpg', '.jpeg', '.png', '.gif']:
@@ -85,7 +95,7 @@ for filename in img_files:
     #    gifs.append(filename)
     #    continue
 
-    if pic_col.find_one({'name': filename}) is not None:
+    if pic_col.find_one({'name': img_name}) is not None:
         already_exist.append(filename)
         continue
 
@@ -124,7 +134,7 @@ for filename in img_files:
             'name': img_name,
             'filetype': ext[1:],
             'dateUpdated': datetime.datetime.utcnow(),
-            'urlSuffix': URL_PREFIX + seq + ext,
+            'urlSuffix': URL_PREFIX + str(seq) + ext,
             'width': width,
             'height': height,
             'text': lines,
@@ -137,7 +147,7 @@ for filename in img_files:
     except:
         error_lst.append(filename)
         seq -= 1
-        continue
+        pass
 
 
 if len(insert_lst) > 0:
@@ -148,11 +158,12 @@ if len(insert_lst) > 0:
     print('start copying...')
 
     for to_insert in insert_lst:
-        filename = to_insert['_id'] + '.' + to_insert['filetype']
+        src_filename = str(to_insert['name']) + '.' + to_insert['filetype']
+        dest_filename = str(to_insert['_id']) + '.' + to_insert['filetype']
 
         # move file to output folder
-        source = join(RAW_DATA_PATH, filename)
-        dest = join(OUTPUT_DATA_PATH, filename)
+        source = join(RAW_DATA_PATH, src_filename)
+        dest = join(OUTPUT_DATA_PATH, dest_filename)
 
         if exists(dest):
             remove(dest)
