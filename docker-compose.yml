@@ -95,6 +95,15 @@ services:
       - es:es
     restart: always
 
+  ocr:
+    build:
+      context: ./server
+      dockerfile: Dockerfile-OCR
+    working_dir: /root/PaddleOCR/
+    volumes:
+      - ./server/data/raw:/root/data/raw
+    restart: always
+
 volumes:
   rs1:
   esdata:

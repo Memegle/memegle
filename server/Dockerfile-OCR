@@ -1,0 +1,15 @@
+FROM python:3.7
+
+WORKDIR /root/
+RUN mkdir -p data/raw/
+RUN git clone https://github.com/vinovo/PaddleOCR.git
+WORKDIR /root/PaddleOCR/
+RUN python3 -m pip install paddlepaddle==2.0.0b0 -i https://mirror.baidu.com/pypi/simple
+RUN pip3 install -r requirments.txt
+RUN mkdir inference
+WORKDIR /root/PaddleOCR/inference/
+RUN wget https://paddleocr.bj.bcebos.com/20-09-22/server/det/ch_ppocr_server_v1.1_det_infer.tar && tar xf ch_ppocr_server_v1.1_det_infer.tar
+RUN wget https://paddleocr.bj.bcebos.com/20-09-22/cls/ch_ppocr_mobile_v1.1_cls_infer.tar && tar xf ch_ppocr_mobile_v1.1_cls_infer.tar
+RUN wget https://paddleocr.bj.bcebos.com/20-09-22/server/rec/ch_ppocr_server_v1.1_rec_infer.tar && tar xf ch_ppocr_server_v1.1_rec_infer.tar
+RUN rm *.tar
+WORKDIR /root/PaddleOCR/
