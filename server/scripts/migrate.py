@@ -9,12 +9,17 @@ import sys
 import subprocess
 from ast import literal_eval
 from PIL import Image
+import numpy as np
 
 if len(sys.argv) != 2:
-    sys.exit('Require one int argument: [num_pics_to_migrate]')
+	sys.exit('Require one int argument: [num_pics_to_migrate]')
+NUM_PICS = int(sys.argv[1]) + 1
+del sys.argv[1]
 
-NUM_PICS = int(sys.argv[1])
 count = 0
+
+from paddleocr import PaddleOCR, draw_ocr
+ocr = PaddleOCR(use_angle_cls=True, lang='ch', use_gpu=False)
 
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
 COPY = False
@@ -108,26 +113,14 @@ for filename in img_files:
 
         lines = []
         confs = []
-        process = subprocess.Popen(['./scripts/MemesOCR', (RAW_DATA_PATH + filename)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate()
+        boundingBoxes = []
+        result = ocr.ocr(RAW_DATA_PATH+filename, cls=True)
+        for line in result:
+            boundingBoxes.append(line[0])
+            lines.append((line[1])[0])
+            confs.append(np.float64((line[1])[1]).item())
 
-        resultStr = stdout.decode('utf-8')
-        result = resultStr.splitlines()
-        lines = literal_eval(result[0])
-        boundingBoxes = literal_eval(result[1])
-        confs = literal_eval(result[2])
-        convertedBoundingBoxes = []
-
-        for box in boundingBoxes:
-            yCoord = (height - box[1] * height) - (box[3] * height)
-            convertedDim = (round(box[0] * width), round(yCoord), round(box[2] * width), round(box[3] * height))
-            convertedBoundingBoxes.append(convertedDim)
-
-        print("Height: " + str(height))
-        print("Width: " + str(width))
-        print(convertedBoundingBoxes)
-
-        print('found text:', resultStr)
+        print('found text:', lines)
 
         d = {
             '_id': seq,
@@ -138,8 +131,8 @@ for filename in img_files:
             'width': width,
             'height': height,
             'text': lines,
-            'confidence': None,
-            'boundingBoxes': convertedBoundingBoxes
+            'confidence': confs,
+            'boundingBoxes': boundingBoxes
         }
 
         insert_lst.append(d)
