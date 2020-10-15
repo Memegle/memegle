@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 
 @Document(collection = "pictures")
 public class Picture {
@@ -19,6 +21,7 @@ public class Picture {
     @Id
     private long id;
     private String name;
+    private String filetype;
     private Date dateUpdated;
     private int width;
     private int height;
@@ -33,6 +36,7 @@ public class Picture {
 
     public long getId() {return this.id;}
     public String getName() {return this.name;}
+    public String getFiletype() {return this.filetype;}
     public String getUrlSuffix() {return this.urlSuffix;}
     public Date getDateUpdated() {return this.dateUpdated;}
     public int getWidth() {return this.width;}
@@ -40,6 +44,7 @@ public class Picture {
     public ArrayList<String> getTexts() {return texts;}
     public ArrayList<Float> getConfidences() {return confidences;}
     public ArrayList<ArrayList<Integer>> getBoundingBoxes() {return boundingBoxes;}
+
     @JsonProperty("fullUrl")
     public String getFullUrl() {
         return Constants.BASE_URL + Constants.IMAGE_MAPPING + this.urlSuffix;
@@ -47,6 +52,7 @@ public class Picture {
 
     public void setId(long id) {this.id = id;}
     public void setName(String name) {this.name = name;}
+    public void setFiletype(String filetype) {this.filetype = filetype;}
     public void setUrlSuffix(String urlSuffix) {this.urlSuffix = urlSuffix;}
     public void setDateUpdated(Date date) {this.dateUpdated = date;}
     public void setWidth(int w) {this.width = w;}
