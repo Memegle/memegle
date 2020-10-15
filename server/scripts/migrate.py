@@ -30,7 +30,7 @@ PROCESSED_DATA_PATH = './data/processed/'
 TEST_DATA_PATH = './data/test/'
 GIF_DATA_PATH = './data/gif/'
 URL_PREFIX = '/'
-ERROR_PATH = './data/error'
+ERROR_PATH = './data/error/'
 
 OUTPUT_DATA_PATH = PROCESSED_DATA_PATH if not TEST_MODE else TEST_DATA_PATH
 
