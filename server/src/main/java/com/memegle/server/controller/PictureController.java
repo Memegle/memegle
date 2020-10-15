@@ -5,6 +5,7 @@ import com.memegle.server.model.PictureSearch;
 import com.memegle.server.repository.PictureRepository;
 import com.memegle.server.repository.PictureSearchRepository;
 import com.memegle.server.model.Picture;
+import com.memegle.server.service.SequenceGeneratorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -30,13 +31,16 @@ public class PictureController {
 
     private final PictureRepository pictureRepo;
     private final PictureSearchRepository searchRepo;
+    private final SequenceGeneratorService sequenceGeneratorService;
 
     // Logging
     private static final Logger LOGGER = LoggerFactory.getLogger(PictureController.class);
 
-    public PictureController(PictureRepository pictureRepo, PictureSearchRepository searchRepository) {
+    public PictureController(PictureRepository pictureRepo, PictureSearchRepository searchRepository,
+                             SequenceGeneratorService sequenceGeneratorService) {
         this.pictureRepo = pictureRepo;
         this.searchRepo = searchRepository;
+        this.sequenceGeneratorService = sequenceGeneratorService;
     }
 
     @GetMapping("/")
@@ -98,6 +102,13 @@ public class PictureController {
     @GetMapping("/secrets/{name}")
     public String secrets(HttpServletRequest request, @PathVariable String name) {
         return name + "/index.html";
+    }
+
+    // Getting the picture sequence, for manual data migration.
+    @GetMapping("/sequence")
+    @ResponseBody
+    public long sequence() {
+        return sequenceGeneratorService.getCurrentSequence(Picture.SEQUENCE_NAME);
     }
 
     @GetMapping(value = "/welcome")

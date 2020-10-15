@@ -1,10 +1,35 @@
 # Memegle Server
 source code for Memegle server
 
+## Dependencies
+To be able to run data migration, you need to have PaddleOCR installed
+1. run `./scripts/paddle-setup.sh`
+2. (Optional) Download det, cls, rec inference models from [PaddleOCR repo](https://github.com/PaddlePaddle/PaddleOCR/blob/develop/doc/doc_en/quickstart_en.md),
+put them under `~/.paddleOCR`, follow the instruction on the repo to uncompress them, and rename them to `det`, `rec`, `cls` respectively.
+The folder should have the following structure after uncompressing. (Don't forget to remove the tar files).
+    
+    ```
+    |-.paddleOCR
+        |-det
+            |- model
+            |- params
+        |-rec
+            |- ch
+                |- model
+                |- params
+        |-cls
+            |- model
+            |- params
+        ...
+    ```
+    
+    If you choose to not download any model, models of middle-size and medium performance will be downloaded the first time you run migrate.
+
 ## Running Scripts
 We have a few python scripts of various purposes.
 
 (All paths are relative to current directory)
+
 ### MemeScrapper
 `python3 ./scripts/MemeScrapper.py [start_id] [num_pics]`
 

@@ -4,26 +4,25 @@ from os import listdir, rename, remove, mkdir
 from os.path import isfile, join, exists, splitext, isdir
 import datetime
 from shutil import copyfile
-import cv2
 import sys
-import subprocess
-from ast import literal_eval
 from PIL import Image
 import numpy as np
 
-if len(sys.argv) != 2:
-	sys.exit('Require one int argument: [num_pics_to_migrate]')
-NUM_PICS = int(sys.argv[1]) + 1
-del sys.argv[1]
+if len(sys.argv) == 2:
+    NUM_PICS = int(sys.argv[1])
+    del sys.argv[1]
+else:
+    NUM_PICS = float('inf')
 
 count = 0
 
 from paddleocr import PaddleOCR, draw_ocr
+
 ocr = PaddleOCR(use_angle_cls=True, lang='ch', use_gpu=False)
 
 # COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
 COPY = False
-TEST_MODE = True
+TEST_MODE = False
 
 DATA_PATH = './data/'
 RAW_DATA_PATH = './data/raw/'
@@ -88,17 +87,13 @@ error_lst = []
 for filename in img_files:
 
     count += 1
-    if (count > NUM_PICS):
+    if count > NUM_PICS:
         break
 
     img_name, ext = splitext(filename)
 
     if ext not in ['.jpg', '.jpeg', '.png', '.gif']:
         continue
-
-    #if ext == '.gif':
-    #    gifs.append(filename)
-    #    continue
 
     if pic_col.find_one({'name': img_name}) is not None:
         already_exist.append(filename)
@@ -114,7 +109,7 @@ for filename in img_files:
         lines = []
         confs = []
         boundingBoxes = []
-        result = ocr.ocr(RAW_DATA_PATH+filename, cls=True)
+        result = ocr.ocr(RAW_DATA_PATH + filename, cls=True)
         for line in result:
             boundingBoxes.append(line[0])
             lines.append((line[1])[0])
@@ -130,18 +125,19 @@ for filename in img_files:
             'urlSuffix': URL_PREFIX + str(seq) + ext,
             'width': width,
             'height': height,
-            'text': lines,
-            'confidence': confs,
-            'boundingBoxes': boundingBoxes
+            'texts': lines,
+            'confidences': confs,
+            'boundingBoxes': boundingBoxes,
+            'tags': [],
         }
 
         insert_lst.append(d)
 
-    except:
+    except Exception as e:
+        print('Error {}'.format(e))
         error_lst.append(filename)
         seq -= 1
         pass
-
 
 if len(insert_lst) > 0:
     pic_col.insert_many(insert_lst)

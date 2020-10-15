@@ -3,3 +3,4 @@ requests
 pymongo
 pytest-shutil
 pillow
+numpy
