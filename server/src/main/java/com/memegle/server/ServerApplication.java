@@ -27,7 +27,7 @@ public class ServerApplication {
 	// Runner for MongoBee
 	@Bean
 	public SpringBootMongock mongock(MongoTemplate mongoTemplate, ApplicationContext springContext) {
-		return new SpringBootMongockBuilder(mongoTemplate, "com.memegle.server.DbHelper")
+		return new SpringBootMongockBuilder(mongoTemplate, "com.memegle.server.changeLogs")
 				.setApplicationContext(springContext)
 				.setLockQuickConfig()
 				.build();

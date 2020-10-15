@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,9 +25,10 @@ public class Picture {
     private Date dateUpdated;
     private int width;
     private int height;
-    private List<String> text;
-    private List<Float> confidence;
-    private List<List<Integer>> boundingBoxes;
+    private ArrayList<String> texts;
+    private ArrayList<Float> confidences;
+    private ArrayList<ArrayList<Integer>> boundingBoxes;
+
     @JsonIgnore
     private String urlSuffix;
 
@@ -39,9 +41,9 @@ public class Picture {
     public Date getDateUpdated() {return this.dateUpdated;}
     public int getWidth() {return this.width;}
     public int getHeight() {return this.height;}
-    public List<String> getText() {return this.text;}
-    public List<Float> getConfidence() {return this.confidence;}
-    public List<List<Integer>> getBoundingBoxes() {return this.boundingBoxes;}
+    public ArrayList<String> getTexts() {return texts;}
+    public ArrayList<Float> getConfidences() {return confidences;}
+    public ArrayList<ArrayList<Integer>> getBoundingBoxes() {return boundingBoxes;}
 
     @JsonProperty("fullUrl")
     public String getFullUrl() {
@@ -55,7 +57,7 @@ public class Picture {
     public void setDateUpdated(Date date) {this.dateUpdated = date;}
     public void setWidth(int w) {this.width = w;}
     public void setHeight(int h) {this.height = h;}
-    public void setText(List<String> text) {this.text = text;}
-    public void setConfidence(List<Float> confidence) {this.confidence = confidence;}
-    public void setBoundingBoxes(List<List<Integer>> boundingBoxes) {this.boundingBoxes = boundingBoxes;}
+    public void setTexts(ArrayList<String> text) {this.texts = text;}
+    public void setConfidences(ArrayList<Float> confidence) {this.confidences = confidence;}
+    public void setBoundingBoxes(ArrayList<ArrayList<Integer>> boundingBoxes) {this.boundingBoxes = boundingBoxes;}
 }
