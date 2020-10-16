@@ -27,7 +27,7 @@ public class Picture {
     private int height;
     private ArrayList<String> texts;
     private ArrayList<Float> confidences;
-    private ArrayList<ArrayList<Integer>> boundingBoxes;
+    private ArrayList<ArrayList<ArrayList<Integer>>> boundingBoxes;
 
     @JsonIgnore
     private String urlSuffix;
@@ -43,7 +43,7 @@ public class Picture {
     public int getHeight() {return this.height;}
     public ArrayList<String> getTexts() {return texts;}
     public ArrayList<Float> getConfidences() {return confidences;}
-    public ArrayList<ArrayList<Integer>> getBoundingBoxes() {return boundingBoxes;}
+    public ArrayList<ArrayList<ArrayList<Integer>>> getBoundingBoxes() {return boundingBoxes;}
 
     @JsonProperty("fullUrl")
     public String getFullUrl() {
@@ -59,5 +59,5 @@ public class Picture {
     public void setHeight(int h) {this.height = h;}
     public void setTexts(ArrayList<String> text) {this.texts = text;}
     public void setConfidences(ArrayList<Float> confidence) {this.confidences = confidence;}
-    public void setBoundingBoxes(ArrayList<ArrayList<Integer>> boundingBoxes) {this.boundingBoxes = boundingBoxes;}
+    public void setBoundingBoxes(ArrayList<ArrayList<ArrayList<Integer>>> boundingBoxes) {this.boundingBoxes = boundingBoxes;}
 }
