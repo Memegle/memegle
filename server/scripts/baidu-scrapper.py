@@ -5,6 +5,8 @@ from os.path import exists, isdir
 import re
 import unicodedata
 
+# Please manually filter out bad images after running the scripts.
+
 # Always change this two variable before executing
 query = '李云龙 表情包'
 tags = ['李云龙', '亮剑']
