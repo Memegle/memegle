@@ -4,12 +4,13 @@ from os import mkdir
 from os.path import exists, isdir
 import re
 import unicodedata
+import json as js
 
 # Please manually filter out bad images after running the scripts.
 
 # Always change this two variable before executing
-query = '李云龙 表情包'
-tags = ['李云龙', '亮剑']
+query = '可爱猫猫 表情包'
+tags = ['猫猫', '可爱', '宠物']
 
 # Constants
 DOWNLOAD_FOLDER = 'data/raw/' + ';'.join(tags) + '/'
@@ -52,8 +53,10 @@ for page in range(START_PAGE, END_PAGE, 1):
           + str(start_ind) + '&rn=30&gsm=1e&1603393461671='
 
     response = session.get(url)
-    # response may contain special chars.
-    json = response.json(strict=False)
+    # handle invalid escapes
+    text = response.text
+    result = re.sub(r"\\([^\/u\"])", "\\1", text, re.MULTILINE)
+    json = js.loads(result)
     data = json['data']
 
     # download each image
