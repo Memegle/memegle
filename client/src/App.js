@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
+import Analytics from "react-router-ga";
 
 import {isInDevelopmentMode, LOG} from "./utils";
 import Main from './Main'
@@ -40,7 +41,9 @@ class App extends Component {
     render() {
         return (
             <BrowserRouter>
-                <Main/>
+                <Analytics id={isInDevelopmentMode() ? null : "UA-181206874-1"}>
+                    <Main/>
+                </Analytics>
             </BrowserRouter>
         )
     }

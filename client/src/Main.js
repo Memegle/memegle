@@ -1,5 +1,5 @@
 import {Redirect, Route, Switch, withRouter} from "react-router-dom";
-import React, { Component } from "react";
+import React, {Component} from "react";
 
 import paths from "./routes/paths";
 import Welcome from "./routes/Welcome";
@@ -15,9 +15,9 @@ class Main extends Component {
 
         return (
             <Switch>
-                <Route path={paths.welcome} component={Welcome} />
-                <Route path={paths.search} component={ResultPage} />
-                <Redirect to={paths.default} />
+                <Route path={paths.welcome} component={Welcome}/>
+                <Route path={paths.search} component={ResultPage}/>
+                <Redirect to={paths.default}/>
             </Switch>
         )
     }
