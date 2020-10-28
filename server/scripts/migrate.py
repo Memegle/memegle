@@ -15,6 +15,7 @@ else:
     NUM_PICS = float('inf')
 
 count = 0
+success = 0
 
 from paddleocr import PaddleOCR, draw_ocr
 
@@ -78,38 +79,33 @@ else:
 
 print('starting at seq {}'.format(seq))
 
-img_files = [f for f in listdir(RAW_DATA_PATH) if isfile(join(RAW_DATA_PATH, f))]
-insert_lst = []
+img_files = []
 already_exist = []
 gifs = []
 error_lst = []
 
-for filename in img_files:
 
-    count += 1
-    if count > NUM_PICS:
-        break
-
+def process_image(dir, filename):
     img_name, ext = splitext(filename)
 
     if ext not in ['.jpg', '.jpeg', '.png', '.gif']:
-        continue
+        return None
 
     if pic_col.find_one({'name': img_name}) is not None:
-        already_exist.append(filename)
-        continue
+        already_exist.append(join(dir, filename))
+        return None
 
+    global seq
     seq += 1
-    print('Processing {} at seq {}'.format(filename, seq))
 
     try:
-        picture = Image.open(RAW_DATA_PATH + filename)
+        picture = Image.open(join(dir, filename))
         width, height = picture.size
 
         lines = []
         confs = []
         boundingBoxes = []
-        result = ocr.ocr(RAW_DATA_PATH + filename, cls=True)
+        result = ocr.ocr(join(dir, filename), cls=True)
         for line in result:
             boundingBoxes.append(line[0])
             lines.append((line[1])[0])
@@ -131,36 +127,65 @@ for filename in img_files:
             'tags': [],
         }
 
-        insert_lst.append(d)
+        return d
 
     except Exception as e:
         print('Error {}'.format(e))
-        error_lst.append(filename)
+        error_lst.append(join(dir, filename))
         seq -= 1
-        pass
 
-if len(insert_lst) > 0:
-    pic_col.insert_many(insert_lst)
+
+def update_db(d):
+    print('inserting {} to db...'.format(d['name'] + '.' + d['filetype']))
+    pic_col.insert_one(d)
     seq_col.update_one({'_id': 'picture_sequence'}, {'$set': {'seq': seq}})
 
-    print('successfully updated mongodb.')
-    print('start copying...')
 
-    for to_insert in insert_lst:
-        src_filename = str(to_insert['name']) + '.' + to_insert['filetype']
-        dest_filename = str(to_insert['_id']) + '.' + to_insert['filetype']
+def add_to_processed(dir, name, ext, id):
+    print('copying {} with id {}'.format(name + '.' + ext, id))
+    src_filename = name + '.' + ext
+    dest_filename = str(id) + '.' + ext
 
-        # move file to output folder
-        source = join(RAW_DATA_PATH, src_filename)
-        dest = join(OUTPUT_DATA_PATH, dest_filename)
+    source = join(dir, src_filename)
+    dest = join(OUTPUT_DATA_PATH, dest_filename)
 
-        if exists(dest):
-            remove(dest)
+    if exists(dest):
+        remove(dest)
 
-        if COPY:
-            copyfile(source, dest)
-        else:
-            rename(source, dest)
+    if COPY:
+        copyfile(source, dest)
+    else:
+        rename(source, dest)
+
+
+for f in listdir(RAW_DATA_PATH):
+    if isfile(join(RAW_DATA_PATH, f)):
+        img_files.append(f)
+    else:
+        tags = f.split(';')
+        print('processing folder with tags {}'.format(tags))
+        dir = join(RAW_DATA_PATH, f)
+        for filename in listdir(dir):
+            count += 1
+            d = process_image(dir, filename)
+            if d:
+                d['tags'] = tags
+                update_db(d)
+                add_to_processed(dir, d['name'], d['filetype'], d['_id'])
+                print('done with {}'.format(d['name'] + '.' + d['filetype']))
+                success += 1
+
+for filename in img_files:
+    count += 1
+    if count > NUM_PICS:
+        break
+    d = process_image(RAW_DATA_PATH, filename)
+    if d:
+        update_db(d)
+        add_to_processed(OUTPUT_DATA_PATH, d['name'], d['filetype'], d['_id'])
+        print('done with {}'.format(d['name'] + '.' + d['filetype']))
+        success += 1
+
 
 if len(already_exist) > 0:
     print('Skipped {} images that are already in the db'.format(len(already_exist)))
@@ -168,8 +193,7 @@ if len(already_exist) > 0:
 if len(error_lst) > 0:
     print('Had problem reading {} images'.format(len(error_lst)))
 
-    for filename in error_lst:
-        source = join(RAW_DATA_PATH, filename)
+    for source in error_lst:
         dest = join(ERROR_PATH, filename)
 
         rename(source, dest)
@@ -177,10 +201,9 @@ if len(error_lst) > 0:
 if len(gifs) > 0:
     print('Skipped {} gif images'.format(len(gifs)))
 
-    for filename in gifs:
-        source = join(RAW_DATA_PATH, filename)
+    for source in gifs:
         dest = join(GIF_DATA_PATH, filename)
 
         rename(source, dest)
 
-print('Total {}, inserted {} to the db'.format(len(img_files), len(insert_lst)))
+print('Total {}, inserted {} to the db'.format(count, success))

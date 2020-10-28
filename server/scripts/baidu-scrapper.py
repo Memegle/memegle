@@ -9,8 +9,9 @@ import json as js
 # Please manually filter out bad images after running the scripts.
 
 # Always change this two variable before executing
-query = '可爱猫猫 表情包'
-tags = ['猫猫', '可爱', '宠物']
+# The + sign force the result to include pattern 表情包
+query = '李云龙 +表情包'
+tags = ['李云龙', '亮剑']
 
 # Constants
 DOWNLOAD_FOLDER = 'data/raw/' + ';'.join(tags) + '/'
@@ -55,7 +56,9 @@ for page in range(START_PAGE, END_PAGE, 1):
     response = session.get(url)
     # handle invalid escapes
     text = response.text
-    result = re.sub(r"\\([^\/u\"])", "\\1", text, re.MULTILINE)
+    text = re.sub(r'"fromPageTitle":".*?[^\\]",', '', text)
+    result = re.sub(r'\\([^\/u"])', '\\1', text, re.MULTILINE)
+
     json = js.loads(result)
     data = json['data']
 
