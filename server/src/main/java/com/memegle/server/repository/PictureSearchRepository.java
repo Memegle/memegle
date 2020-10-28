@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface PictureSearchRepository extends ElasticsearchRepository<PictureSearch, Long> {
-    @Query("{\"multi_match\": {\"query\": \"?0\", \"fields\": [\"name\", \"text\"]}}")
+    @Query("{\"multi_match\": {\"query\": \"?0\", \"fields\": [\"name\", \"text\", \"tags\"]}}")
     List<PictureSearch> searchName(String name, Pageable pageable);
 }
