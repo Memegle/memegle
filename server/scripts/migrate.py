@@ -182,7 +182,7 @@ for filename in img_files:
     d = process_image(RAW_DATA_PATH, filename)
     if d:
         update_db(d)
-        add_to_processed(OUTPUT_DATA_PATH, d['name'], d['filetype'], d['_id'])
+        add_to_processed(RAW_DATA_PATH, d['name'], d['filetype'], d['_id'])
         print('done with {}'.format(d['name'] + '.' + d['filetype']))
         success += 1
 
