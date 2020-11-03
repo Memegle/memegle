@@ -23,9 +23,10 @@
     color: white;
 }
 
-:focus {
+.search-bar:focus {
     transition: .5s ease;
     box-shadow: inset -2px -3px 5px #FFFFFF;
+    outline: none;
 }
 
 .logo {
