@@ -139,7 +139,7 @@ class Result extends Component {
         }
     }
 
-    render() {
+    DesktopMobileView(mobile) {
 
         const RenderImages = ({error, isLoaded, images}) => {
             if (error) {
@@ -159,6 +159,7 @@ class Result extends Component {
                                 width = 78;
                                 height = 78 * image.height / image.width;
                             }
+    
                             if (this.state.mobileView) {
                                 return (
                                     <div className='mobile-row'>
@@ -183,34 +184,7 @@ class Result extends Component {
             }
         };
 
-        const DesktopView = () => {
-            return (
-                <div className='container'>
-                    <div className='row top'>
-                        <div className='img-div'>
-                            <img src={this.state.logo} className='logo' alt='none' onClick={this.handleLogoClick}
-                                 onMouseEnter={this.switchLogo} onMouseLeave={this.switchLogo}/>
-                        </div>
-                        <div className='col-6 search-bar-div'>
-                            <input className='search-bar' type='text' value={this.state.value} placeholder='请输入关键词'
-                                   onKeyPress={this.keyPressed} onChange={this.handleChange}/>
-
-                            <img src={require('../../assets/icon-magnifier-white.png')}
-                                 className='result-magnifier' alt='none'/>
-                        </div>
-                        <div className='col search-button-div'>
-                            <button className='result-search-button' onClick={this.handleSubmit}>搜图 :)</button>
-                        </div>
-                    </div>
-                    <div className="row gallery">
-                        <RenderImages error={this.state.error} isLoaded={this.state.isLoaded}
-                                      images={this.state.images}/>
-                    </div>
-                </div>
-            );
-        }
-
-        const MobileView = () => {
+        if (mobile) {
             return (
                 <div className='container'>
                     <div className='row top'>
@@ -221,7 +195,7 @@ class Result extends Component {
                         <div className='col-6 mobile-search-bar-div'>
                             <input className='mobile-search-bar' type='text' value={this.state.value} placeholder='请输入关键词'
                                    onKeyPress={this.keyPressed} onChange={this.handleChange}/>
-
+    
                             <img src={require('../../assets/icon-magnifier-white.png')}
                                  className='mobile-result-magnifier' alt='none'/>
                         </div>
@@ -235,16 +209,43 @@ class Result extends Component {
                     </div>
                 </div>
             );
+        } 
+        else {
+            return (
+                <div className='container'>
+                    <div className='row top'>
+                        <div className='img-div'>
+                            <img src={this.state.logo} className='logo' alt='none' onClick={this.handleLogoClick}
+                                onMouseEnter={this.switchLogo} onMouseLeave={this.switchLogo} />
+                        </div>
+                        <div className='col-6 search-bar-div'>
+                            <input className='search-bar' type='text' value={this.state.value} placeholder='请输入关键词'
+                                onKeyPress={this.keyPressed} onChange={this.handleChange} />
+
+                            <img src={require('../../assets/icon-magnifier-white.png')}
+                                className='result-magnifier' alt='none' />
+                        </div>
+                        <div className='col search-button-div'>
+                            <button className='result-search-button' onClick={this.handleSubmit}>搜图 :)</button>
+                        </div>
+                    </div>
+                    <div className="row gallery">
+                        <RenderImages error={this.state.error} isLoaded={this.state.isLoaded}
+                            images={this.state.images} />
+                    </div>
+                </div>
+            );
         }
+    }
 
-
+    render() {
         if (this.state.toWelcome) {
             return <Redirect to='welcome'/>;
         } else if (this.state.toNewResult) {
             const newRoute = getSearchRoute(this.state.value)
             return <Redirect to={newRoute}/>;
         } else {
-            return this.state.mobileView? <MobileView /> : <DesktopView />;
+            return this.DesktopMobileView(this.state.mobileView);
         }
     }
 }
