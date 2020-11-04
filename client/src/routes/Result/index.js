@@ -19,6 +19,7 @@ class Result extends Component {
             toNewResult: false,
             value: '',
             logo: logo,
+            mobileView: false,
         };
 
         this.allImages = []
@@ -34,6 +35,7 @@ class Result extends Component {
         this.displayMoreImages = this.displayMoreImages.bind(this);
         this.handleScroll = this.handleScroll.bind(this);
         this.retrieveImages = this.retrieveImages.bind(this);
+        this.handleWindowResize = this.handleWindowResize.bind(this);
     }
 
     componentDidMount() {
@@ -42,9 +44,19 @@ class Result extends Component {
 
         this.calculateScreenSize();
         this.retrieveImages();
+        this.handleWindowResize();
 
         window.addEventListener('scroll', this.handleScroll);
         window.addEventListener("resize", this.calculateScreenSize);
+        window.addEventListener("resize", this.handleWindowResize)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.handleWindowResize)
+    }
+
+    handleWindowResize() {
+        this.setState({mobileView: window.innerWidth <= 480})
     }
 
     retrieveImages() {
@@ -147,26 +159,31 @@ class Result extends Component {
                                 width = 78;
                                 height = 78 * image.height / image.width;
                             }
-
-                            return (
-                                <div className='image-div' key={image.id}>
-                                    <img src={image.fullUrl} style={{height: height+'%', width: width+'%'}} alt='none' />
-                                    <div className='frame' />
-                                </div>
-                            );
+                            if (this.state.mobileView) {
+                                return (
+                                    <div className='mobile-row'>
+                                        <div className='mobile-image-div' key={image.id}>
+                                            <img src={image.fullUrl} style={{ height: height + '%', width: width + '%' }} alt='none' />
+                                            <div className='mobile-frame' />
+                                        </div>
+                                    </div>
+                                );
+                            }
+                            else {
+                                return (
+                                    <div className='image-div' key={image.id}>
+                                        <img src={image.fullUrl} style={{ height: height + '%', width: width + '%' }} alt='none' />
+                                        <div className='frame' />
+                                    </div>
+                                );
+                            }
                         })}
                     </React.Fragment>
                 );
             }
         };
 
-
-        if (this.state.toWelcome) {
-            return <Redirect to='welcome'/>;
-        } else if (this.state.toNewResult) {
-            const newRoute = getSearchRoute(this.state.value)
-            return <Redirect to={newRoute}/>;
-        } else {
+        const DesktopView = () => {
             return (
                 <div className='container'>
                     <div className='row top'>
@@ -191,6 +208,43 @@ class Result extends Component {
                     </div>
                 </div>
             );
+        }
+
+        const MobileView = () => {
+            return (
+                <div className='container'>
+                    <div className='row top'>
+                        <div className='img-div'>
+                            <img src={this.state.logo} className='logo' alt='none' onClick={this.handleLogoClick}
+                                 onMouseEnter={this.switchLogo} onMouseLeave={this.switchLogo}/>
+                        </div>
+                        <div className='col-6 mobile-search-bar-div'>
+                            <input className='mobile-search-bar' type='text' value={this.state.value} placeholder='请输入关键词'
+                                   onKeyPress={this.keyPressed} onChange={this.handleChange}/>
+
+                            <img src={require('../../assets/icon-magnifier-white.png')}
+                                 className='mobile-result-magnifier' alt='none'/>
+                        </div>
+                        <div className='mobile-search-button-div'>
+                            <button className='mobile-result-search-button' onClick={this.handleSubmit}>搜图 :)</button>
+                        </div>
+                    </div>
+                    <div className="row gallery">
+                        <RenderImages error={this.state.error} isLoaded={this.state.isLoaded}
+                                      images={this.state.images}/>
+                    </div>
+                </div>
+            );
+        }
+
+
+        if (this.state.toWelcome) {
+            return <Redirect to='welcome'/>;
+        } else if (this.state.toNewResult) {
+            const newRoute = getSearchRoute(this.state.value)
+            return <Redirect to={newRoute}/>;
+        } else {
+            return this.state.mobileView? <MobileView /> : <DesktopView />;
         }
     }
 }
