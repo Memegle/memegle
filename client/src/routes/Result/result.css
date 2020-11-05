@@ -109,6 +109,8 @@
     font-size: 24px;
 }
 
+/** Mobile */
+
 .mobile-search-bar-div {
     margin-left: 4%;
     display: flex;
@@ -128,6 +130,12 @@
     border-radius: 30px;
     background-color:black;
     color: white;
+}
+
+.mobile-search-bar:focus {
+    transition: .5s ease;
+    box-shadow: inset -2px -3px 5px #FFFFFF;
+    outline: none;
 }
 
 .mobile-result-magnifier {

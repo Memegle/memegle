@@ -3,10 +3,10 @@ import * as QueryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 
 import './result.css';
-import logo from '../../assets/logo-mm-hollow.png';
-import coloredLogo from '../../assets/logo-mm-transparent.png';
-import { LOG } from '../../utils';
-import performSearch, { getSearchRoute } from '../../actions/search';
+import logo from 'assets/logo-mm-hollow.png';
+import coloredLogo from 'assets/logo-mm-transparent.png';
+import { LOG } from 'utils';
+import performSearch, { getSearchRoute } from 'actions/search';
 
 class Result extends Component {
     constructor(props) {
@@ -102,7 +102,6 @@ class Result extends Component {
 
     handleScroll() {
         if (window.innerHeight + document.documentElement.scrollTop >= document.scrollingElement.scrollHeight) {
-            LOG('yay')
             this.displayMoreImages();
         }
     }
@@ -139,13 +138,13 @@ class Result extends Component {
         }
     }
 
-    DesktopMobileView(mobile) {
-
+    DesktopMobileView() {
+        const mobile = this.state.mobileView;
         const RenderImages = ({error, isLoaded, images}) => {
             if (error) {
                 return <div className="error">Error: {error.message}</div>;
             } else if (!isLoaded) {
-                return <div style={{ color: 'white' }}>Loading...</div>;
+                return <div style={{ margin: `5px 5px`, color: 'white' }}>拼命找图中 (๑•́ ₃ •̀๑)...</div>;
             } else {
                 return (
                     <React.Fragment>
@@ -160,7 +159,7 @@ class Result extends Component {
                                 height = 78 * image.height / image.width;
                             }
     
-                            if (this.state.mobileView) {
+                            if (mobile) {
                                 return (
                                     <div className='mobile-row'>
                                         <div className='mobile-image-div' key={image.id}>
@@ -185,6 +184,7 @@ class Result extends Component {
         };
 
         if (mobile) {
+            LOG('rerendering')
             return (
                 <div className='container'>
                     <div className='row top'>
@@ -196,7 +196,7 @@ class Result extends Component {
                             <input className='mobile-search-bar' type='text' value={this.state.value} placeholder='请输入关键词'
                                    onKeyPress={this.keyPressed} onChange={this.handleChange}/>
     
-                            <img src={require('../../assets/icon-magnifier-white.png')}
+                            <img src={require('assets/icon-magnifier-white.png')}
                                  className='mobile-result-magnifier' alt='none'/>
                         </div>
                         <div className='mobile-search-button-div'>
@@ -222,7 +222,7 @@ class Result extends Component {
                             <input className='search-bar' type='text' value={this.state.value} placeholder='请输入关键词'
                                 onKeyPress={this.keyPressed} onChange={this.handleChange} />
 
-                            <img src={require('../../assets/icon-magnifier-white.png')}
+                            <img src={require('assets/icon-magnifier-white.png')}
                                 className='result-magnifier' alt='none' />
                         </div>
                         <div className='col search-button-div'>
@@ -245,7 +245,7 @@ class Result extends Component {
             const newRoute = getSearchRoute(this.state.value)
             return <Redirect to={newRoute}/>;
         } else {
-            return this.DesktopMobileView(this.state.mobileView);
+            return this.DesktopMobileView();
         }
     }
 }
