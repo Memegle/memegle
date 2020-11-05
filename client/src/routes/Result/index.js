@@ -8,6 +8,55 @@ import coloredLogo from '../../assets/logo-mm-transparent.png';
 import { LOG } from '../../utils';
 import performSearch, { getSearchRoute } from '../../actions/search';
 
+//import Modal from 'react-modal';
+//import { Button, Form } from 'react-bootstrap'
+import Button from 'react-bootstrap/Button';
+import Modal from "react-bootstrap/Modal";
+import ModalBody from "react-bootstrap/ModalBody";
+import ModalHeader from "react-bootstrap/ModalHeader";
+import ModalFooter from "react-bootstrap/ModalFooter";
+import ModalTitle from "react-bootstrap/ModalTitle";
+
+const UserFeedback = () => {
+    const [isOpen, setIsOpen] = React.useState(true);
+    const [title, setTitle] = React.useState("Loading...")
+
+    const bg = {
+        overlay: {
+            backgroundColor: "#000000"
+        }
+    };
+
+    const showModal = () => {
+        setIsOpen(true);
+    };
+
+    const hideModal = () => {
+        setIsOpen(false);
+    };
+
+    const modalLoaded = () => {
+        setTitle("Looks like no results showed. Please propose some categories that you would like included in future searches. :)");
+    };
+
+    return (
+        <>
+            <Modal className="my-modal" show={isOpen} onHide={hideModal} onEntered={modalLoaded}>
+                <Modal.Header>
+                    <Modal.Title>{title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <input type="text" name="fname"></input>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button onClick={hideModal}>Cancel</button>
+                    <button onClick={hideModal}>Save</button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    );
+};
+
 class Result extends Component {
     constructor(props) {
         super(props);
@@ -19,6 +68,7 @@ class Result extends Component {
             toNewResult: false,
             value: '',
             logo: logo,
+            userFeedback: false
         };
 
         this.allImages = []
@@ -56,8 +106,14 @@ class Result extends Component {
         }).catch(error => {
             this.setState({
                 error: error,
+                /*userFeedback: (error.message === 'Empty result') ?
+                    prompt('Looks like no results showed. Please propose some categories that you would like included in future searches. :)')
+                    : null*/
             });
+
+            //LOG(this.state.userFeedback)
         })
+
     }
 
     displayMoreImages() {
@@ -131,7 +187,7 @@ class Result extends Component {
 
         const RenderImages = ({error, isLoaded, images}) => {
             if (error) {
-                return <div className="error">Error: {error.message}</div>;
+                return  <UserFeedback />;
             } else if (!isLoaded) {
                 return <div style={{ color: 'white' }}>Loading...</div>;
             } else {
@@ -159,7 +215,6 @@ class Result extends Component {
                 );
             }
         };
-
 
         if (this.state.toWelcome) {
             return <Redirect to='welcome'/>;

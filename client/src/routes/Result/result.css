@@ -3,6 +3,11 @@
     margin-left: 1%;
 }
 
+.my-modal .modal-content {
+    background-color: black;
+    color: white;
+}
+
 .search-bar-div {
     margin-left: 1.5%;
     display: flex;
