@@ -19,6 +19,7 @@ class Result extends Component {
             toNewResult: false,
             value: '',
             logo: logo,
+            poorResult: false,
         };
 
         this.allImages = []
@@ -57,7 +58,31 @@ class Result extends Component {
             this.setState({
                 error: error,
             });
+        }).finally(() => {
+            const poorResult = this.isResultPoor(this.allImages);
+            LOG("poor result? " + poorResult);
+            this.setState({poorResult: poorResult});
         })
+    }
+
+    isResultPoor(images) {
+        // Scores are generally low if the query consists of only one Chinese character.
+        if (this.queryString.keyword.length < 2) {
+            return false;
+        }
+
+        if (images.length < 5) {
+            return true;
+        }
+
+        // Check the top 5 results
+        const toCheck = 5;
+        const sum = images.slice(0, toCheck).map(image => image.searchScore)
+            .reduce((sum, cur) => sum + cur, 0);
+        const avg = sum / toCheck;
+
+        // If there are at least two matched characters, the score is generally higher than 10.
+        return avg < 10;
     }
 
     displayMoreImages() {
