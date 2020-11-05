@@ -16,19 +16,17 @@ class Result extends Component {
             isLoaded: false,
             images: [],
             toWelcome: false,
-            toNewResult: false,
-            value: '',
+            newSearch: null,
             logo: logo,
             mobileView: false,
         };
 
         this.allImages = []
         this.queryString = QueryString.parse(this.props.queryString);
-        this.numImagesToFetch = 30;
+        this.numImagesToAdd = 30;
 
         this.calculateScreenSize = this.calculateScreenSize.bind(this);
         this.handleLogoClick = this.handleLogoClick.bind(this);
-        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
         this.switchLogo = this.switchLogo.bind(this);
@@ -74,7 +72,7 @@ class Result extends Component {
 
     displayMoreImages() {
         const startIndex = this.state.images.length;
-        const endIndex = startIndex + this.numImagesToFetch;
+        const endIndex = startIndex + this.numImagesToAdd;
 
         if (startIndex >= this.allImages.length) {
             return;
@@ -89,7 +87,7 @@ class Result extends Component {
         LOG(this.allImages);
         LOG(this.state.images);
 
-        LOG("Number of images to fetch: " + this.numImagesToFetch);
+        LOG("Number of images to fetch: " + this.numImagesToAdd);
     }
 
     calculateScreenSize() {
@@ -97,7 +95,7 @@ class Result extends Component {
         const picPerCol = Math.floor(window.innerHeight / 230.0);
         LOG('pic per row: ' + picPerRow);
         LOG('pic per col: ' + picPerCol);
-        this.numImagesToFetch = picPerRow * picPerCol;
+        this.numImagesToAdd = picPerRow * picPerCol;
     }
 
     handleScroll() {
@@ -111,17 +109,10 @@ class Result extends Component {
         this.setState({toWelcome: true});
     }
 
-    handleChange(event) {
-        this.setState({value: event.target.value});
-    }
-
     handleSubmit(event) {
-        if (this.state.value === '') {
-            return;
-        }
         event.preventDefault();
-        document.title = this.state.value + " - Memegle";
-        this.setState({toNewResult: true});
+        document.title = event.target.value + " - Memegle";
+        this.setState({newSearch: event.target.value});
     }
 
     keyPressed(event) {
@@ -141,8 +132,9 @@ class Result extends Component {
     DesktopMobileView() {
         const mobile = this.state.mobileView;
         const RenderImages = ({error, isLoaded, images}) => {
+            LOG("Rendering images")
             if (error) {
-                return <div className="error">Error: {error.message}</div>;
+                return <div className="error">啊噢，{error.message} ಥ_ಥ</div>;
             } else if (!isLoaded) {
                 return <div style={{ margin: `5px 5px`, color: 'white' }}>拼命找图中 (๑•́ ₃ •̀๑)...</div>;
             } else {
@@ -184,7 +176,6 @@ class Result extends Component {
         };
 
         if (mobile) {
-            LOG('rerendering')
             return (
                 <div className='container'>
                     <div className='row top'>
@@ -193,8 +184,8 @@ class Result extends Component {
                                  onMouseEnter={this.switchLogo} onMouseLeave={this.switchLogo}/>
                         </div>
                         <div className='col-6 mobile-search-bar-div'>
-                            <input className='mobile-search-bar' type='text' value={this.state.value} placeholder='请输入关键词'
-                                   onKeyPress={this.keyPressed} onChange={this.handleChange}/>
+                            <input className='mobile-search-bar' type='text' defaultValue={this.queryString.keyword}
+                                   placeholder='请输入关键词' onKeyPress={this.keyPressed} />
     
                             <img src={require('assets/icon-magnifier-white.png')}
                                  className='mobile-result-magnifier' alt='none'/>
@@ -219,8 +210,8 @@ class Result extends Component {
                                 onMouseEnter={this.switchLogo} onMouseLeave={this.switchLogo} />
                         </div>
                         <div className='col-6 search-bar-div'>
-                            <input className='search-bar' type='text' value={this.state.value} placeholder='请输入关键词'
-                                onKeyPress={this.keyPressed} onChange={this.handleChange} />
+                            <input className='search-bar' type='text' defaultValue={this.queryString.keyword}
+                                   placeholder='请输入关键词' onKeyPress={this.keyPressed} />
 
                             <img src={require('assets/icon-magnifier-white.png')}
                                 className='result-magnifier' alt='none' />
@@ -241,8 +232,8 @@ class Result extends Component {
     render() {
         if (this.state.toWelcome) {
             return <Redirect to='welcome'/>;
-        } else if (this.state.toNewResult) {
-            const newRoute = getSearchRoute(this.state.value)
+        } else if (this.state.newSearch) {
+            const newRoute = getSearchRoute(this.state.newSearch)
             return <Redirect to={newRoute}/>;
         } else {
             return this.DesktopMobileView();

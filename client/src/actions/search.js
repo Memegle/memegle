@@ -19,25 +19,31 @@ const performSearch = async (keyword) => {
        "Dispatching Search Query:\n" +
        "keyword="+keyword+"\n"
    )
+   
+   let response;
 
-   let response = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({
-         keyword: keyword,
-      }),
-      headers: {
-         Accept: 'application/json',
-         'Content-Type': 'application/json'
-      }
-   });
+   try {
+      response = await fetch(url, {
+         method: 'POST',
+         body: JSON.stringify({
+            keyword: keyword,
+         }),
+         headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+         }
+      });
+   } catch (e) {
+      throw Error('查询失败了，等会再试试呗')
+   }
 
    if (response.status !== 200) {
-      throw Error("Failed to fetch result")
+      throw Error('查询失败了，等会再试试呗')
    }
 
    const json = await response.json();
    if (json.length === 0) {
-      throw Error('Empty result')
+      throw Error('似乎没有找到符合要求的图片')
    }
 
    LOG("search result is:");
@@ -54,7 +60,7 @@ export const getSearchRoute = (keyword) => {
 
 const validateQuery = (keyword) => {
    if (keyword.length === 0) {
-      return "Empty query";
+      return "无法执行空查询";
    }
 
    return null;
