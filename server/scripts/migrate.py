@@ -76,6 +76,7 @@ if seq is None:
     seq = 0
 else:
     seq = seq['seq']
+    seq_col.update_one({'_id': 'picture_sequence'}, {'$set': {'prev_seq': seq}})
 
 print('starting at seq {}'.format(seq))
 

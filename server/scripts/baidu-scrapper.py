@@ -10,8 +10,8 @@ import json as js
 
 # Always change this two variable before executing
 # The + sign force the result to include pattern 表情包
-query = '宝宝心里苦'
-tags = ['宝宝心里苦', '伤心']
+query = '问号 +表情包'
+tags = ['???', '问号', '？？？']
 
 # Constants
 DOWNLOAD_FOLDER = 'data/raw/' + ';'.join(tags) + '/'
