@@ -1,5 +1,34 @@
+/** Common */
+.container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.fact {
+  position: absolute;
+  bottom: 5%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 85%;
+  color: white;
+  text-align: center;
+  font-size: 18px;
+}
+
+::placeholder {
+  color: white;
+  opacity: 0.80;
+}
+
 /** Desktop components */
-.home-header {
+.header {
   margin: 5% auto;
   width: 65%;
   display: flex;
@@ -9,17 +38,12 @@
   border-radius: 30px;
 }
 
-.home-logo-div {
-  justify-content: center;
+.logo {
+  padding-top: 5%;
   width: 80%;
 }
 
-.home-logo {
-  padding-top: 5%;
-  width: 100%;
-}
-
-.home-search-bar-div {
+.searchBarDiv {
   position: relative;
   padding-top: 6%;
   padding-bottom: 10%;
@@ -27,7 +51,7 @@
   min-height: 60px;
 }
 
-.search-box-div {
+.searchBoxDiv {
   height: 40px;
   padding: 0;
   display: flex;
@@ -35,7 +59,7 @@
   justify-content: center;
 }
 
-.home-search-bar {
+.searchBar {
   padding-left: 15px;
   padding-right: 50px;
   align-content: center;
@@ -50,7 +74,12 @@
   text-overflow: ellipsis;
 }
 
-.home-magnifier {
+.searchBar:focus {
+  transition: .5s ease;
+  box-shadow: inset -2px -3px 5px #FFFFFF;
+}
+
+.magnifier {
   pointer-events: none;
   position: absolute;
   width: 20px;
@@ -59,25 +88,15 @@
   right: 20px;
 }
 
-.home-search-bar:focus {
-  transition: .5s ease;
-  box-shadow: inset -2px -3px 5px #FFFFFF;
-}
 
-::placeholder {
-  color: white;
-  opacity: 0.80;
-}
-
-
-.button-search-div {
+.buttonDiv {
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.button-search {
+.button {
   background-color: black;
   color: white;
   border-radius: 30px;
@@ -88,7 +107,7 @@
   text-overflow: ellipsis;
 }
 
-.button-search:focus {
+.button:focus {
   box-shadow: inset -2px -3px 5px #FFFFFF;
   transition: .5s ease;
   outline: none;
@@ -99,20 +118,20 @@ input:focus {
 }
 
 /** Mobile components */
-.mobile-logo {
+.mLogo {
   display: block;
   height: 21%;
   margin: 30% auto 0;
 }
 
-.mobile-search-box-div {
+.mSearchBoxDiv {
   width: 75%;
   height: 40px;
   margin: 18% auto 0;
   position: relative;
 }
 
-.mobile-search-box {
+.mSearchBox {
   width: 100%;
   height: 100%;
   background-color: black;
@@ -125,17 +144,12 @@ input:focus {
   padding: 0;
 }
 
-.mobile-search-box:focus {
+.mSearchBox:focus {
   box-shadow: inset 0 -2px 1px #FFFFFF;
   outline: none
 }
 
-.mobile-search-box:focus::placeholder {
-  color: transparent;
-}
-
-
-.mobile-magnifier {
+.mMagnifier {
   position: absolute;
   width: 25px;
   height: 25px;
@@ -143,7 +157,7 @@ input:focus {
   right: 0;
 }
 
-.mobile-search-button {
+.mButton {
   display: block;
   margin: 7% auto;
   width: 19%;
@@ -157,44 +171,29 @@ input:focus {
   font-size: 16px;
 }
 
-.mobile-search-button:hover {
+.mButton:hover {
   box-shadow: inset -2px -3px 5px #FFFFFF;
   outline: none
 }
 
-
-/** Common */
-.container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  min-width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.text {
-  position: absolute;
-  bottom: 5%;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  width: 85%;
-  color: white;
-  text-align: center;
-  font-size: 18px;
-}
-
 @media screen and (max-width: 1024px)
 {
-  .home-header {
+  .header {
     width: 85%;
     margin: 20% auto;
   }
 
-  .text {
-    font-size: 16px;
+  .fact {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-height: 720px) {
+  .header {
+    margin: 5% auto;
+  }
+
+  .fact {
+    display: none;
   }
 }
