@@ -21,12 +21,6 @@ const UserFeedback = () => {
     const [isOpen, setIsOpen] = React.useState(true);
     const [title, setTitle] = React.useState("Loading...")
 
-    const bg = {
-        overlay: {
-            backgroundColor: "#000000"
-        }
-    };
-
     const showModal = () => {
         setIsOpen(true);
     };
@@ -36,21 +30,21 @@ const UserFeedback = () => {
     };
 
     const modalLoaded = () => {
-        setTitle("Looks like no results showed. Please propose some categories that you would like included in future searches. :)");
+        setTitle("Not satisfied with the result? Propose some categories that you would like to see in future searches. :)");
     };
 
     return (
         <>
-            <Modal className="my-modal" show={isOpen} onHide={hideModal} onEntered={modalLoaded}>
-                <Modal.Header>
-                    <Modal.Title>{title}</Modal.Title>
+            <Modal centered className="modal-feedback" show={isOpen} onHide={hideModal} onEntered={modalLoaded}>
+                <Modal.Header className="modal-header">
+                    <Modal.Title className="modal-title">{title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <input type="text" name="fname"></input>
+                    <input className="modal-searchBar" placeholder="Use comma to split each category" type="text" name="fname"></input>
                 </Modal.Body>
-                <Modal.Footer>
-                    <button onClick={hideModal}>Cancel</button>
-                    <button onClick={hideModal}>Save</button>
+                <Modal.Footer className="modal-footer">
+                    <button className="modal-cancelButton" onClick={hideModal}>算了 :(</button>
+                    <button className="modal-saveButton" onClick={hideModal}>好的 :P</button>
                 </Modal.Footer>
             </Modal>
         </>
