@@ -10,14 +10,14 @@ import json as js
 
 # Always change this two variable before executing
 # The + sign force the result to include pattern 表情包
-query = '李云龙 +表情包'
-tags = ['李云龙', '亮剑']
+query = '宝宝心里苦'
+tags = ['宝宝心里苦', '伤心']
 
 # Constants
 DOWNLOAD_FOLDER = 'data/raw/' + ';'.join(tags) + '/'
 # Each page returns 30 images, [start, end)
 START_PAGE = 0
-END_PAGE = 10
+END_PAGE = 3
 
 success = 0
 fail = 0
@@ -57,9 +57,10 @@ for page in range(START_PAGE, END_PAGE, 1):
     # handle invalid escapes
     text = response.text
     text = re.sub(r'"fromPageTitle":".*?[^\\]",', '', text)
-    result = re.sub(r'\\([^\/u"])', '\\1', text, re.MULTILINE)
+    text = re.sub(r'\\([^\/u"])', '\\1', text, re.MULTILINE)
+    result = re.sub(r'\\\\"', '', text, re.MULTILINE)
 
-    json = js.loads(result)
+    json = js.loads(result, strict=False)
     data = json['data']
 
     # download each image

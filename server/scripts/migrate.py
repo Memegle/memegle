@@ -124,7 +124,6 @@ def process_image(dir, filename):
             'texts': lines,
             'confidences': confs,
             'boundingBoxes': boundingBoxes,
-            'tags': [],
         }
 
         return d
