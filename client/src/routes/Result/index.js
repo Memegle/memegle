@@ -8,6 +8,7 @@ import coloredLogo from 'assets/logo-mm-transparent.png';
 import {LOG} from 'utils';
 import performSearch, {getSearchRoute} from 'actions/search';
 import UserFeedback from "components/UserFeedback";
+import Modal from "react-bootstrap/Modal";
 
 class Result extends Component {
     constructor(props) {
@@ -147,7 +148,37 @@ class Result extends Component {
         event.currentTarget.src = logo;
     }
 
+    submitFeedback() {
+
+    }
+
+    showPopup() {
+        return (
+            <Modal centered className={styles.feedback} show={true}>
+                <Modal.Header className={styles.header}>
+                    <Modal.Title className={styles.title}>
+                        搜索结果不尽人意？向我们提供你想在Memegle上见到的表情包关键词吧！
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <input className={styles.feedbackInput} placeholder="请使用逗号分隔关键词" type="text" id="feedback"/>
+                </Modal.Body>
+                <Modal.Footer className={styles.footer}>
+                    <button className={styles.cancelButton} onClick={() => {
+                        this.setState({poorResult: false})
+                    }}>
+                        算了 :(
+                    </button>
+                    <button className={styles.saveButton} onClick={this.submitFeedback}>
+                        好的 :p
+                    </button>
+                </Modal.Footer>
+            </Modal>
+        );
+    }
+
     render() {
+        return (this.showPopup());
         if (this.state.toWelcome) {
             return <Redirect to='welcome'/>;
         } else if (this.state.newSearch) {
