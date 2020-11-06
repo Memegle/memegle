@@ -42,3 +42,4 @@ data/processed/*
 /bin/test/*
 
 .DS_Store
+*.log
