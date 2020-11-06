@@ -83,7 +83,7 @@ public class PictureController {
     @PostMapping(value = "/search",
             consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<Picture> search(@RequestBody SearchQuery query) {
+    public List<PictureSearch> search(@RequestBody SearchQuery query) {
         if (query.keyword == null || query.keyword.length() == 0) {
             //TODO: change this to a HTTP error response
             return null;
@@ -93,10 +93,7 @@ public class PictureController {
 
         LOGGER.info("Querying:\n" + query);
 
-        return searchRepo.searchName(query.keyword, pageable)
-                .stream()
-                .map(PictureSearch::toPicture)
-                .collect(Collectors.toList());
+        return searchRepo.searchName(query.keyword, pageable);
     }
 
     @GetMapping("/secrets/{name}")

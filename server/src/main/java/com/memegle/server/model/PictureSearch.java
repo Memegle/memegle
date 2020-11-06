@@ -1,10 +1,12 @@
 package com.memegle.server.model;
 
-import com.memegle.server.util.PictureBuilder;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.memegle.server.util.Constants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Score;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -14,40 +16,51 @@ import java.util.Date;
 public class PictureSearch {
     @Id
     private String id;   // id is stored as a string in elasticsearch
+
+    // Whenever the schema of Picture changes, copy fields and getter methods from Picture class
+    /* paste start */
     private String name;
+    private String filetype;
     private Date dateUpdated;
-    private String urlSuffix;
     private int width;
     private int height;
+    private ArrayList<String> texts;
+    private ArrayList<Float> confidences;
+    private ArrayList<ArrayList<ArrayList<Integer>>> boundingBoxes;
+    private ArrayList<String> tags;
+    private long like;
+    private long dislike;
+    /* paste end */
+
 
     @Score
-    private float score;    // Read-only value, auto-populated by elastic repo
+    private float searchScore;    // Read-only value, auto-populated by elastic repo
+
+    private String urlSuffix;
 
     public PictureSearch() {}
 
-    public Picture toPicture() {
-        try {
-            // must use getter method (they are overridden by spring and will return the correct value from repo)
-            return new PictureBuilder()
-                    .withId(getId())
-                    .withName(getName())
-                    .withUrlSuffix(getUrlSuffix())
-                    .withDate(getDateUpdated())
-                    .withWidth(getWidth())
-                    .withHeight(getHeight())
-                    .build();
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
-
     public String getId() {return id;}
-    public String getName() {return name;}
-    public int getWidth() {return width;}
-    public int getHeight() {return height;}
-    public String getUrlSuffix() {return urlSuffix;}
-    public Date getDateUpdated() {return dateUpdated;}
 
-    public float getScore() {return this.score;}
+    /* paste start */
+    public String getName() {return this.name;}
+    public String getFiletype() {return this.filetype;}
+    public String getUrlSuffix() {return this.urlSuffix;}
+    public Date getDateUpdated() {return this.dateUpdated;}
+    public int getWidth() {return this.width;}
+    public int getHeight() {return this.height;}
+    public ArrayList<String> getTexts() {return texts;}
+    public ArrayList<Float> getConfidences() {return confidences;}
+    public ArrayList<ArrayList<ArrayList<Integer>>> getBoundingBoxes() {return boundingBoxes;}
+    public ArrayList<String> getTags() {return tags;}
+    public long getLike() {return like;}
+    public long getDislike() {return dislike;}
+    /* paste end */
+
+    public float getSearchScore() {return this.searchScore;}
+
+    @JsonProperty("fullUrl")
+    public String getFullUrl() {
+        return Constants.BASE_URL + Constants.IMAGE_MAPPING + this.urlSuffix;
+    }
 }

@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
 @Document(collection = "pictures")
@@ -20,6 +19,7 @@ public class Picture {
 
     @Id
     private long id;
+
     private String name;
     private String filetype;
     private Date dateUpdated;
@@ -28,13 +28,29 @@ public class Picture {
     private ArrayList<String> texts;
     private ArrayList<Float> confidences;
     private ArrayList<ArrayList<ArrayList<Integer>>> boundingBoxes;
+    private ArrayList<String> tags;
+    private long like;
+    private long dislike;
+
+    @Transient
+    private float searchScore;
 
     @JsonIgnore
     private String urlSuffix;
 
     public Picture() {}
 
+    public static Picture fromPictureSearch(PictureSearch search) {
+        Picture picture = new Picture();
+        // set all values
+        picture.setId(Long.parseLong(search.getId()));
+        picture.setName(search.getName());
+        picture.setFiletype(search.getFiletype());
+        return null;
+    }
+
     public long getId() {return this.id;}
+
     public String getName() {return this.name;}
     public String getFiletype() {return this.filetype;}
     public String getUrlSuffix() {return this.urlSuffix;}
@@ -44,6 +60,11 @@ public class Picture {
     public ArrayList<String> getTexts() {return texts;}
     public ArrayList<Float> getConfidences() {return confidences;}
     public ArrayList<ArrayList<ArrayList<Integer>>> getBoundingBoxes() {return boundingBoxes;}
+    public ArrayList<String> getTags() {return tags;}
+    public long getLike() {return like;}
+    public long getDislike() {return dislike;}
+
+    public float getSearchScore() {return searchScore;}
 
     @JsonProperty("fullUrl")
     public String getFullUrl() {
@@ -60,4 +81,7 @@ public class Picture {
     public void setTexts(ArrayList<String> text) {this.texts = text;}
     public void setConfidences(ArrayList<Float> confidence) {this.confidences = confidence;}
     public void setBoundingBoxes(ArrayList<ArrayList<ArrayList<Integer>>> boundingBoxes) {this.boundingBoxes = boundingBoxes;}
+    public void setTags(ArrayList<String> tags) {this.tags = tags;}
+    public void setLike(long like) {this.like = like;}
+    public void setDislike(long dislike) {this.dislike = dislike;}
 }
