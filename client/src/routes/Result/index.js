@@ -8,6 +8,42 @@ import coloredLogo from 'assets/logo-mm-transparent.png';
 import { LOG } from 'utils';
 import performSearch, { getSearchRoute } from 'actions/search';
 
+import Modal from "react-bootstrap/Modal";
+
+const UserFeedback = () => {
+    const [isOpen, setIsOpen] = React.useState(true);
+    const [title, setTitle] = React.useState("Loading...")
+
+    const showModal = () => {
+        setIsOpen(true);
+    };
+
+    const hideModal = () => {
+        setIsOpen(false);
+    };
+
+    const modalLoaded = () => {
+        setTitle("Not satisfied with the result? Propose some categories that you would like to see in future searches. :)");
+    };
+
+    return (
+        <>
+            <Modal centered className="modal-feedback" show={isOpen} onHide={hideModal} onEntered={modalLoaded}>
+                <Modal.Header className="modal-header">
+                    <Modal.Title className="modal-title">{title}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <input className="modal-searchBar" placeholder="Use comma to split each category" type="text" name="fname"></input>
+                </Modal.Body>
+                <Modal.Footer className="modal-footer">
+                    <button className="modal-cancelButton" onClick={hideModal}>算了 :(</button>
+                    <button className="modal-saveButton" onClick={hideModal}>好的 :P</button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    );
+};
+
 class Result extends Component {
     constructor(props) {
         super(props);
@@ -158,7 +194,7 @@ class Result extends Component {
         const RenderImages = ({error, isLoaded, images}) => {
             LOG("Rendering images")
             if (error) {
-                return <div className="error">啊噢，{error.message} ಥ_ಥ</div>;
+                return  <div className="error">啊噢，{error.message} ಥ_ಥ<UserFeedback /></div>;
             } else if (!isLoaded) {
                 return <div style={{ margin: `5px 5px`, color: 'white' }}>拼命找图中 (๑•́ ₃ •̀๑)...</div>;
             } else {
