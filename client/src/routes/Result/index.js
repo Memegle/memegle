@@ -7,7 +7,6 @@ import logo from 'assets/logo-mm-hollow.png';
 import coloredLogo from 'assets/logo-mm-transparent.png';
 import {LOG} from 'utils';
 import performSearch, {getSearchRoute} from 'actions/search';
-import UserFeedback from "components/UserFeedback";
 import Modal from "react-bootstrap/Modal";
 
 class Result extends Component {
