@@ -188,7 +188,7 @@ input:focus {
   }
 }
 
-@media screen and (max-height: 720px) {
+@media screen and (max-height: 720px) and (min-width: 480px) {
   .header {
     margin: 5% auto;
   }
