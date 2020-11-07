@@ -18,7 +18,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Service
 public class SequenceGeneratorService {
-    private MongoOperations mongoOperations;
+    private final MongoOperations mongoOperations;
 
     @Autowired
     public SequenceGeneratorService(MongoOperations mongoOperations) {

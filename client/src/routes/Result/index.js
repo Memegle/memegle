@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import * as QueryString from 'query-string';
 import {Redirect} from 'react-router-dom';
+import Modal from "react-bootstrap/Modal";
 
 import styles from "./result.module.css"
 import logo from 'assets/logo-mm-hollow.png';
 import coloredLogo from 'assets/logo-mm-transparent.png';
 import {LOG} from 'utils';
 import performSearch, {getSearchRoute} from 'actions/search';
-import Modal from "react-bootstrap/Modal";
+import submitFeedback from "actions/feedback";
 
 class Result extends Component {
     constructor(props) {
@@ -33,6 +34,8 @@ class Result extends Component {
         this.handleScroll = this.handleScroll.bind(this);
         this.retrieveImages = this.retrieveImages.bind(this);
         this.handleWindowResize = this.handleWindowResize.bind(this);
+        this.handleSubmitFeedback = this.handleSubmitFeedback.bind(this);
+        this.hidePopup = this.hidePopup.bind(this);
     }
 
     componentDidMount() {
@@ -135,7 +138,10 @@ class Result extends Component {
 
     keyPressed(event) {
         if (event.key === 'Enter') {
-            this.handleSubmit(event);
+            if (event.target.id === 'searchBox')
+                this.handleSubmit(event);
+            else if (event.target.id === 'feedback')
+                this.handleSubmitFeedback();
         }
     }
 
@@ -147,37 +153,45 @@ class Result extends Component {
         event.currentTarget.src = logo;
     }
 
-    submitFeedback() {
+    handleSubmitFeedback() {
+        const feedback = document.getElementById('feedback').value;
+        submitFeedback(feedback);
+        this.hidePopup();
+        //TODO: show thank you snackbar or popup
+    }
 
+    hidePopup() {
+        this.setState({poorResult: false});
     }
 
     showPopup() {
         return (
-            <Modal centered className={styles.feedback} show={true}>
-                <Modal.Header className={styles.header}>
-                    <Modal.Title className={styles.title}>
-                        搜索结果不尽人意？向我们提供你想在Memegle上见到的表情包关键词吧！
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <input className={styles.feedbackInput} placeholder="请使用逗号分隔关键词" type="text" id="feedback"/>
-                </Modal.Body>
-                <Modal.Footer className={styles.footer}>
-                    <button className={styles.cancelButton} onClick={() => {
-                        this.setState({poorResult: false})
-                    }}>
-                        算了 :(
-                    </button>
-                    <button className={styles.saveButton} onClick={this.submitFeedback}>
-                        好的 :p
-                    </button>
-                </Modal.Footer>
+            /* modal is causing warnings, to prevent warnings, add animation={false} */
+            <Modal centered show={this.state.poorResult} onHide={this.hidePopup}>
+                <div className={styles.modalContent}>
+                    <Modal.Header className={styles.modalHeader}>
+                        <Modal.Title className={styles.modalTitle}>
+                            搜索结果不尽人意？向我们提供您希望在Memegle上见到的表情包关键词吧。
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className={styles.modalBody}>
+                        <input className={styles.modalInput} placeholder="请使用逗号分隔关键词"
+                               type="text" id="feedback" onKeyPress={this.keyPressed}/>
+                    </Modal.Body>
+                    <Modal.Footer className={styles.modalFooter}>
+                        <button className={styles.cancelButton} onClick={this.hidePopup}>
+                            算了 :(
+                        </button>
+                        <button className={styles.saveButton} onClick={this.handleSubmitFeedback}>
+                            好的 :p
+                        </button>
+                    </Modal.Footer>
+                </div>
             </Modal>
         );
     }
 
     render() {
-        return (this.showPopup());
         if (this.state.toWelcome) {
             return <Redirect to='welcome'/>;
         } else if (this.state.newSearch) {
@@ -237,6 +251,8 @@ class Result extends Component {
                         <RenderImages error={this.state.error} isLoaded={this.state.isLoaded}
                                       images={this.state.images}/>
                     </div>
+
+                    {this.state.poorResult && this.showPopup()}
                 </div>
             );
         }
