@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
  * PLEASE keep the methods in this class in alphabetical order!!!!!
@@ -28,13 +27,12 @@ public class PictureController {
     // TODO: put this param in the db
     // Constants
     public final static int PIC_PER_PAGE = 200;
+    // Logging
+    private static final Logger LOGGER = LoggerFactory.getLogger(PictureController.class);
 
     private final PictureRepository pictureRepo;
     private final PictureSearchRepository searchRepo;
     private final SequenceGeneratorService sequenceGeneratorService;
-
-    // Logging
-    private static final Logger LOGGER = LoggerFactory.getLogger(PictureController.class);
 
     public PictureController(PictureRepository pictureRepo, PictureSearchRepository searchRepository,
                              SequenceGeneratorService sequenceGeneratorService) {

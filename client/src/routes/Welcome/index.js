@@ -2,7 +2,7 @@ import React from 'react';
 import {Redirect} from 'react-router-dom';
 
 import {LOG} from 'utils'
-import './welcome.css';
+import styles from "./welcome.module.css"
 import {getSearchRoute} from "actions/search";
 
 class Welcome extends React.Component {
@@ -55,61 +55,51 @@ class Welcome extends React.Component {
 
     desktopView() {
         return (
-            <div className='container'>
-                <div className='row home-header'>
+            <>
+                <div className={`row ${styles.header}`}>
 
-                    <div className='row home-logo-div'>
-                        <img src={require('assets/Memegle.png')} className='home-logo' alt='none'/>
-                    </div>
+                    <img src={require('assets/Memegle.png')} className={styles.logo} alt='none'/>
 
-                    <div className='row home-search-bar-div'>
+                    <div className={`row ${styles.searchBarDiv}`}>
 
-                        <div className='col-10 search-box-div'>
-                            <input className='home-search-bar' type='text'
+                        <div className={`col-10 ${styles.searchBoxDiv}`}>
+                            <input className={styles.searchBar} type='text'
                                    placeholder='请输入关键词'
                                    value={this.state.value} onKeyPress={this.keyPressed}
                                    onChange={this.handleTextChange}/>
 
                             <img src={require('assets/icon-magnifier-white.png')}
-                                 className='home-magnifier' alt='none'/>
+                                 className={styles.magnifier} alt='none'/>
                         </div>
 
-                        <div className='col button-search-div'>
-                            <button className='button-search' onClick={this.handleSubmit}>
+                        <div className={`col ${styles.buttonDiv}`}>
+                            <button className={styles.button} onClick={this.handleSubmit}>
                                 搜图 :)
                             </button>
                         </div>
                     </div>
                 </div>
-
-                <div className='text'>
-                    网络表情符号最早来自于1982年美国卡内基梅隆大学Scott E·Fahlman教授在BBS上首次使用的ASCII码”:-)”表示微笑。
-                </div>
-            </div>
+            </>
         );
     }
 
     mobileView() {
         return (
-            <div className='container'>
-                <img src={require('assets/logo-m-bw.png')} className='mobile-logo' alt='none'/>
+            <>
+                <img src={require('assets/logo-m-bw.png')} className={styles.mLogo} alt='none'/>
 
-                <div className='mobile-search-box-div'>
-                    <input className='mobile-search-box' placeholder='请输入关键词...'
+                <div className={styles.mSearchBoxDiv}>
+                    <input className={styles.mSearchBox} placeholder='请输入关键词...'
                            value={this.state.value} onKeyPress={this.keyPressed}
                            onChange={this.handleTextChange}/>
                     <img src={require('assets/icon-magnifier-white.png')}
-                         className='mobile-magnifier' alt='none'/>
+                         className={styles.mMagnifier} alt='none'/>
                 </div>
 
-                <button className='mobile-search-button' onClick={this.handleSubmit}>
+                <button className={styles.mButton} onClick={this.handleSubmit}>
                     搜图 :)
                 </button>
-
-                <div className='text'>
-                    网络表情符号最早来自于1982年美国卡内基梅隆大学Scott E·Fahlman教授在BBS上首次使用的ASCII码”:-)”表示微笑。
-                </div>
-            </div>
+            </>
         );
     }
 
@@ -120,7 +110,14 @@ class Welcome extends React.Component {
             document.title = this.state.value + " - Memegle";
             return <Redirect to={newRoute}/>;
         } else {
-            return this.state.mobileView ? this.mobileView() : this.desktopView();
+            return (
+                <div className={styles.container}>
+                    {this.state.mobileView ? this.mobileView() : this.desktopView()}
+                    <div className={styles.fact}>
+                        网络表情符号最早来自于1982年美国卡内基梅隆大学Scott E·Fahlman教授在BBS上首次使用的ASCII码”:-)”表示微笑。
+                    </div>
+                </div>
+            );
         }
     }
 }

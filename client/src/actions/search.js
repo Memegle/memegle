@@ -1,7 +1,6 @@
-import { serverUrl } from '../App'
-import { LOG } from '../utils'
+import { serverUrl } from 'App'
+import { LOG } from 'utils'
 
-/** Write comprehensive documentation for this file **/
 
 /**
  *

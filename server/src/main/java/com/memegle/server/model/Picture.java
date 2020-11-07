@@ -13,7 +13,6 @@ import java.util.Date;
 
 @Document(collection = "pictures")
 public class Picture {
-
     @Transient
     public static final String SEQUENCE_NAME = "picture_sequence";
 
