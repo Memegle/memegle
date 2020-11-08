@@ -48,11 +48,6 @@ public class PictureController {
         this.searchRepo = searchRepo;
     }
 
-    @GetMapping("/")
-    public String root() {
-        return "redirect:/welcome/";
-    }
-
     @GetMapping("/all")
     @ResponseBody
     public List<Picture> all(){
@@ -105,21 +100,11 @@ public class PictureController {
         return result;
     }
 
-    @GetMapping("/secrets/{name}")
-    public String secrets(HttpServletRequest request, @PathVariable String name) {
-        return name + "/index.html";
-    }
-
     // Getting the picture sequence, for manual data migration.
     @GetMapping("/sequence")
     @ResponseBody
     public long sequence() {
         return sequenceGeneratorService.getCurrentSequence(Picture.SEQUENCE_NAME);
-    }
-
-    @GetMapping(value = "/welcome")
-    public String welcome(HttpServletRequest request) {
-        return "index.html";
     }
 
 }

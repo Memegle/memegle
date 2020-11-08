@@ -1,10 +1,9 @@
 package com.memegle.server.repository;
 
-import com.memegle.server.model.Search;
-import org.bson.types.ObjectId;
+import com.memegle.server.model.Recommendation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SearchRepository extends MongoRepository<Search, ObjectId> {
+public interface RecommendationRepository extends MongoRepository<Recommendation, String> {
 }

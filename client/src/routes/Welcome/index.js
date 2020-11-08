@@ -1,23 +1,31 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 
-import {LOG} from 'utils'
-import styles from "./welcome.module.css"
-import {getSearchRoute} from "actions/search";
+import {LOG} from 'utils';
+import styles from "./welcome.module.css";
+import { getSearchRoute } from "actions/search";
+import { fetchFact, fetchRecommendation } from "actions/welcome";
 
 class Welcome extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: '',
-            toResult: false,
+            search: '',
+            toSearch: '',
             mobileView: false,
+            fact: '',
+            recommendation: '',
         };
+
+        this.factRef = React.createRef();
+        this.fetchingFact = false;
+        this.fetchingRecommendation = false;
 
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.keyPressed = this.keyPressed.bind(this);
         this.handleWindowResize = this.handleWindowResize.bind(this);
+        this.fetchNeededData = this.fetchNeededData.bind(this);
     }
 
     componentDidMount() {
@@ -36,15 +44,14 @@ class Welcome extends React.Component {
     }
 
     handleTextChange(event) {
-        this.setState({value: event.target.value});
+        this.setState({search: event.target.value});
     }
 
     handleSubmit(event) {
-        if (this.state.value === '') {
-            return;
-        }
+        const newSearch = this.state.search || this.state.recommendation;
+
         event.preventDefault();
-        this.setState({toResult: true});
+        this.setState({toSearch: newSearch});
     }
 
     keyPressed(event) {
@@ -63,9 +70,9 @@ class Welcome extends React.Component {
                     <div className={`row ${styles.searchBarDiv}`}>
 
                         <div className={`col-10 ${styles.searchBoxDiv}`}>
-                            <input className={styles.searchBar} type='text'
-                                   placeholder='请输入关键词'
-                                   value={this.state.value} onKeyPress={this.keyPressed}
+                            <input autoFocus className={styles.searchBar} type='text'
+                                   placeholder={this.state.recommendation}
+                                   value={this.state.search} onKeyPress={this.keyPressed}
                                    onChange={this.handleTextChange}/>
 
                             <img src={require('assets/icon-magnifier-white.png')}
@@ -89,8 +96,8 @@ class Welcome extends React.Component {
                 <img src={require('assets/logo-m-bw.png')} className={styles.mLogo} alt='none'/>
 
                 <div className={styles.mSearchBoxDiv}>
-                    <input className={styles.mSearchBox} placeholder='请输入关键词...'
-                           value={this.state.value} onKeyPress={this.keyPressed}
+                    <input autoFocus className={styles.mSearchBox} placeholder={this.state.recommendation}
+                           value={this.state.search} onKeyPress={this.keyPressed}
                            onChange={this.handleTextChange}/>
                     <img src={require('assets/icon-magnifier-white.png')}
                          className={styles.mMagnifier} alt='none'/>
@@ -103,18 +110,45 @@ class Welcome extends React.Component {
         );
     }
 
+    fetchNeededData() {
+        if (this.state.fact === '') {
+            if (!this.fetchingFact) {
+                LOG('fetching facts ')
+                this.fetchingFact = true;
+                fetchFact()
+                    .then(fact => this.setState({fact: fact}))
+                    .finally(() => this.fetchingFact = false);
+            }
+        } else {
+            this.factRef.current.innerHTML = this.state.fact;
+        }
+
+        if (this.state.recommendation === '' && !this.fetchingRecommendation) {
+            LOG('fetching recommendation ')
+            this.fetchingRecommendation = true;
+            fetchRecommendation()
+                .then(recommendation => this.setState({recommendation: recommendation}))
+                .finally(() => this.fetchingRecommendation = false);
+        }
+
+    }
+
     render() {
         document.title = "Memegle";
-        if (this.state.toResult) {
-            const newRoute = getSearchRoute(this.state.value)
-            document.title = this.state.value + " - Memegle";
+
+        this.fetchNeededData();
+
+        if (this.state.toSearch) {
+            const newRoute = getSearchRoute(this.state.toSearch)
+            document.title = this.state.search + " - Memegle";
             return <Redirect to={newRoute}/>;
         } else {
             return (
                 <div className={styles.container}>
                     {this.state.mobileView ? this.mobileView() : this.desktopView()}
                     <div className={styles.fact}>
-                        网络表情符号最早来自于1982年美国卡内基梅隆大学Scott E·Fahlman教授在BBS上首次使用的ASCII码”:-)”表示微笑。
+                        <div>{this.state.fact ? "你知道吗？" : ""}</div>
+                        <div ref={this.factRef}>{""}</div>
                     </div>
                 </div>
             );

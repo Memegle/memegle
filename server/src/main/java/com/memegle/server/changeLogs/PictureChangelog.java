@@ -19,8 +19,8 @@ import java.util.List;
 // DON'T use @Autowired annotation in this class as documented on mongock documentation
 // Parameters will be correctly connected to beans declared in the application context
 @ChangeLog
-public class DatabaseChangelog {
-    private final static Logger LOGGER = LoggerFactory.getLogger(DatabaseChangelog.class);
+public class PictureChangelog {
+    private final static Logger LOGGER = LoggerFactory.getLogger(PictureChangelog.class);
 
     @ChangeSet(author = "Paul", id = "enforcePictureSchema", order = "000", runAlways = true)
     public void enforcePictureSchema(PictureRepository pictureRepo) {

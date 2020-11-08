@@ -22,6 +22,8 @@ done
 echo "ES cluster is now on!"
 echo "Starting Memegle server..."
 
+gradle --stop
+
 # https://stackoverflow.com/questions/3004811/how-do-you-run-multiple-programs-in-parallel-from-a-bash-script
 gradle build --continuous -x test &
 P1=$!
