@@ -154,11 +154,12 @@
 
 .saveButton {
     width: 70px;
+    height: 35px;
     background-color: black;
     color: white;
     border-radius: 30px;
     border: 2px solid white;
-    position:absolute;
+    position: absolute;
     right: 15%;
     transition: .5s ease;
 }
@@ -170,6 +171,7 @@
 
 .cancelButton {
     width: 70px;
+    height: 35px;
     background-color: black;
     color: white;
     border-radius: 30px;
@@ -213,6 +215,14 @@
         margin: 15px auto;
         width: 75vw;
         height: 75vw;
+    }
+
+    .saveButton {
+        font-size: 14px;
+    }
+
+    .cancelButton {
+        font-size: 14px;
     }
 }
 

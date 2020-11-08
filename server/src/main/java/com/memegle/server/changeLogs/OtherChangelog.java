@@ -73,7 +73,7 @@ public class OtherChangelog {
                 "老年人",
                 "土味情话",
                 "宝宝心里苦",
-                "？？？",
+                "黑人问号",
         };
 
         for (String keyword : recommendations) {
