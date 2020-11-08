@@ -2,19 +2,24 @@ package com.memegle.server.controller;
 
 import com.memegle.server.dto.SearchQuery;
 import com.memegle.server.model.PictureSearch;
+import com.memegle.server.model.Search;
 import com.memegle.server.repository.PictureRepository;
 import com.memegle.server.repository.PictureSearchRepository;
 import com.memegle.server.model.Picture;
+import com.memegle.server.repository.SearchRepository;
 import com.memegle.server.service.SequenceGeneratorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -31,14 +36,16 @@ public class PictureController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PictureController.class);
 
     private final PictureRepository pictureRepo;
-    private final PictureSearchRepository searchRepo;
+    private final PictureSearchRepository pictureSearchRepo;
     private final SequenceGeneratorService sequenceGeneratorService;
+    private final SearchRepository searchRepo;
 
-    public PictureController(PictureRepository pictureRepo, PictureSearchRepository searchRepository,
-                             SequenceGeneratorService sequenceGeneratorService) {
+    public PictureController(PictureRepository pictureRepo, PictureSearchRepository pictureSearchRepo,
+                             SequenceGeneratorService sequenceGeneratorService, SearchRepository searchRepo) {
         this.pictureRepo = pictureRepo;
-        this.searchRepo = searchRepository;
+        this.pictureSearchRepo = pictureSearchRepo;
         this.sequenceGeneratorService = sequenceGeneratorService;
+        this.searchRepo = searchRepo;
     }
 
     @GetMapping("/")
@@ -83,15 +90,19 @@ public class PictureController {
     @ResponseBody
     public List<PictureSearch> search(@RequestBody SearchQuery query) {
         if (query.keyword == null || query.keyword.length() == 0) {
-            //TODO: change this to a HTTP error response
-            return null;
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Cannot perform search on empty string");
         }
 
         Pageable pageable = PageRequest.of(0, PIC_PER_PAGE);
 
         LOGGER.info("Querying:\n" + query);
 
-        return searchRepo.searchName(query.keyword, pageable);
+        List<PictureSearch> result =  pictureSearchRepo.searchName(query.keyword, pageable);
+
+        // Log search query to db
+        searchRepo.save(new Search(query.keyword, new Date(), result.size()));
+
+        return result;
     }
 
     @GetMapping("/secrets/{name}")

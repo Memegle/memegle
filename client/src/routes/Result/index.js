@@ -23,7 +23,7 @@ class Result extends Component {
         };
 
         this.allImages = []
-        this.queryString = QueryString.parse(this.props.queryString);
+        this.keyword = QueryString.parse(this.props.queryString).keyword.trim();
         this.numImagesToAdd = 30;
 
         this.calculateScreenSize = this.calculateScreenSize.bind(this);
@@ -40,7 +40,7 @@ class Result extends Component {
 
     componentDidMount() {
         LOG('In result page');
-        this.setState({value: this.queryString.keyword});
+        this.setState({value: this.keyword});
 
         this.calculateScreenSize();
         this.retrieveImages();
@@ -60,7 +60,7 @@ class Result extends Component {
     }
 
     retrieveImages() {
-        performSearch(this.queryString.keyword).then(result => {
+        performSearch(this.keyword).then(result => {
             this.allImages = result;
             this.displayMoreImages();
             this.setState({isLoaded: true});
@@ -239,7 +239,7 @@ class Result extends Component {
                              onTouchEnd={this.displayBwLogo}/>
                         <div className={styles.searchBarDiv}>
                             <input className={styles.searchBar} id='searchBox' type='text'
-                                   defaultValue={this.queryString.keyword}
+                                   defaultValue={this.keyword}
                                    placeholder='请输入关键词' onKeyPress={this.keyPressed}/>
 
                             <img src={require('assets/icon-magnifier-white.png')}
