@@ -1,5 +1,5 @@
-import { serverUrl } from 'App'
-import { LOG } from 'utils'
+import { serverUrl } from 'App';
+import { LOG } from 'utils';
 
 
 /**
@@ -36,7 +36,7 @@ const performSearch = async (keyword) => {
       throw Error('查询失败了，等会再试试呗')
    }
 
-   if (response.status !== 200) {
+   if (!response || response.status !== 200) {
       throw Error('查询失败了，等会再试试呗')
    }
 

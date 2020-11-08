@@ -1,4 +1,4 @@
-import { serverUrl } from 'App'
+import { serverUrl } from 'App';
 import { LOG } from "utils";
 
 const submitFeedback = async (feedback) => {
@@ -15,6 +15,7 @@ const submitFeedback = async (feedback) => {
             'Content-Type': 'application/json'
         },
     })
+
     LOG(response);
 };
 
