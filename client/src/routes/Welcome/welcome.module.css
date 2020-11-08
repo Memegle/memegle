@@ -39,6 +39,7 @@
 }
 
 .logo {
+  pointer-events: none;
   padding-top: 5%;
   width: 80%;
 }
@@ -119,6 +120,7 @@ input:focus {
 
 /** Mobile components */
 .mLogo {
+  pointer-events: none;
   display: block;
   height: 21%;
   margin: 30% auto 0;
@@ -150,6 +152,7 @@ input:focus {
 }
 
 .mMagnifier {
+  pointer-events: none;
   position: absolute;
   width: 25px;
   height: 25px;
