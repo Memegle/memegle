@@ -216,6 +216,14 @@
         width: 75vw;
         height: 75vw;
     }
+
+    .saveButton {
+        font-size: 14px;
+    }
+
+    .cancelButton {
+        font-size: 14px;
+    }
 }
 
 
