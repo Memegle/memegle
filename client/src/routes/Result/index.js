@@ -63,17 +63,13 @@ class Result extends Component {
         performSearch(this.keyword).then(result => {
             this.allImages = result;
             this.displayMoreImages();
-            this.setState({isLoaded: true});
+            this.setState({isLoaded: true, poorResult: this.isResultPoor(result)});
             this.handleScroll(); // Load more images if no scroll bar is present
         }).catch(error => {
             this.setState({
                 error: error,
             });
-        }).finally(() => {
-            const poorResult = this.isResultPoor(this.allImages);
-            LOG("poor result? " + poorResult);
-            this.setState({poorResult: poorResult});
-        })
+        });
     }
 
     isResultPoor(images) {
