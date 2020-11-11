@@ -65,7 +65,7 @@ class Welcome extends React.Component {
             <>
                 <div className={`row ${styles.header}`}>
 
-                    <img src={require('assets/Memegle.png')} className={styles.logo} alt='none'/>
+                    <div className={styles.logo}/>
 
                     <div className={`row ${styles.searchBarDiv}`}>
 

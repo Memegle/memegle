@@ -39,8 +39,11 @@
 }
 
 .logo {
+  height: 180px;
+  background: url(../../assets/Memegle.png) no-repeat center;
+  background-size: contain;
   pointer-events: none;
-  padding-top: 5%;
+  margin-top: 4%;
   width: 80%;
 }
 
