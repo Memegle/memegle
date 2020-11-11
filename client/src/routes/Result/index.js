@@ -228,11 +228,13 @@ class Result extends Component {
             return (
                 <div className={styles.container}>
                     <div className={`row ${styles.top}`}>
-                        <img src={logo} className={styles.logo} alt='none' onClick={this.handleLogoClick}
-                             onMouseOver={this.displayColoredLogo}
-                             onMouseOut={this.displayBwLogo}
-                             onTouchStart={this.displayColoredLogo}
-                             onTouchEnd={this.displayBwLogo}/>
+                        <img src={logo} className={styles.logo} alt='none'
+                            onContextMenu={(e)=> e.preventDefault()} 
+                            onClick={this.handleLogoClick}
+                            onMouseOver={this.displayColoredLogo}
+                            onMouseOut={this.displayBwLogo}
+                            onTouchStart={this.displayColoredLogo}
+                            onTouchEnd={this.displayBwLogo} />
                         <div className={styles.searchBarDiv}>
                             <input className={styles.searchBar} id='searchBox' type='text'
                                    defaultValue={this.keyword}
