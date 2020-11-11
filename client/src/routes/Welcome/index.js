@@ -93,7 +93,7 @@ class Welcome extends React.Component {
     mobileView() {
         return (
             <>
-                <img src={require('assets/logo-m-bw.png')} className={styles.mLogo} alt='none'/>
+                <div className={styles.mLogo}/>
 
                 <div className={styles.mSearchBoxDiv}>
                     <input autoFocus className={styles.mSearchBox} placeholder={this.state.recommendation}

@@ -123,6 +123,8 @@ input:focus {
 
 /** Mobile components */
 .mLogo {
+  background: url(../../assets/logo-m-bw.png) no-repeat center;
+  background-size: contain;
   pointer-events: none;
   display: block;
   height: 21%;
