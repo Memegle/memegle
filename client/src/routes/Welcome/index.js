@@ -65,7 +65,7 @@ class Welcome extends React.Component {
             <>
                 <div className={`row ${styles.header}`}>
 
-                    <img src={require('assets/Memegle.png')} className={styles.logo} alt='none'/>
+                    <div className={styles.logo}/>
 
                     <div className={`row ${styles.searchBarDiv}`}>
 
@@ -93,7 +93,7 @@ class Welcome extends React.Component {
     mobileView() {
         return (
             <>
-                <img src={require('assets/logo-m-bw.png')} className={styles.mLogo} alt='none'/>
+                <div className={styles.mLogo}/>
 
                 <div className={styles.mSearchBoxDiv}>
                     <input autoFocus className={styles.mSearchBox} placeholder={this.state.recommendation}
