@@ -140,7 +140,7 @@ class Welcome extends React.Component {
 
         if (this.state.toSearch) {
             const newRoute = getSearchRoute(this.state.toSearch)
-            document.title = this.state.search + " - Memegle";
+            document.title = this.state.toSearch + " - Memegle";
             return <Redirect to={newRoute}/>;
         } else {
             return (
