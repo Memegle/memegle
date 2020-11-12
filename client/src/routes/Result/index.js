@@ -63,11 +63,12 @@ class Result extends Component {
         performSearch(this.keyword).then(result => {
             this.allImages = result;
             this.displayMoreImages();
-            this.setState({isLoaded: true, poorResult: this.isResultPoor(result)});
+            this.setState({isLoaded: true});
             this.handleScroll(); // Load more images if no scroll bar is present
         }).catch(error => {
             this.setState({
                 error: error,
+                poorResult: error.message === '似乎没有找到符合要求的图片',
             });
         });
     }
