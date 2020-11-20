@@ -9,6 +9,7 @@ import coloredLogo from 'assets/logo-mm-transparent.png';
 import {LOG} from 'utils';
 import performSearch, {getSearchRoute} from 'actions/search';
 import submitFeedback from "actions/feedback";
+import Snackbar from '@material-ui/core/Snackbar';
 
 class Result extends Component {
     constructor(props) {
@@ -20,6 +21,9 @@ class Result extends Component {
             toWelcome: false,
             newSearch: null,
             poorResult: false,
+            feedbackDone: false,
+            vertical: 'top',
+            horizontal: 'center',
         };
 
         this.allImages = []
@@ -36,6 +40,7 @@ class Result extends Component {
         this.handleWindowResize = this.handleWindowResize.bind(this);
         this.handleSubmitFeedback = this.handleSubmitFeedback.bind(this);
         this.hidePopup = this.hidePopup.bind(this);
+        this.showSnackbar = this.showSnackbar.bind(this);
     }
 
     componentDidMount() {
@@ -154,7 +159,22 @@ class Result extends Component {
         const feedback = document.getElementById('feedback').value;
         submitFeedback(feedback);
         this.hidePopup();
-        //TODO: show thank you snackbar or popup
+        this.setState({feedbackDone: true});
+        this.showSnackbar();
+    }
+
+    showSnackbar() {
+        return (
+            <div>
+                <Snackbar
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                    open={this.state.feedbackDone}
+                    message="谢谢!"
+                    autoHideDuration={5000}
+                    onClose={() => this.setState({feedbackDone: false})}
+                />
+            </div>
+        )
     }
 
     hidePopup() {
@@ -252,6 +272,7 @@ class Result extends Component {
                     </div>
 
                     {this.state.poorResult && this.showPopup()}
+                    {this.state.feedbackDone && this.showSnackbar()}
                 </div>
             );
         }
