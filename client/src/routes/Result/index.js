@@ -169,7 +169,7 @@ class Result extends Component {
                 <Snackbar
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                     open={this.state.feedbackDone}
-                    message="谢谢!"
+                    message="谢谢你的反馈! ：）"
                     autoHideDuration={5000}
                     onClose={() => this.setState({feedbackDone: false})}
                 />
