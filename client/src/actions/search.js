@@ -54,6 +54,10 @@ export const getSearchRoute = (keyword) => {
    const error = validateQuery(keyword)
    if (error) throw Error(error);
 
+   // check secret
+   if (keyword === 'memegle'){
+      return '/secret';
+   }
    return '/search?keyword=' + keyword;
 }
 
