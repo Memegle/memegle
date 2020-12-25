@@ -10,7 +10,8 @@ class Secret extends Component {
             count: '',
         };
     }
-        componentDidMount() {
+
+    componentDidMount() {
         LOG('In secret page');
         this.retrieveSecrets();
     }
@@ -23,7 +24,7 @@ class Secret extends Component {
     render() {
         return (
             <div className={styles.body}>
-                <h1>我们一共有{this.state.count}条表情</h1>
+                <h1>Memegle一共有{this.state.count}条表情</h1>
             </div>
         )
     }
