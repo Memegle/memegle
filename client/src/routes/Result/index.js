@@ -9,6 +9,7 @@ import coloredLogo from 'assets/logo-mm-transparent.png';
 import {LOG} from 'utils';
 import performSearch, {getSearchRoute} from 'actions/search';
 import submitFeedback from "actions/feedback";
+import NewPage from "NewPage";
 
 class Result extends Component {
     constructor(props) {
@@ -60,17 +61,17 @@ class Result extends Component {
     }
 
     retrieveImages() {
-        performSearch(this.keyword).then(result => {
-            this.allImages = result;
-            this.displayMoreImages();
-            this.setState({isLoaded: true});
-            this.handleScroll(); // Load more images if no scroll bar is present
-        }).catch(error => {
-            this.setState({
-                error: error,
-                poorResult: error.message === '似乎没有找到符合要求的图片',
+            performSearch(this.keyword).then(result => {
+                this.allImages = result;
+                this.displayMoreImages();
+                this.setState({isLoaded: true});
+                this.handleScroll(); // Load more images if no scroll bar is present
+            }).catch(error => {
+                this.setState({
+                    error: error,
+                    poorResult: error.message === '似乎没有找到符合要求的图片',
+                });
             });
-        });
     }
 
     isResultPoor(images) {
@@ -189,6 +190,11 @@ class Result extends Component {
     }
 
     render() {
+        if(this.keyword ==='memegle'){
+            return (
+                <NewPage/>
+        )
+        }
         if (this.state.toWelcome) {
             return <Redirect to='welcome'/>;
         } else if (this.state.newSearch) {
@@ -202,29 +208,42 @@ class Result extends Component {
                     return <div className={styles.error}>啊噢，{error.message} ಥ_ಥ</div>;
                 } else if (!isLoaded) {
                     return <div className={styles.error}>拼命找图中 (๑•́ ₃ •̀๑)...</div>;
-                } else {
-                    return (
-                        <React.Fragment>
-                            {images.map(image => {
-                                let height, width;
-                                if (image.height > image.width) {
-                                    height = 78;
-                                    width = 78 * image.width / image.height;
-                                } else {
-                                    width = 78;
-                                    height = 78 * image.height / image.width;
-                                }
-                                return (
-                                    <div className={styles.image} key={image.id}>
-                                        <img src={image.fullUrl} style={{height: height + '%', width: width + '%'}}
-                                             alt='none'/>
-                                        <div className={styles.frame}/>
-                                    </div>
-                                );
-                            })}
-                        </React.Fragment>
-                    );
                 }
+        else {
+                        return ( < React.Fragment >
+                            {
+                                images.map(image => {
+                                    let height, width;
+                                    if (image.height > image.width) {
+                                        height = 78;
+                                        width = 78 * image.width / image.height;
+                                    } else {
+                                        width = 78;
+                                        height = 78 * image.height / image.width;
+                                    }
+                                    return (
+                                        < div
+                                    className = {styles.image}
+                                    key = {image.id} >
+                                        < img
+                                    src = {image.fullUrl}
+                                    style = {
+                                    {
+                                        height: height + '%', width
+                                    :
+                                        width + '%'
+                                    }
+                                }
+                                    alt = 'none' />
+                                        < div
+                                    className = {styles.frame}
+                                    />
+                                    < /div>
+                                );
+                                })
+                            } < /React.Fragment>
+                    );
+                    }
             };
             return (
                 <div className={styles.container}>
