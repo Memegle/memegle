@@ -9,6 +9,8 @@ A search engine for Meme Pictures
 
 ([MongoDB compass](https://www.mongodb.com/products/compass) is a tool for visualizing the MongoDB database, and is recommended.)
 
+(URL to use in Mongo Compass is mongodb://127.0.0.1:27017/?readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false)
+
 (Windows users are recommended to use [Git Bash](https://gitforwindows.org/), which docker-compose comes along with)
 
 ## Running the app in dev environment
