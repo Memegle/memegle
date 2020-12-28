@@ -1,3 +1,6 @@
 node_modules
 build
 *.log
+
+# Don't commit npm dependency file. Use yarn instead.
+package-lock.json
