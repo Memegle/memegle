@@ -7,10 +7,6 @@ import com.memegle.server.model.User;
 import com.memegle.server.service.MyUserDetailsService;
 import com.memegle.server.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,13 +29,6 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
-
-    @GetMapping("/hello")
-    @ResponseBody
-    public String hello() {
-        return "Hello World";
-    }
-
     @PostMapping("/register")
     @ResponseBody
     public String registerUser(@RequestBody @Valid AuthRequest authRequest) {
@@ -47,12 +36,12 @@ public class UserController {
         user.setUserName(authRequest.getUsername());
         user.setPassword(authRequest.getPassword());
         userDetailsService.saveUser(user);
-        return "OK";
+        return "Register successful";
     }
 
     @PostMapping("/auth")
     @ResponseBody
-    public AuthResponse createAuthentication(@RequestBody AuthRequest authRequest) throws Exception {
+    public AuthResponse createAuthentication(@RequestBody AuthRequest authRequest) {
         User user = userDetailsService.findByUserNameAndPassword(authRequest.getUsername(), authRequest.getPassword());
 
         if (user != null) {

@@ -30,7 +30,7 @@ public class JwtUtil {
         return false;
     }
 
-    public String getLoginFromToken(String token) {
+    public String getLoginUsernameFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
         return claims.getSubject();
     }
