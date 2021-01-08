@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 
 @Configuration
-public class MongoJPAConfig extends AbstractMongoClientConfiguration {
+public class MongoClientConfig extends AbstractMongoClientConfiguration {
     private final MongoProperties properties;
 
-    public MongoJPAConfig(MongoProperties properties) {
+    public MongoClientConfig(MongoProperties properties) {
         this.properties = properties;
     }
 
