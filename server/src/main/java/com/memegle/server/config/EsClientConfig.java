@@ -30,7 +30,6 @@ public class EsClientConfig extends AbstractElasticsearchConfiguration {
 
         HttpHost httpHost;
         if (host != null && port != null) {
-            System.out.println("IN ONE AAAA");
             httpHost = new HttpHost(host, Integer.parseInt(port), "https");
         } else {
             httpHost = new HttpHost("localhost", 9200, "http");
