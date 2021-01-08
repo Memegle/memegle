@@ -43,9 +43,13 @@ services:
     ports:
       - 9000:27017 # 27017 does not work in AWS security group for unknown reason, fix later.
     restart: always
+    environment:
+      - MONGO_INITDB_DATABASE=memegle
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - rs1:/data/db
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--auth","--replSet", "rs0"]
 
   init-mongo-rs:
     image: mongo:4.0-xenial
