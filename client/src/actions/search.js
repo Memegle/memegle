@@ -54,6 +54,11 @@ export const getSearchRoute = (keyword) => {
    const error = validateQuery(keyword)
    if (error) throw Error(error);
 
+   //secret search word "memegle" that will show the count of images
+   if(keyword === 'memegle'){
+      return 'SecretPage';
+   }
+
    return '/search?keyword=' + keyword;
 }
 

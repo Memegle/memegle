@@ -4,6 +4,7 @@ import React, {Component} from "react";
 import paths from "./routes/paths";
 import Welcome from "./routes/Welcome";
 import Result from "./routes/Result"
+import SecretPage from "./SecretPage";
 
 class Main extends Component {
     render() {
@@ -17,6 +18,7 @@ class Main extends Component {
             <Switch>
                 <Route path={paths.welcome} component={Welcome}/>
                 <Route path={paths.search} component={ResultPage}/>
+                <Route path={paths.SecretPage} component={SecretPage} />
                 <Redirect to={paths.default}/>
             </Switch>
         )
