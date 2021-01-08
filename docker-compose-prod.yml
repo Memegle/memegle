@@ -24,11 +24,10 @@ services:
       - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs
       - ES_HOST=vpc-memegle-test-s6vqr3snahyzjbr5725qq2xrwi.us-west-1.es.amazonaws.com
       - ES_PORT=443
-      - ES_USERNAME=${ES_USERNAME}
-      - ES_PASSWORD=${ES_PASSWORD}
       - MEMEGLE_APP_PRODUCTION_MODE=true
     env_file:
       - ./scripts/env/mongo-auth.env
+      - ./scripts/env/es-auth.env
     ports:
       - 8080:8080
 #    depends_on:
