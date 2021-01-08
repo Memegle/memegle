@@ -4,8 +4,10 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.lang.NonNull;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Configuration
 public class MongoClientConfig extends AbstractMongoClientConfiguration {
@@ -26,16 +28,13 @@ public class MongoClientConfig extends AbstractMongoClientConfiguration {
 
         properties.setUri(uri);
 
-        String username = System.getenv("MONGO_INITDB_ROOT_USERNAME");
-        String password = System.getenv("MONGO_INITDB_ROOT_PASSWORD");
-
-        if (username != null && password != null) {
-            properties.setAuthenticationDatabase("admin");
-            properties.setUsername(username);
-            properties.setPassword(password.toCharArray());
-        }
-
         return MongoClients.create(uri);
+    }
+
+    @Bean
+    @NonNull
+    public MongoTemplate mongoTemplate() {
+        return new MongoTemplate(mongoClient(), getDatabaseName());
     }
 
     @Override
