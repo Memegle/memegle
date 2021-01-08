@@ -26,6 +26,15 @@ public class MongoClientConfig extends AbstractMongoClientConfiguration {
 
         properties.setUri(uri);
 
+        String username = System.getenv("MONGO_INITDB_ROOT_USERNAME");
+        String password = System.getenv("MONGO_INITDB_ROOT_PASSWORD");
+
+        if (username != null && password != null) {
+            properties.setAuthenticationDatabase("admin");
+            properties.setUsername(username);
+            properties.setPassword(password.toCharArray());
+        }
+
         return MongoClients.create(uri);
     }
 

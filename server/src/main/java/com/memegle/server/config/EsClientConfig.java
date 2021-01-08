@@ -1,5 +1,5 @@
-/**
- * Set up the client to connect to Elasticsearch
+/*
+ * Set up ES client
  */
 package com.memegle.server.config;
 
@@ -27,10 +27,13 @@ public class EsClientConfig extends AbstractElasticsearchConfiguration {
     public RestHighLevelClient elasticsearchClient() {
         String host = System.getenv("ES_HOST");
         String port = System.getenv("ES_PORT");
+        String uri = System.getenv("ES_URI");
 
         HttpHost httpHost;
         if (host != null && port != null) {
             httpHost = new HttpHost(host, Integer.parseInt(port), "https");
+        } else if (uri != null) {
+            httpHost = HttpHost.create(uri);
         } else {
             httpHost = new HttpHost("localhost", 9200, "http");
         }

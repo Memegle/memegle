@@ -21,64 +21,46 @@ services:
     volumes:
       - ./server/data/processed:/root/memegle/images
     environment:
-      - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs0
+      - MONGO_URI=mongodb://54.176.95.190:9000/memegle?replicaSet=rs
       - ES_HOST=vpc-memegle-test-s6vqr3snahyzjbr5725qq2xrwi.us-west-1.es.amazonaws.com
       - ES_PORT=443
-      - ES_USERNAME=memegle
-      - ES_PASSWORD=ILoveMemegle!123
       - MEMEGLE_APP_PRODUCTION_MODE=true
+    env_file:
+      - ./scripts/env/mongo-auth.env
     ports:
       - 8080:8080
 #    depends_on:
 #      - monstache
     links:
       - mongo1
-#      - es
-    entrypoint: ["sh", "init-boot.sh"]
+    entrypoint: ["catalina.sh", "run"]
 
   mongo1:
     hostname: mongo1
     container_name: mongo1
     image: mongo:4.0-xenial
+    expose:
+      - 27017
     ports:
       - 9000:27017 # 27017 does not work in AWS security group for unknown reason, fix later.
-    restart: always
-    environment:
-      - MONGO_INITDB_DATABASE=memegle
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    restart: unless-stopped
+    env_file:
+      - ./scripts/env/mongo-auth.env
     volumes:
       - rs1:/data/db
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--auth","--replSet", "rs0"]
+    command: "--bind_ip_all --replSet rs"
 
-  init-mongo-rs:
+  init_mongo_rs:
     image: mongo:4.0-xenial
     links:
       - mongo1
     depends_on:
       - mongo1
+    env_file:
+      - ./scripts/env/mongo-auth.env
     volumes:
       - ./scripts:/scripts
     entrypoint: ["sh", "/scripts/mongo_init.sh"]
-
-#  es:
-#    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.7
-#    container_name: elasticsearch
-#    environment:
-#      - cluster.name=docker-cluster
-#      - xpack.security.enabled=false
-#      - discovery.type=single-node
-#      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-#    ulimits:
-#      memlock:
-#        soft: -1
-#        hard: -1
-#    volumes:
-#      - esdata:/usr/share/elasticsearch/data
-#    ports:
-#      - 9200:9200
-#      - 9300:9300
-#    restart: always
 
 
   # https://rwynn.github.io/monstache-site/start/
@@ -101,5 +83,3 @@ services:
 
 volumes:
   rs1:
-#  esdata:
-#    driver: local
