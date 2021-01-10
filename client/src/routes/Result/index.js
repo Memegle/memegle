@@ -152,9 +152,15 @@ class Result extends Component {
 
     handleSubmitFeedback() {
         const feedback = document.getElementById('feedback').value;
-        submitFeedback(feedback);
-        this.hidePopup();
-        //TODO: show thank you snackbar or popup
+        if (feedback.trim() === "") {
+            LOG("反馈不能为空, 请输入反馈信息！！");
+            document.getElementById("feedbackError").hidden = false;
+        } else {
+            document.getElementById("feedbackError").hidden = true;
+            submitFeedback(feedback);
+            this.hidePopup();
+            //TODO: show thank you snackbar or popup
+        }
     }
 
     hidePopup() {
@@ -172,6 +178,7 @@ class Result extends Component {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body className={styles.modalBody}>
+                        <p id="feedbackError" className={styles.feedbackError} hidden={true}>反馈不能为空, 请输入反馈信息！</p>
                         <input className={styles.modalInput} placeholder="请使用逗号分隔关键词"
                                type="text" id="feedback" onKeyPress={this.keyPressed}/>
                     </Modal.Body>
