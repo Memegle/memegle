@@ -189,6 +189,9 @@ class Result extends Component {
     }
 
     render() {
+        if(this.keyword ==='memegle'){
+            return <Redirect to='newpage'/>;
+        }
         if (this.state.toWelcome) {
             return <Redirect to='welcome'/>;
         } else if (this.state.newSearch) {
