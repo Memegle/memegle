@@ -9,6 +9,8 @@ import coloredLogo from 'assets/logo-mm-transparent.png';
 import {LOG} from 'utils';
 import performSearch, {getSearchRoute} from 'actions/search';
 import submitFeedback from "actions/feedback";
+import LogIn from "initialPage/LogIn.js";
+import Registration from "initialPage/Registration.js";
 
 class Result extends Component {
     constructor(props) {
@@ -189,6 +191,13 @@ class Result extends Component {
     }
 
     render() {
+        if(this.keyword ==='FRANK'){
+            return <Registration/>;
+        }
+        if(this.keyword ==='123'){
+            return <LogIn/>;
+        }
+
         if(this.keyword ==='memegle'){
             return <Redirect to='newpage'/>;
         }
