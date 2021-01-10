@@ -25,11 +25,16 @@ public class FeedbackController {
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String processFeedback(@RequestBody List<String> feedbackStrs) {
-        for (String feedbackStr : feedbackStrs) {
-            LOGGER.info("Recording feedback " + feedbackStr);
-            feedbackService.recordFeedback(feedbackStr);
+        if (feedbackStrs.size() != 0) {
+            for (String feedbackStr : feedbackStrs) {
+                LOGGER.info("Recording feedback " + feedbackStr);
+                feedbackService.recordFeedback(feedbackStr);
+            }
+
+            return "acknowledged";
         }
 
-        return "acknowledged";
+        return "feedback cannot be empty!";
+
     }
 }
