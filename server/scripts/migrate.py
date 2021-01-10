@@ -25,13 +25,16 @@ ocr = PaddleOCR(use_angle_cls=True, lang='ch', use_gpu=False)
 COPY = False
 TEST_MODE = False
 
-DATA_PATH = './data/'
-RAW_DATA_PATH = './data/raw/'
-PROCESSED_DATA_PATH = './data/processed/'
-TEST_DATA_PATH = './data/test/'
-GIF_DATA_PATH = './data/gif/'
-URL_PREFIX = '/'
-ERROR_PATH = './data/error/'
+if len(sys.argv) != 8:
+    sys.exit('Require eight arguments: [data_path] [raw_data_path] [processed_data_path] [test_data_path] [gif_data_path] [url_prefix] [error_path]')
+
+DATA_PATH = sys.argv[1]  #'./data/'
+RAW_DATA_PATH = sys.argv[2]  #'./data/raw/'
+PROCESSED_DATA_PATH = sys.argv[3]  #'./data/processed/'
+TEST_DATA_PATH = sys.argv[4]  #'./data/test/'
+GIF_DATA_PATH = sys.argv[5]  #'./data/gif/'
+URL_PREFIX = sys.argv[6]  #'/'
+ERROR_PATH = sys.argv[7]  #'./data/error/'
 
 OUTPUT_DATA_PATH = PROCESSED_DATA_PATH if not TEST_MODE else TEST_DATA_PATH
 
