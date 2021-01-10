@@ -154,7 +154,6 @@ class Result extends Component {
     handleSubmitFeedback() {
         const feedback = document.getElementById('feedback').value;
         submitFeedback(feedback.trim()).then(result => {
-            LOG(result);
             this.hidePopup();
             //TODO: show thank you snackbar or popup
         }).catch(error => {

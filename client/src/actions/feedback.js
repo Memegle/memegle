@@ -16,8 +16,8 @@ const submitFeedback = async (feedback) => {
         },
     })
     LOG(response);
-    const json = await response.json();
     if (!response || response.status !== 200) {
+        const json = await response.json();
         throw Error(json.message);
     }
 };
