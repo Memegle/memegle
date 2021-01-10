@@ -2,6 +2,9 @@ import { serverUrl } from 'App';
 import { LOG } from "utils";
 
 const submitFeedback = async (feedback) => {
+    if (feedback === "") {
+        throw Error("反馈不能为空，请输入反馈信息!")
+    }
     const processed = feedback.replaceAll('，', ',');
     const parts = processed.split(',').map(item => item.trim());
     const uniq_parts = [...new Set(parts)]

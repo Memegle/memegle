@@ -20,7 +20,7 @@ class Result extends Component {
             toWelcome: false,
             newSearch: null,
             poorResult: false,
-            feedbackError: null,
+            feedbackError: "",
         };
 
         this.allImages = []
@@ -178,7 +178,7 @@ class Result extends Component {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body className={styles.modalBody}>
-                        {this.state.feedbackError && <p className={styles.error}>{this.state.feedbackError.message}</p>}
+                        <p className={styles.error}>{this.state.feedbackError.message}</p>
                         <input className={styles.modalInput} placeholder="请使用逗号分隔关键词"
                                type="text" id="feedback" onKeyPress={this.keyPressed}/>
                     </Modal.Body>
