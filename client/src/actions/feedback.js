@@ -15,8 +15,11 @@ const submitFeedback = async (feedback) => {
             'Content-Type': 'application/json'
         },
     })
-
     LOG(response);
+    const json = await response.json();
+    if (!response || response.status !== 200) {
+        throw Error(json.message);
+    }
 };
 
 export default submitFeedback;

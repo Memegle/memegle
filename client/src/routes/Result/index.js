@@ -20,7 +20,7 @@ class Result extends Component {
             toWelcome: false,
             newSearch: null,
             poorResult: false,
-            feedbackError: false,
+            feedbackError: null,
         };
 
         this.allImages = []
@@ -153,15 +153,15 @@ class Result extends Component {
 
     handleSubmitFeedback() {
         const feedback = document.getElementById('feedback').value;
-        if (feedback.trim() === "") {
-            LOG("反馈不能为空");
-            this.setState({feedbackError: true})
-        } else {
-            submitFeedback(feedback);
+        submitFeedback(feedback.trim()).then(result => {
+            LOG(result);
             this.hidePopup();
             //TODO: show thank you snackbar or popup
-        }
-
+        }).catch(error => {
+            this.setState({
+                feedbackError: error,
+            })
+        });
     }
 
     hidePopup() {
@@ -179,7 +179,7 @@ class Result extends Component {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body className={styles.modalBody}>
-                        { this.state.feedbackError && <p className={styles.error}>请输入反馈信息！</p>}
+                        {this.state.feedbackError && <p className={styles.error}>{this.state.feedbackError.message}</p>}
                         <input className={styles.modalInput} placeholder="请使用逗号分隔关键词"
                                type="text" id="feedback" onKeyPress={this.keyPressed}/>
                     </Modal.Body>

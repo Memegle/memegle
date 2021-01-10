@@ -27,8 +27,8 @@ public class FeedbackController {
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String processFeedback(@RequestBody List<String> feedbackStrs) {
-        if (feedbackStrs.size() == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "反馈信息不能为空！");
+        if (feedbackStrs.size() == 0 || feedbackStrs.contains("")) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "反馈信息不能为空！");
         }
         for (String feedbackStr : feedbackStrs) {
             LOGGER.info("Recording feedback " + feedbackStr);
