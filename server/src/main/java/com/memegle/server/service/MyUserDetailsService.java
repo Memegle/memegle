@@ -1,6 +1,6 @@
 package com.memegle.server.service;
 
-import com.memegle.server.config.MyUserPrincipal;
+import com.memegle.server.config.CustomUserDetails;
 import com.memegle.server.model.User;
 import com.memegle.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +46,8 @@ public class MyUserDetailsService implements UserDetailsService{
 
 
     @Override
-    public MyUserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUserName(username);
-        return MyUserPrincipal.toCustomUserDetails(user);
+        return CustomUserDetails.toCustomUserDetails(user);
     }
 }

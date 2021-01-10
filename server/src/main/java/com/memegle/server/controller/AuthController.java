@@ -1,8 +1,8 @@
 package com.memegle.server.controller;
 
 
-import com.memegle.server.model.AuthRequest;
-import com.memegle.server.model.AuthResponse;
+import com.memegle.server.dto.AuthRequest;
+import com.memegle.server.dto.AuthResponse;
 import com.memegle.server.model.User;
 import com.memegle.server.service.MyUserDetailsService;
 import com.memegle.server.util.JwtUtil;

@@ -8,18 +8,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-public class MyUserPrincipal implements UserDetails {
+public class CustomUserDetails implements UserDetails {
 
     private String username;
     private String password;
     private Collection<? extends GrantedAuthority> grantedAuthorities;
 
-    public static MyUserPrincipal toCustomUserDetails(User user) {
-        MyUserPrincipal myUserPrincipal = new MyUserPrincipal();
-        myUserPrincipal.username = user.getUserName();
-        myUserPrincipal.password = user.getPassword();
-        myUserPrincipal.grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(user.getUserName()));
-        return myUserPrincipal;
+    public static CustomUserDetails toCustomUserDetails(User user) {
+        CustomUserDetails customUserDetails = new CustomUserDetails();
+        customUserDetails.username = user.getUserName();
+        customUserDetails.password = user.getPassword();
+        customUserDetails.grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(user.getUserName()));
+        return customUserDetails;
     }
 
     @Override

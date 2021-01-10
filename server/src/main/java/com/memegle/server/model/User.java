@@ -89,17 +89,4 @@ public class User {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", status=" + status +
-                ", type=" + type +
-                ", activationCode='" + activationCode + '\'' +
-                ", avatarUrl='" + avatarUrl + '\'' +
-                ", createTime=" + createTime +
-                '}';
-    }
 }

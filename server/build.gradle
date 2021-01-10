@@ -31,9 +31,9 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-security"
 
 	// JWT dependency
-	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
 
-	compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 
 	// Mongock dependencies
 	// https://github.com/cloudyrock/mongock#springBootMongock-build-parameters

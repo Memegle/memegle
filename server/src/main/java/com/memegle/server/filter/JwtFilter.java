@@ -1,6 +1,6 @@
 package com.memegle.server.filter;
 
-import com.memegle.server.config.MyUserPrincipal;
+import com.memegle.server.config.CustomUserDetails;
 import com.memegle.server.service.MyUserDetailsService;
 import com.memegle.server.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +41,8 @@ public class JwtFilter extends GenericFilterBean {
         String token = getTokenFromRequest((HttpServletRequest) request);
         if (token != null && jwtUtil.validateToken(token)) {
             String userName = jwtUtil.getLoginUsernameFromToken(token);
-            MyUserPrincipal myUserPrincipal = myUserDetailsService.loadUserByUsername(userName);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(myUserPrincipal, null, myUserPrincipal.getAuthorities());
+            CustomUserDetails customUserDetails = myUserDetailsService.loadUserByUsername(userName);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
 

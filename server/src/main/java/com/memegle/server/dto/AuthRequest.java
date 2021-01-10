@@ -1,4 +1,4 @@
-package com.memegle.server.model;
+package com.memegle.server.dto;
 
 import javax.validation.constraints.NotEmpty;
 
