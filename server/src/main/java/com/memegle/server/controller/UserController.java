@@ -14,7 +14,7 @@ import javax.validation.Valid;
 
 @CrossOrigin
 @Controller
-public class AuthController {
+public class UserController {
 
     private MyUserDetailsService userDetailsService;
     private JwtUtil jwtUtil;
@@ -32,15 +32,11 @@ public class AuthController {
     @PostMapping("/register")
     @ResponseBody
     public String registerUser(@RequestBody @Valid AuthRequest authRequest) {
-        User existUser = userDetailsService.findByUserName(authRequest.getUsername());
-        if (existUser != null) {
-            return "user already registered";
-        }
         User user = new User();
         user.setUserName(authRequest.getUsername());
         user.setPassword(authRequest.getPassword());
         userDetailsService.saveUser(user);
-        return "register successful";
+        return "Register successful";
     }
 
     @PostMapping("/auth")
