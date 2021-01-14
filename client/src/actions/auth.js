@@ -1,7 +1,7 @@
 
 import { LOG } from "utils";
 
-const postRegistration = async (infor) => {
+export const postRegistration = async (infor) => {
     try {
         const response = await fetch('http://localhost:8080/auth', {
            method: 'POST',
@@ -18,8 +18,7 @@ const postRegistration = async (infor) => {
      }
     }
 
-
-const postLogIn = async () => {
+export const postLogIn = async () => {
         try {
             const response = await fetch('http://localhost:8080/register', {
                method: 'POST',
