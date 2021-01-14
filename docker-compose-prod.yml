@@ -23,7 +23,7 @@ services:
     environment:
       - ES_HOST=vpc-memegle-y2a7bejqpqmflccfhwkdrpeg7q.us-west-1.es.amazonaws.com
       - ES_PORT=443
-      - MEMEGLE_APP_PRODUCTION_MODE=true
+      - MEMEGLE_APP_MODE=production
     env_file:
       - ./scripts/env/mongo-auth.env
       - ./scripts/env/es-auth.env
