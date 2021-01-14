@@ -9,6 +9,7 @@ import coloredLogo from 'assets/logo-mm-transparent.png';
 import {LOG} from 'utils';
 import performSearch, {getSearchRoute} from 'actions/search';
 import submitFeedback from "actions/feedback";
+import secretPage from "routes/Result/secretPage";
 
 class Result extends Component {
     constructor(props) {
@@ -190,8 +191,11 @@ class Result extends Component {
 
     render() {
         if(this.keyword ==='memegle'){
-            return <Redirect to='newpage'/>;
+            return
+                <Redirect to='secretpage'/>;
+            ;
         }
+
         if (this.state.toWelcome) {
             return <Redirect to='welcome'/>;
         } else if (this.state.newSearch) {
