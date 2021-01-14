@@ -5,7 +5,7 @@ import Analytics from "react-router-ga";
 import {isInDevelopmentMode, LOG} from "./utils";
 import Main from './Main'
 
-export var serverUrl = 'http://www.memegle.live:8080';
+export var serverUrl = 'https://www.memegle.live:8080';
 
 let urlChecked = false;
 
@@ -23,7 +23,6 @@ const setServerUrl = () => {
             LOG('Local is up, using ' + serverUrl);
         })
         .catch(error => {
-            serverUrl = 'http://www.memegle.live:8080';
             LOG('Can\'t connect to localhost, using ' + serverUrl);
         })
 };
