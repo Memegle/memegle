@@ -4,3 +4,4 @@ pymongo
 pytest-shutil
 pillow
 numpy
+python-magic
