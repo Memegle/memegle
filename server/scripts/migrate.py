@@ -1,209 +1,212 @@
-# https://www.mongodb.com/blog/post/getting-started-with-python-and-mongodb
-from pymongo import MongoClient
-from os import listdir, rename, remove, mkdir
-from os.path import isfile, join, exists, splitext, isdir
-import datetime
-from shutil import copyfile
+import boto3
+from botocore.exceptions import ClientError
+import argparse
+import magic
+from os import mkdir, listdir, rename, remove
+from os.path import exists, isfile, join, splitext
 import sys
+import json
+from bson.objectid import ObjectId
+from pymongo import MongoClient
 from PIL import Image
+from paddleocr import PaddleOCR
 import numpy as np
+import datetime
+import getpass
 
-if len(sys.argv) == 2:
-    NUM_PICS = int(sys.argv[1])
-    del sys.argv[1]
+DEFAULT_INPUT_FOLDER = './data/raw/'
+DEFAULT_OUTPUT_FOLDER = './data/processed/'
+DEFAULT_ERROR_FOLDER = './data/error/'
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-i', '--input_dir')
+parser.add_argument('-o', '--output_dir')
+parser.add_argument('-e', '--error_dir')
+parser.add_argument('-r', '--recursive', action='store_true')
+parser.add_argument('-p', '--prod', action='store_true')
+parser.add_argument('-t', '--test', action='store_true')
+
+args = parser.parse_args()
+
+input_dir = args.input_dir if args.input_dir else DEFAULT_INPUT_FOLDER
+output_dir = args.output_dir if args.output_dir else DEFAULT_OUTPUT_FOLDER
+error_dir = args.error_dir if args.error_dir else DEFAULT_ERROR_FOLDER
+
+if args.test:
+    print('Running in test mode, output directory will be changed to ${output_dir}/test/')
+    output_dir = join(output_dir, 'test/')
+
+BUCKET_NAME = 'memegle' if not args.test else 'memegle-test'
+URL_PREFIX = 'https://memegle.s3-us-west-1.amazonaws.com/' if not args.test \
+    else 'https://memegle-test.s3-us-west-1.amazonaws.com/'
+
+s3 = boto3.resource('s3')
+bucket = s3.Bucket(BUCKET_NAME)
+boto = boto3.client('s3')
+if args.prod:
+    url = "memegle.live"
+    port = 7017
+    username = input('Enter MongoDB username: ')
+    password = getpass.getpass()
+    mongo = MongoClient('mongodb://{}:{}@{}:{}/?authSource=admin&ssl=true'.format(username, password, url, port))
 else:
-    NUM_PICS = float('inf')
-
-count = 0
+    mongo = MongoClient(port=27017)
+db = mongo.memegle if not args.test else mongo.test
+pic_col = db.pictures
+paddle = PaddleOCR(use_angle_cls=True, lang='ch', use_gpu=False)
 success = 0
 
-from paddleocr import PaddleOCR, draw_ocr
+if not exists(input_dir):
+    if input_dir == DEFAULT_INPUT_FOLDER:
+        print('Default input directory does not exist, creating and exiting')
+        mkdir(input_dir)
+    else:
+        print('Input directory does not exist, exiting')
 
-ocr = PaddleOCR(use_angle_cls=True, lang='ch', use_gpu=False)
-
-# COPY is used for debugging this script, normally you don't need to copy, which cost you more disk space.
-COPY = False
-TEST_MODE = False
-
-DATA_PATH = './data/'
-RAW_DATA_PATH = './data/raw/'
-PROCESSED_DATA_PATH = './data/processed/'
-TEST_DATA_PATH = './data/test/'
-GIF_DATA_PATH = './data/gif/'
-URL_PREFIX = '/'
-ERROR_PATH = './data/error/'
-
-OUTPUT_DATA_PATH = PROCESSED_DATA_PATH if not TEST_MODE else TEST_DATA_PATH
-
-print('Running', 'Real Migration' if not TEST_MODE else 'Test Migration', 'with COPY =', COPY)
-
-if not (exists(DATA_PATH) and isdir(DATA_PATH)):
-    print('creating data folder...')
-    mkdir(DATA_PATH)
-
-if not (exists(RAW_DATA_PATH) and isdir(RAW_DATA_PATH)):
-    print('./data/raw/ does not exist, creating and exiting')
-    mkdir(RAW_DATA_PATH)
     sys.exit()
 
-if not (exists(OUTPUT_DATA_PATH) and isdir(OUTPUT_DATA_PATH)):
-    print('{} does not exist, creating'.format(OUTPUT_DATA_PATH))
-    mkdir(OUTPUT_DATA_PATH)
+if not args.prod and not exists(output_dir):
+    print('Output directory does not exist, creating')
+    mkdir(output_dir)
 
-if not (exists(GIF_DATA_PATH) and isdir(GIF_DATA_PATH)):
-    print('creating gif folder...')
-    mkdir(GIF_DATA_PATH)
-
-if not (exists(ERROR_PATH) and isdir(ERROR_PATH)):
-    print('creating error folder...')
-    mkdir(ERROR_PATH)
-
-# db config
-client = MongoClient(port=27017)
-db = client.memegle if not TEST_MODE else client.test
-
-seq_col = db.database_sequences
-# open pictures collection
-pic_col = db.pictures
-
-seq = seq_col.find_one({'_id': 'picture_sequence'})
-if seq is None:
-    d = {
-        '_id': 'picture_sequence',
-        'seq': 0
-    }
-    seq_col.insert_one(d)
-    seq = 0
-else:
-    seq = seq['seq']
-    seq_col.update_one({'_id': 'picture_sequence'}, {'$set': {'prev_seq': seq}})
-
-print('starting at seq {}'.format(seq))
-
-img_files = []
-already_exist = []
-gifs = []
-error_lst = []
+if not exists(error_dir):
+    print('Error directory does not exist, creating')
+    mkdir(error_dir)
 
 
-def process_image(dir, filename):
-    img_name, ext = splitext(filename)
+def has_required_keys(d):
+    required = ['source_url', 'path']
+    return all(key in d for key in required)
 
+
+def exclude_keys(d):
+    exclude = ['path']
+    return {k: v for k, v in d.items() if k not in exclude}
+
+
+def process_img(filename, d):
+    if not has_required_keys(d):
+        print('Skipping {}, dict does not contain all required keys')
+        return False
+
+    _, ext = splitext(filename)
     if ext not in ['.jpg', '.jpeg', '.png', '.gif']:
-        return None
+        print('Skipping {}, not image file'.format(filename))
+        return False
 
-    if pic_col.find_one({'name': img_name}) is not None:
-        already_exist.append(join(dir, filename))
-        return None
-
-    global seq
-    seq += 1
+    if 'source_url' in d and pic_col.find_one({'source_url': d['source_url']}) is not None:
+        print('Skipping {}, source url already exists in the db')
+        return False
 
     try:
-        picture = Image.open(join(dir, filename))
-        width, height = picture.size
+        id = ObjectId()
+        path = d['path']
 
-        lines = []
-        confs = []
-        boundingBoxes = []
-        result = ocr.ocr(join(dir, filename), cls=True)
+        img = Image.open(path)
+        width, height = img.size
+
+        texts = []
+        confidences = []
+        bounding_boxes = []
+        result = paddle.ocr(path, cls=True)
+
         for line in result:
-            boundingBoxes.append(line[0])
-            lines.append((line[1])[0])
-            confs.append(np.float64((line[1])[1]).item())
+            bounding_boxes.append(line[0])
+            texts.append(line[1][0])
+            confidences.append(np.float64(line[1][1]).item())
 
-        print('found text:', lines)
+        print('found text:', texts)
 
-        d = {
-            '_id': seq,
-            'name': img_name,
-            'filetype': ext[1:],
-            'dateUpdated': datetime.datetime.utcnow(),
-            'urlSuffix': URL_PREFIX + str(seq) + ext,
-            'width': width,
-            'height': height,
-            'texts': lines,
-            'confidences': confs,
-            'boundingBoxes': boundingBoxes,
-        }
+        d['_id'] = id
+        d['date_created'] = datetime.datetime.utcnow()
+        d['width'] = width
+        d['height'] = height
+        d['texts'] = texts
+        d['bounding_boxes'] = bounding_boxes
+        d['confidences'] = confidences
+        d['ext'] = ext[1:]
+        d['media_url'] = URL_PREFIX + str(id) + ext
 
-        return d
+        return True
 
     except Exception as e:
-        print('Error {}'.format(e))
-        error_lst.append(join(dir, filename))
-        seq -= 1
+        print('Error {} on file {}'.format(e, filename))
+        return False
 
 
-def update_db(d):
-    print('inserting {} to db...'.format(d['name'] + '.' + d['filetype']))
-    pic_col.insert_one(d)
-    seq_col.update_one({'_id': 'picture_sequence'}, {'$set': {'seq': seq}})
-
-
-def add_to_processed(dir, name, ext, id):
-    print('copying {} with id {}'.format(name + '.' + ext, id))
-    src_filename = name + '.' + ext
-    dest_filename = str(id) + '.' + ext
-
-    source = join(dir, src_filename)
-    dest = join(OUTPUT_DATA_PATH, dest_filename)
-
-    if exists(dest):
-        remove(dest)
-
-    if COPY:
-        copyfile(source, dest)
-    else:
-        rename(source, dest)
-
-
-for f in listdir(RAW_DATA_PATH):
-    if isfile(join(RAW_DATA_PATH, f)):
-        img_files.append(f)
-    else:
-        tags = f.split(';')
-        print('processing folder with tags {}'.format(tags))
-        dir = join(RAW_DATA_PATH, f)
+def process_dir(dir, recur=False):
+    global success
+    if recur:
         for filename in listdir(dir):
-            count += 1
-            d = process_image(dir, filename)
-            if d:
-                d['tags'] = tags
-                update_db(d)
-                add_to_processed(dir, d['name'], d['filetype'], d['_id'])
-                print('done with {}'.format(d['name'] + '.' + d['filetype']))
-                success += 1
+            p = join(dir, filename)
+            if isdir(p):
+                process_dir(p)
 
-for filename in img_files:
-    count += 1
-    if count > NUM_PICS:
-        break
-    d = process_image(RAW_DATA_PATH, filename)
-    if d:
-        update_db(d)
-        add_to_processed(RAW_DATA_PATH, d['name'], d['filetype'], d['_id'])
-        print('done with {}'.format(d['name'] + '.' + d['filetype']))
-        success += 1
+    print('Processing directory {}'.format(dir))
+    meta_path = join(dir, 'meta.json')
+    if not isfile(meta_path):
+        print('Cannot process {}, missing meta.json'.format(dir))
+        return
+
+    with open(meta_path, 'r') as f:
+        data = json.load(f)
+
+    for filename, d in data.items():
+        path = d['path']
+        if not isfile(path):
+            path = join(input_dir, filename)
+
+            if not isfile(path):
+                print("File not found: {}".format(path))
+                continue
+
+            d['path'] = path
+
+        if not process_img(filename, d):
+            rename(path, join(error_dir, filename))
+            continue
+
+        d = exclude_keys(d)
+        new_name = str(d['_id']) + '.' + d['ext']
+        try:
+            # add to mongo and upload to s3
+            if args.prod:
+                upload_file(path, new_name)
+                if args.test:
+                    rename(path, join(output_dir, new_name))
+                else:
+                    remove(path)
+            else:
+                rename(path, join(output_dir, new_name))
+
+            pic_col.insert_one(d)
+            success += 1
+        except Exception as e:
+            print('Failed to update s3 or mongo: {}'.format(e))
+            rename(path, join(error_dir, filename))
+
+    if args.test:
+        rename(meta_path, join(output_dir, 'meta.json'))
+    else:
+        remove(meta_path)
 
 
-if len(already_exist) > 0:
-    print('Skipped {} images that are already in the db'.format(len(already_exist)))
+def upload_file(path, key):
+    print('Uploading {} to s3...'.format(key))
+    mime = magic.from_file(path, mime=True)
+    bucket.put_object(Key=key, Body=open(path, 'rb'), ContentType=mime)
 
-if len(error_lst) > 0:
-    print('Had problem reading {} images'.format(len(error_lst)))
 
-    for source in error_lst:
-        dest = join(ERROR_PATH, filename)
+def key_exists(key):
+    try:
+        boto.head_object(Bucket=BUCKET_NAME, Key=key)
+        return True
+    except ClientError as e:
+        if e.response['ResponseMetadata']['HTTPStatusCode'] == 404:
+            return False
 
-        rename(source, dest)
+        raise
 
-if len(gifs) > 0:
-    print('Skipped {} gif images'.format(len(gifs)))
 
-    for source in gifs:
-        dest = join(GIF_DATA_PATH, filename)
-
-        rename(source, dest)
-
-print('Total {}, inserted {} to the db'.format(count, success))
+process_dir(input_dir, args.recursive)
+print('Successfully inserted {} pictures to db'.format(success))
