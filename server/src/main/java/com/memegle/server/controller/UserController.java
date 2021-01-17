@@ -58,7 +58,7 @@ public class UserController {
         user.setPassword(password);
         user.setStatus(0);
         user.setActivationCode(MailClient.generateUUID());
-        User byUserName = userDetailsService.findByUserName(email);
+        User byUserName = userDetailsService.findByUserName(username);
         User byEmail = userDetailsService.findByEmail(email);
 
         if (byEmail != null) {
