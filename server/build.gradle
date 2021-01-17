@@ -35,6 +35,9 @@ dependencies {
 
 	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 
+	// Spring mail
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.4.2'
+
 	// Mongock dependencies
 	// https://github.com/cloudyrock/mongock#springBootMongock-build-parameters
 	implementation 'org.javassist:javassist:3.18.2-GA'

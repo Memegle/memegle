@@ -4,11 +4,19 @@ import javax.validation.constraints.NotEmpty;
 
 public class AuthRequest {
 
-    @NotEmpty
+    private String email;
+
     private String username;
 
-    @NotEmpty
     private String password;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getUsername() {
         return username;

@@ -4,6 +4,7 @@ import com.memegle.server.config.CustomUserDetails;
 import com.memegle.server.model.User;
 import com.memegle.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,6 +33,10 @@ public class MyUserDetailsService implements UserDetailsService{
 
     public User findByUserName(String username) {
         return userRepository.findByUserName(username);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     public User findByUserNameAndPassword(String username, String password) {
