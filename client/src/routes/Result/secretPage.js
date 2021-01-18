@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Redirect} from "react-router-dom";
-import PrintNum from "./PrintNum";
+import {count} from "actions/count";
 import {postLogIn,postRegistration} from 'actions/auth.js';
 
 class secretPage extends Component {

@@ -8,5 +8,8 @@ export const count = async () => {
     } catch (e) {
         throw e;
     }
+    
     return result;
-}
+};
+
+export default count;
