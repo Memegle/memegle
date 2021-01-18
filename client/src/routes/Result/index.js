@@ -21,6 +21,7 @@ class Result extends Component {
             toWelcome: false,
             newSearch: null,
             poorResult: false,
+            feedbackError: "",
         };
 
         this.allImages = []
@@ -153,9 +154,14 @@ class Result extends Component {
 
     handleSubmitFeedback() {
         const feedback = document.getElementById('feedback').value;
-        submitFeedback(feedback);
-        this.hidePopup();
-        //TODO: show thank you snackbar or popup
+        submitFeedback(feedback.trim()).then(result => {
+            this.hidePopup();
+            //TODO: show thank you snackbar or popup
+        }).catch(error => {
+            this.setState({
+                feedbackError: error,
+            })
+        });
     }
 
     hidePopup() {
@@ -173,6 +179,7 @@ class Result extends Component {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body className={styles.modalBody}>
+                        <p className={styles.error}>{this.state.feedbackError.message}</p>
                         <input className={styles.modalInput} placeholder="请使用逗号分隔关键词"
                                type="text" id="feedback" onKeyPress={this.keyPressed}/>
                     </Modal.Body>
@@ -190,12 +197,6 @@ class Result extends Component {
     }
 
     render() {
-        if(this.keyword ==='memegle'){
-            return
-                <Redirect to='secretpage'/>;
-            ;
-        }
-
         if (this.state.toWelcome) {
             return <Redirect to='welcome'/>;
         } else if (this.state.newSearch) {

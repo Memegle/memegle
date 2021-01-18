@@ -3,8 +3,8 @@ import React, {Component} from "react";
 
 import paths from "./routes/paths";
 import Welcome from "./routes/Welcome";
-import Result from "./routes/Result";
-import secretPage from "./routes/Result";
+import Result from "./routes/Result"
+
 
 class Main extends Component {
     render() {
@@ -18,7 +18,6 @@ class Main extends Component {
             <Switch>
                 <Route path={paths.welcome} component={Welcome}/>
                 <Route path={paths.search} component={ResultPage}/>
-                <Route path={paths.secretpage} component={secretPage}/>
                 <Redirect to={paths.default}/>
             </Switch>
         )
