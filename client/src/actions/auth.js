@@ -18,7 +18,7 @@ export const postRegistration = async (infor) => {
      }
     }
 
-export const postLogIn = async () => {
+export const postLogin = async () => {
         try {
             const response = await fetch('http://localhost:8080/register', {
                method: 'POST',
