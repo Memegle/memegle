@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -63,15 +64,15 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "用户名已存在，请更换用户名");
         }
         //  check whether password length have at least 7 character.
-        if(this.password.length()<8 ){
+        if(password.length()<8 ){
              throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "密码需至少八位");
         }
         // check whether password contains at least one letter
-        if(this.password.matches(".*[a-z].*") ){
+        if(password.matches(".*[a-z].*") ){
              throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "密码需有至少一个字母");
         }
         // check whether password contain any space.
-        if(this.password.contains(" ")){
+        if(password.contains(" ")){
              throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "密码不能包含空格");
         }
 
@@ -108,18 +109,20 @@ public class UserController {
     }
 
     @GetMapping("/activation/{username}/{code}")
-    public String activateAccount(@PathVariable String username, @PathVariable String code) {
+    public String activateAccount(Model model, @PathVariable String username, @PathVariable String code) {
         User user = userDetailsService.findByUserName(username);
         if (user.getStatus() == 1) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "用户已激活！");
+            model.addAttribute("msg","账号已激活，请勿重复激活");
         }else if (code.equals(user.getActivationCode())){
+            model.addAttribute("msg", "账号激活成功，请登录");
             user.setStatus(1);
             userDetailsService.saveUser(user);
         }else {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "激活失败！");
+           model.addAttribute("msg", "账号激活失败");
         }
 
-        return "/result/index.html";
+
+        return "/result/index";
     }
 
 }
