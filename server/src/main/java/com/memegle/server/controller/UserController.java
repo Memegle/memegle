@@ -53,15 +53,26 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(0);
         user.setActivationCode(MailClient.generateUUID());
-        User byUserName = userDetailsService.findByUserName(email);
+        User byUserName = userDetailsService.findByUserName(username);
         User byEmail = userDetailsService.findByEmail(email);
 
         if (byEmail != null) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "邮箱已注册!");
         }
-
         if (byUserName != null) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "用户名已存在，请更换用户名");
+        }
+        //  check whether password length have at least 7 character.
+        if(this.password.length()<8 ){
+             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "密码需至少八位");
+        }
+        // check whether password contains at least one letter
+        if(this.password.matches(".*[a-z].*") ){
+             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "密码需有至少一个字母");
+        }
+        // check whether password contain any space.
+        if(this.password.contains(" ")){
+             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "密码不能包含空格");
         }
 
         try {
