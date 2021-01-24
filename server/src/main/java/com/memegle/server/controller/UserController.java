@@ -4,13 +4,12 @@ package com.memegle.server.controller;
 import com.memegle.server.dto.AuthRequest;
 import com.memegle.server.dto.AuthResponse;
 import com.memegle.server.model.User;
-import com.memegle.server.service.MyUserDetailsService;
+import com.memegle.server.service.CustomerDetails;
 import com.memegle.server.util.JwtUtil;
 import com.memegle.server.util.MailClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,26 +20,21 @@ import javax.validation.Valid;
 @Controller
 public class UserController {
 
-    private MyUserDetailsService userDetailsService;
-    private JwtUtil jwtUtil;
-    private MailClient mailClient;
+    private final CustomerDetails userDetailsService;
+    private final JwtUtil jwtUtil;
+    private final MailClient mailClient;
+    private final PasswordEncoder passwordEncoder;
+
+
 
     @Value("${memegle.path.domain}")
     private String domain;
 
-    @Autowired
-    public void setUserDetailsService(MyUserDetailsService userDetailsService) {
+    public UserController(CustomerDetails userDetailsService, JwtUtil jwtUtil, MailClient mailClient, PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
-    }
-
-    @Autowired
-    public void setJwtUtil(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
-    }
-
-    @Autowired
-    public void setMailClient(MailClient mailClient) {
         this.mailClient = mailClient;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
@@ -56,6 +50,7 @@ public class UserController {
         user.setEmail(email);
         user.setUserName(username);
         user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setStatus(0);
         user.setActivationCode(MailClient.generateUUID());
         User byUserName = userDetailsService.findByUserName(email);
@@ -71,8 +66,8 @@ public class UserController {
 
         try {
             String content="<html>\n"+"<body>\n"
-                    + "<h3>hello, "+username+",</h3>\n"
-                    + "<a href=\""+domain+"\">请点击此处激活你的账号!</a>"
+                    + "<h3>Hello "+username+",</h3>\n"
+                    + "<a href=\""+domain+"/activation"+"/"+username+"/"+user.getActivationCode()+"\">请点击此处激活你的账号!</a>"
                     +"</body>\n"+"</html>";
             mailClient.sendMail(email,"账号激活", content);
         } catch (Exception e) {
@@ -100,4 +95,20 @@ public class UserController {
 
         return new AuthResponse(token);
     }
+
+    @GetMapping("/activation/{username}/{code}")
+    public String activateAccount(@PathVariable String username, @PathVariable String code) {
+        User user = userDetailsService.findByUserName(username);
+        if (user.getStatus() == 1) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "用户已激活！");
+        }else if (code.equals(user.getActivationCode())){
+            user.setStatus(1);
+            userDetailsService.saveUser(user);
+        }else {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "激活失败！");
+        }
+
+        return "/result/index.html";
+    }
+
 }

@@ -1,6 +1,5 @@
-package com.memegle.server.config;
+package com.memegle.server.model;
 
-import com.memegle.server.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

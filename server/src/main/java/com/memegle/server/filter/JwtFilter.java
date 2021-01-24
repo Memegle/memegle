@@ -1,7 +1,7 @@
 package com.memegle.server.filter;
 
-import com.memegle.server.config.CustomUserDetails;
-import com.memegle.server.service.MyUserDetailsService;
+import com.memegle.server.model.CustomUserDetails;
+import com.memegle.server.service.CustomerDetails;
 import com.memegle.server.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +23,7 @@ public class JwtFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION = "Authorization";
     private JwtUtil jwtUtil;
-    private MyUserDetailsService myUserDetailsService;
+    private CustomerDetails myUserDetailsService;
 
     @Autowired
     public void setJwtUtil(JwtUtil jwtUtil) {
@@ -31,7 +31,7 @@ public class JwtFilter extends GenericFilterBean {
     }
 
     @Autowired
-    public void setMyUserDetailsService(MyUserDetailsService myUserDetailsService) {
+    public void setMyUserDetailsService(CustomerDetails myUserDetailsService) {
         this.myUserDetailsService = myUserDetailsService;
     }
 

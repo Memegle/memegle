@@ -1,17 +1,16 @@
 package com.memegle.server.service;
 
-import com.memegle.server.config.CustomUserDetails;
+import com.memegle.server.model.CustomUserDetails;
 import com.memegle.server.model.User;
 import com.memegle.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MyUserDetailsService implements UserDetailsService{
+public class CustomerDetails implements UserDetailsService{
 
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
@@ -27,7 +26,6 @@ public class MyUserDetailsService implements UserDetailsService{
     }
 
     public void saveUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 

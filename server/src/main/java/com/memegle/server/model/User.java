@@ -1,5 +1,6 @@
 package com.memegle.server.model;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -7,6 +8,8 @@ import java.util.Date;
 @Document(collection = "user")
 public class User {
 
+    @Id
+    private String id;
     private String userName;
     private String password;
     private String email;
@@ -22,6 +25,14 @@ public class User {
     public User(String userName, String password) {
         this.userName = userName;
         this.password = password;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getEmail() {
