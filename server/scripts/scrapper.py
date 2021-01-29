@@ -10,7 +10,7 @@ import unicodedata
 import argparse
 from os.path import exists, isdir, isfile, join, abspath
 from os import mkdir
-import json
+import csv
 
 
 def positive_int(num):
@@ -31,9 +31,10 @@ args = parser.parse_args()
 URL = 'https://fabiaoqing.com/biaoqing/detail/id/'
 SUFFIX = '.html'
 DOWNLOAD_FOLDER = abspath(args.output_dir)
-JSON_PATH = join(DOWNLOAD_FOLDER, 'meta.json')
+CSV_PATH = join(DOWNLOAD_FOLDER, 'meta.csv')
 ID = args.start
 TIMES_RUN = args.count
+HEADERS = ['source_url', 'title', 'path', 'source']
 
 if not isdir(DOWNLOAD_FOLDER):
     print('Folder {} not found, creating...'.format(DOWNLOAD_FOLDER))
@@ -69,13 +70,13 @@ def slugify(value, allow_unicode=False):
     return re.sub(r'[-\s]+', '-', value)
 
 
-if isfile(JSON_PATH):
-    with open(JSON_PATH, 'r') as f:
-        data = json.load(f)
+if isfile(CSV_PATH):
+    f = open(CSV_PATH, 'a')
+    writer = csv.DictWriter(f, fieldnames=HEADERS)
 else:
-    data = {}
-
-meta_json = open(JSON_PATH, 'w')
+    f = open(CSV_PATH, 'w')
+    writer = csv.DictWriter(f, fieldnames=HEADERS)
+    writer.writeheader()
 
 success = 0
 for cid in range(ID, ID + TIMES_RUN, 1):
@@ -85,16 +86,18 @@ for cid in range(ID, ID + TIMES_RUN, 1):
         rind = img_url.rindex('/')
         filename = img_url[rind+1:]
         path = join(DOWNLOAD_FOLDER, filename)
-        data[filename] = {'source_url': img_url, 'title': title, 'path': path, 'source': 'fabiaoqing'}
+        if isfile(path):
+            # if file already exists, skip
+            print('file already exists, skipping: {}'.format(path))
+            continue
         urllib.request.urlretrieve(img_url, path)
+        writer.writerow({'source_url': img_url, 'title': title, 'path': path, 'source': 'fabiaoqing'})
         print('saving {}'.format(path))
         success += 1
     except Exception as e:
         print('failing at {} with error: {}'.format(cid, e))
 
-if data:
-    json.dump(data, meta_json)
-meta_json.close()
+f.close()
 print('successfully download {} images, failing {}'.format(success, TIMES_RUN-success))
 
 

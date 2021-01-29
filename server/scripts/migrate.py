@@ -5,7 +5,7 @@ import magic
 from os import mkdir, listdir, rename, remove
 from os.path import exists, isfile, join, splitext
 import sys
-import json
+import csv
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 from PIL import Image
@@ -17,6 +17,7 @@ import getpass
 DEFAULT_INPUT_FOLDER = './data/raw/'
 DEFAULT_OUTPUT_FOLDER = './data/processed/'
 DEFAULT_ERROR_FOLDER = './data/error/'
+META_FILENAME = 'meta.csv'
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input_dir')
@@ -65,7 +66,7 @@ if not exists(input_dir):
 
     sys.exit()
 
-if not args.prod and not exists(output_dir):
+if (not args.prod or args.test) and not exists(output_dir):
     print('Output directory does not exist, creating')
     mkdir(output_dir)
 
@@ -143,52 +144,53 @@ def process_dir(dir, recur=False):
                 process_dir(p)
 
     print('Processing directory {}'.format(dir))
-    meta_path = join(dir, 'meta.json')
+    meta_path = join(dir, META_FILENAME)
     if not isfile(meta_path):
-        print('Cannot process {}, missing meta.json'.format(dir))
+        print('Cannot process {}, missing {}'.format(dir, META_FILENAME))
         return
 
-    with open(meta_path, 'r') as f:
-        data = json.load(f)
+    with open(meta_path, 'r', newline='') as f:
+        reader = csv.DictReader(f)
 
-    for filename, d in data.items():
-        path = d['path']
-        if not isfile(path):
-            path = join(input_dir, filename)
-
+        for d in reader:
+            path = d['path']
+            filename = path[path.rfind('/')+1:]
             if not isfile(path):
-                print("File not found: {}".format(path))
+                path = join(input_dir, filename)
+
+                if not isfile(path):
+                    print("File not found: {}".format(path))
+                    continue
+
+                d['path'] = path
+
+            if not process_img(filename, d):
+                rename(path, join(error_dir, filename))
                 continue
 
-            d['path'] = path
-
-        if not process_img(filename, d):
-            rename(path, join(error_dir, filename))
-            continue
-
-        d = exclude_keys(d)
-        new_name = str(d['_id']) + '.' + d['ext']
-        try:
-            # add to mongo and upload to s3
-            if args.prod:
-                upload_file(path, new_name)
-                if args.test:
-                    rename(path, join(output_dir, new_name))
+            d = exclude_keys(d)
+            new_name = str(d['_id']) + '.' + d['ext']
+            try:
+                # add to mongo and upload to s3
+                if args.prod:
+                    upload_file(path, new_name)
+                    if args.test:
+                        rename(path, join(output_dir, new_name))
+                    else:
+                        remove(path)
                 else:
-                    remove(path)
-            else:
-                rename(path, join(output_dir, new_name))
+                    rename(path, join(output_dir, new_name))
 
-            pic_col.insert_one(d)
-            success += 1
-        except Exception as e:
-            print('Failed to update s3 or mongo: {}'.format(e))
-            rename(path, join(error_dir, filename))
+                pic_col.insert_one(d)
+                success += 1
+            except Exception as e:
+                print('Failed to update s3 or mongo: {}'.format(e))
+                rename(path, join(error_dir, filename))
 
-    if args.test:
-        rename(meta_path, join(output_dir, 'meta.json'))
-    else:
-        remove(meta_path)
+        if args.test:
+            rename(meta_path, join(output_dir, META_FILENAME))
+        else:
+            remove(meta_path)
 
 
 def upload_file(path, key):
