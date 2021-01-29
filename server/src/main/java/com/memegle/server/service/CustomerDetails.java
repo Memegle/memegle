@@ -37,8 +37,8 @@ public class CustomerDetails implements UserDetailsService{
         return userRepository.findByEmail(email);
     }
 
-    public User findByUserNameAndPassword(String username, String password) {
-        User user = findByUserName(username);
+    public User findByEmailAndPassword(String email, String password) {
+        User user = findByEmail(email);
         if (user != null) {
             if (passwordEncoder.matches(password, user.getPassword())) {
                 return user;

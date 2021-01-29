@@ -93,7 +93,7 @@ public class UserController {
     @PostMapping("/auth")
     @ResponseBody
     public AuthResponse createAuthentication(@RequestBody AuthRequest authRequest) {
-        User user = userDetailsService.findByUserNameAndPassword(authRequest.getUsername(), authRequest.getPassword());
+        User user = userDetailsService.findByEmailAndPassword(authRequest.getEmail(), authRequest.getPassword());
         String token;
         if (user != null) {
             token = jwtUtil.generateToken(user.getEmail());
