@@ -12,16 +12,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerDetails implements UserDetailsService{
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
+    public CustomerDetails (UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
