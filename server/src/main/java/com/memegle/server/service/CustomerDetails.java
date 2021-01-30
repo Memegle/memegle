@@ -12,16 +12,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerDetails implements UserDetailsService{
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
+    public CustomerDetails (UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
-    }
-
-    @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -37,8 +32,8 @@ public class CustomerDetails implements UserDetailsService{
         return userRepository.findByEmail(email);
     }
 
-    public User findByUserNameAndPassword(String username, String password) {
-        User user = findByUserName(username);
+    public User findByEmailAndPassword(String email, String password) {
+        User user = findByEmail(email);
         if (user != null) {
             if (passwordEncoder.matches(password, user.getPassword())) {
                 return user;
