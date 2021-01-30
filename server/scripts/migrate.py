@@ -3,7 +3,7 @@ from botocore.exceptions import ClientError
 import argparse
 import magic
 from os import mkdir, listdir, rename, remove
-from os.path import exists, isfile, join, splitext
+from os.path import exists, isfile, join, splitext, isdir
 import sys
 import csv
 from bson.objectid import ObjectId
@@ -168,8 +168,14 @@ def process_dir(dir, recur=False):
                 rename(path, join(error_dir, filename))
                 continue
 
+            if has_duplicate(d):
+                print('duplicate image {}'.format(path))
+                continue
+
             d = exclude_keys(d)
+
             new_name = str(d['_id']) + '.' + d['ext']
+
             try:
                 # add to mongo and upload to s3
                 if args.prod:
@@ -208,6 +214,15 @@ def key_exists(key):
             return False
 
         raise
+
+
+# in Mongo
+def has_duplicate(d):
+    source_url = d['source_url']
+
+    pic = pic_col.find_one({'source_url': source_url})
+
+    return pic is not None
 
 
 process_dir(input_dir, args.recursive)
