@@ -22,6 +22,7 @@ public class Picture {
     private String title;   
     private String source;
     private String mediaUrl;
+    private String ext;
 
     private String filetype;
     private Date dateUpdated;
@@ -54,6 +55,7 @@ public class Picture {
     public String getTitle() {return this.title;}
     public String getSourceUrl(){return this.sourceUrl}
     public String getMediaUrl() {return this.mediaUrl;}
+    public String getExt() {return this.ext;}
 
     public String getFiletype() {return this.filetype;}
     public Date getDateUpdated() {return this.dateUpdated;}
@@ -73,9 +75,9 @@ public class Picture {
     public void setTitle(String title) {this.title = title;}        
     public String setSourceUrl(String sourceUrl) {this.sourceUrl = sourceUrl;}
     public void setMediaUrl(String mediaUrl) {this.mediaUrl = mediaUrl;}
-    
+    public void setExt(String ext) {this.ext = ext;}
 
-    
+
     public void setFiletype(String filetype) {this.filetype = filetype;}
     public void setDateUpdated(Date date) {this.dateUpdated = date;}
     public void setWidth(int w) {this.width = w;}

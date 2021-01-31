@@ -18,13 +18,16 @@ import java.util.Date;
 public class PictureSearch {
 
     @Id
-    private ObjectId id;   // id is stored as a string in elasticsearch           
+    // Whenever the schema of Picture changes, copy fields and getter methods from Picture class
+
+
+    /* paste start */
+    private ObjectId id;   
     private String title;
     private String source;
     private String mediaUrl;
-
-    // Whenever the schema of Picture changes, copy fields and getter methods from Picture class
-    /* paste start */
+    private String ext;
+    
     private String filetype;
     private Date dateUpdated;
     private int width;
@@ -45,15 +48,15 @@ public class PictureSearch {
 
    
    //Update to fit DB schema
+  
+    /* paste start */
     public String getId() {return this.id;}
-    public String getTitle() {return this.title;}                //------------------------&&&&&
+    public String getTitle() {return this.title;}         
     public String getFiletype() {return this.filetype;}
     public String getSourceUrl(){return this.sourceUrl}
     public String getMediaUrl() {return this.mediaUrl;}
+    public String getExt() {return this.ext;}
 
-
-    /* paste start */
-    
     public Date getDateUpdated() {return this.dateUpdated;}
     public int getWidth() {return this.width;}
     public int getHeight() {return this.height;}
@@ -63,6 +66,9 @@ public class PictureSearch {
     public ArrayList<String> getTags() {return tags;}
     public long getLike() {return like;}
     public long getDislike() {return dislike;}
+
+
+
     /* paste end */
 
     public float getSearchScore() {return this.searchScore;}
