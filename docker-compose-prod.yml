@@ -29,8 +29,8 @@ services:
       - ./scripts/env/es-auth.env
     ports:
       - 8080:8080
-#    depends_on:
-#      - monstache
+    depends_on:
+      - monstache
     links:
       - mongo1
     entrypoint: ["catalina.sh", "run"]
@@ -42,7 +42,7 @@ services:
     expose:
       - 27017
     ports:
-      - 27017:27017 # 27017 does not work in AWS security group for unknown reason, fix later.
+      - 27017:27017
     restart: unless-stopped
     env_file:
       - ./scripts/env/mongo-auth.env
@@ -64,22 +64,22 @@ services:
 
 
   # https://rwynn.github.io/monstache-site/start/
-#  monstache:
-#    image: rwynn/monstache:rel5
-#    container_name: monstache
-#    working_dir: /app
-#    command: -f ./monstache.config.toml
-#    volumes:
-#      - ./monstache.config.toml:/app/monstache.config.toml
-#    depends_on:
-#      - init-mongo-rs
-#      - es
-#    ports:
-#      - 8081:8080     # host-port:container-port
-#    links:
-#      - mongo1:mongo1
-#      - es:es
-#    restart: always
+  monstache:
+    image: rwynn/monstache:rel6
+    container_name: monstache
+    working_dir: /app
+    command: -f ./monstache.config.toml
+    volumes:
+      - ./monstache.config.toml:/app/monstache.config.toml
+    depends_on:
+      - init-mongo-rs
+    env_file:
+      - ./scripts/env/monstache-cfg.env
+    ports:
+      - 8081:8080     # host-port:container-port
+    links:
+      - mongo1:mongo1
+    restart: always
 
 volumes:
   rs1:
