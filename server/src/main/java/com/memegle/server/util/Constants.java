@@ -13,13 +13,10 @@ public class Constants {
     private Constants() {}
 
     private static String getServerUrl() {
-        switch (System.getenv("MEMEGLE_APP_MODE")) {
-            case "production":
-                return "https://memegle.live:8080";
-            case "staging":
-                return "http://stage.memegle.live:8080";
-            default:
-                return "http://localhost:8080";
+        if ("production".equals(System.getenv("MEMEGLE_APP_MODE"))) {
+            return "https://memegle.live:8080";
         }
+        
+        return "http://localhost:8080";
     }
 }

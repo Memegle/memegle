@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {BrowserRouter} from 'react-router-dom';
 import Analytics from "react-router-ga";
 
-import {isProductionMode, isStagingMode, LOG} from "./utils";
+import {isProductionMode, LOG} from "./utils";
 import Main from './Main'
 
 export var serverUrl = 'https://www.memegle.live:8080';
@@ -31,7 +31,7 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        if (!isProductionMode() && !isStagingMode() && !urlChecked) {
+        if (!isProductionMode() && !urlChecked) {
             setServerUrl();
             urlChecked = true;
         }
