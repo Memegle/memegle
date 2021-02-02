@@ -88,6 +88,8 @@ services:
     depends_on:
       - init_mongo_rs
       - es
+    env_file:
+      - ./scripts/env/monstache-cfg.env
     ports:
       - 8081:8080     # host-port:container-port
     links:
