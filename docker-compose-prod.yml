@@ -72,7 +72,7 @@ services:
     volumes:
       - ./monstache.config.toml:/app/monstache.config.toml
     depends_on:
-      - init-mongo-rs
+      - init_mongo_rs
     env_file:
       - ./scripts/env/monstache-cfg.env
     ports:
