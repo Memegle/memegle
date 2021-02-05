@@ -16,7 +16,6 @@ public class Picture {
     public static final String SEQUENCE_NAME = "picture_sequence";
 
     @Id
-   
     private ObjectId id;
     private String sourceUrl;
     private String title;   
