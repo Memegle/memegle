@@ -1,12 +1,11 @@
 package com.memegle.server.model;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.memegle.server.util.Constants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+import org.bson.types.ObjectId;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -17,9 +16,14 @@ public class Picture {
     public static final String SEQUENCE_NAME = "picture_sequence";
 
     @Id
-    private long id;
+   
+    private ObjectId id;
+    private String sourceUrl;
+    private String title;   
+    private String source;
+    private String mediaUrl;
+    private String ext;
 
-    private String name;
     private String filetype;
     private Date dateUpdated;
     private int width;
@@ -34,25 +38,26 @@ public class Picture {
     @Transient
     private float searchScore;
 
-    @JsonIgnore
-    private String urlSuffix;
 
     public Picture() {}
 
     public static Picture fromPictureSearch(PictureSearch search) {
         Picture picture = new Picture();
         // set all values
-        picture.setId(Long.parseLong(search.getId()));
-        picture.setName(search.getName());
+        picture.setId(search.getId());                      //------------------------
+        picture.setTitle(search.getTitle());                //------------------------
         picture.setFiletype(search.getFiletype());
         return null;
     }
+ 
+    //adjust getters for variables id an title
+    public ObjectId getId() {return this.id;}
+    public String getTitle() {return this.title;}
+    public String getSourceUrl(){return this.sourceUrl}
+    public String getMediaUrl() {return this.mediaUrl;}
+    public String getExt() {return this.ext;}
 
-    public long getId() {return this.id;}
-
-    public String getName() {return this.name;}
     public String getFiletype() {return this.filetype;}
-    public String getUrlSuffix() {return this.urlSuffix;}
     public Date getDateUpdated() {return this.dateUpdated;}
     public int getWidth() {return this.width;}
     public int getHeight() {return this.height;}
@@ -65,15 +70,15 @@ public class Picture {
 
     public float getSearchScore() {return searchScore;}
 
-    @JsonProperty("fullUrl")
-    public String getFullUrl() {
-        return Constants.BASE_URL + Constants.IMAGE_MAPPING + this.urlSuffix;
-    }
 
-    public void setId(long id) {this.id = id;}
-    public void setName(String name) {this.name = name;}
+    public void setId(ObjectId id) {this.id = id;}                 
+    public void setTitle(String title) {this.title = title;}        
+    public String setSourceUrl(String sourceUrl) {this.sourceUrl = sourceUrl;}
+    public void setMediaUrl(String mediaUrl) {this.mediaUrl = mediaUrl;}
+    public void setExt(String ext) {this.ext = ext;}
+
+
     public void setFiletype(String filetype) {this.filetype = filetype;}
-    public void setUrlSuffix(String urlSuffix) {this.urlSuffix = urlSuffix;}
     public void setDateUpdated(Date date) {this.dateUpdated = date;}
     public void setWidth(int w) {this.width = w;}
     public void setHeight(int h) {this.height = h;}
