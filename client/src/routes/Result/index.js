@@ -223,7 +223,7 @@ class Result extends Component {
                                 }
                                 return (
                                     <div className={styles.image} key={image.id}>
-                                        <img src={image.fullUrl} style={{height: height + '%', width: width + '%'}}
+                                        <img src={image.media_url} style={{height: height + '%', width: width + '%'}}
                                              alt='none'/>
                                         <div className={styles.frame}/>
                                     </div>
