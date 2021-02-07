@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface PictureRepository extends MongoRepository<Picture, Long> {
 
-    public Picture findById(long id);
+    public Picture findById(String id);
 
-    public List<Picture> findByName(String name);
+    public List<Picture> findByTitle(String title);
 }

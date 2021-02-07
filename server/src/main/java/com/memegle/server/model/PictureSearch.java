@@ -29,7 +29,7 @@ public class PictureSearch {
     private String source;
     private String mediaUrl;
     private String ext;
-    private String filetype;
+    private Date dateCreated;
     private int width;
     private int height;
     private ArrayList<String> texts;
@@ -43,7 +43,7 @@ public class PictureSearch {
    //Update to fit DB schema
 
     //Getters
-    public String getScore()) {return this.score; }
+    public int getScore() {return this.score; }
 
    /* paste start */ 
     public String getId() {return this.id;}        

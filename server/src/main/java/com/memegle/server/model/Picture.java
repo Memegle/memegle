@@ -21,7 +21,7 @@ public class Picture {
 
     //field shared with PictureSearch.java  (total:12)
     @Id
-    private ObjectId id;                 //########### Need to be tested 
+    private ObjectId id;
     private String sourceUrl;
     private String title;   
     private String source;
@@ -49,7 +49,7 @@ public class Picture {
     public static Picture fromPictureSearch(PictureSearch search) {
         Picture picture = new Picture();
         // set all values
-        picture.setId(search.getId());                     
+        picture.setId(search.getId());
         picture.setTitle(search.getTitle());                
         picture.setSource(search.getSource());
         picture.setSourceUrl(search.getSourceUrl());
@@ -67,7 +67,7 @@ public class Picture {
  
     //Getters
 
-    public ObjectId getId() {return this.id;}        //########### Need to be tested 
+    public String getId() {return id.toString();}        //########### Need to be checked
     public String getTitle() {return this.title; }
     public String getSource() {return this.source; }
     public String getSourceUrl(){return this.sourceUrl; }
@@ -81,10 +81,10 @@ public class Picture {
     public ArrayList<ArrayList<ArrayList<Integer>>> getBoundingBoxes() {return boundingBoxes;}
 
     //Setters 
-    public void setId(ObjectId id) {this.id = id;}      //########### Need to be tested 
+    public void setId(String id) {this.id = new ObjectId(id);}      //########### Need to be checked
     public void setTitle(String title) {this.title = title;}     
     public void setSource(String src) {this.source = src;}      
-    public String setSourceUrl(String sourceUrl) {this.sourceUrl = sourceUrl;}
+    public void setSourceUrl(String sourceUrl) {this.sourceUrl = sourceUrl;}
     public void setMediaUrl(String mediaUrl) {this.mediaUrl = mediaUrl;}
     public void setExt(String ext) {this.ext = ext;}
     public void setDateCreated(Date date) {this.dateCreated = date;}
