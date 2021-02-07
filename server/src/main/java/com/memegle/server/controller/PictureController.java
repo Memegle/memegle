@@ -38,14 +38,12 @@ public class PictureController {
 
     private final PictureRepository pictureRepo;
     private final PictureSearchRepository pictureSearchRepo;
-    private final SequenceGeneratorService sequenceGeneratorService;
     private final SearchRepository searchRepo;
 
     public PictureController(PictureRepository pictureRepo, PictureSearchRepository pictureSearchRepo,
-                             SequenceGeneratorService sequenceGeneratorService, SearchRepository searchRepo) {
+                             SearchRepository searchRepo) {
         this.pictureRepo = pictureRepo;
         this.pictureSearchRepo = pictureSearchRepo;
-        this.sequenceGeneratorService = sequenceGeneratorService;
         this.searchRepo = searchRepo;
     }
 
@@ -91,17 +89,13 @@ public class PictureController {
 
         List<PictureSearch> result =  pictureSearchRepo.searchTitle(query.keyword, pageable);
 
+        for (PictureSearch pictureSearch : result) {
+            LOGGER.info(pictureSearch.getDateCreated().toString());
+        }
+
         // Log search query to db
         searchRepo.save(new Search(query.keyword, new Date(), result.size()));
 
         return result;
     }
-
-    // Getting the picture sequence, for manual data migration.
-    @GetMapping("/sequence")
-    @ResponseBody
-    public long sequence() {
-        return sequenceGeneratorService.getCurrentSequence(Picture.SEQUENCE_NAME);
-    }
-
 }
