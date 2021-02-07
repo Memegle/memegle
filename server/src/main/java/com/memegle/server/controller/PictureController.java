@@ -77,7 +77,7 @@ public class PictureController {
         }
         long id = Math.abs(random.nextLong()) % count + 1;
         Picture picture = this.pictureRepo.findById(id);
-        return picture.getFullUrl();
+        return picture.getSourceUrl();
     }
 
     @PostMapping(value = "/search",
