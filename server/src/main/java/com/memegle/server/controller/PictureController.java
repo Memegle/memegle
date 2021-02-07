@@ -8,6 +8,7 @@ import com.memegle.server.repository.PictureSearchRepository;
 import com.memegle.server.model.Picture;
 import com.memegle.server.repository.SearchRepository;
 import com.memegle.server.service.SequenceGeneratorService;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -63,19 +64,15 @@ public class PictureController {
     // Used for testing
     @GetMapping("/pictures/{id}")
     @ResponseBody
-    public Picture id(@PathVariable long id) {
+    public Picture id(@PathVariable String id) {
         return pictureRepo.findById(id);
     }
 
     @GetMapping("/random")
     @ResponseBody
     public String random() {
-        Random random = new Random();
-        long count = this.pictureRepo.count();
-        if (count <= 0) {
-            return "";
-        }
-        long id = Math.abs(random.nextLong()) % count + 1;
+        ObjectId newId = new ObjectId();
+        String id = newId.toString();
         Picture picture = this.pictureRepo.findById(id);
         return picture.getSourceUrl();
     }
@@ -92,7 +89,7 @@ public class PictureController {
 
         LOGGER.info("Querying:\n" + query);
 
-        List<PictureSearch> result =  pictureSearchRepo.searchName(query.keyword, pageable);
+        List<PictureSearch> result =  pictureSearchRepo.searchTitle(query.keyword, pageable);
 
         // Log search query to db
         searchRepo.save(new Search(query.keyword, new Date(), result.size()));
