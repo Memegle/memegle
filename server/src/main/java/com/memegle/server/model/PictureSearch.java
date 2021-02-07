@@ -55,9 +55,9 @@ public class PictureSearch {
     public Date getDateCreated() {return this.dateCreated;}
     public int getWidth() {return this.width;}
     public int getHeight() {return this.height;}
-    public ArrayList<String> getTexts() {return texts;}
-    public ArrayList<Float> getConfidences() {return confidences;}
-    public ArrayList<ArrayList<ArrayList<Integer>>> getBoundingBoxes() {return boundingBoxes;}
+    public ArrayList<String> getTexts() {return this.texts;}
+    public ArrayList<Float> getConfidences() {return this.confidences;}
+    public ArrayList<ArrayList<ArrayList<Integer>>> getBoundingBoxes() {return this.boundingBoxes;}
     /* paste end */
 
 }
