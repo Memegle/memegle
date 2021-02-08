@@ -7,6 +7,10 @@ index-stats = true
 
 namespace-regex = '^memegle\.pictures$'
 elasticsearch-max-conns = 2
+elasticsearch-max-bytes = 2000000
+prune-invalid-json = true
+direct-read-split-max = 1
+
 dropped-collections = true
 dropped-databases = true
 replay = false
