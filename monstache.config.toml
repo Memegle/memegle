@@ -3,7 +3,7 @@ direct-read-namespaces = ["memegle.pictures"]
 
 gzip = true
 stats = true
-index-stats = true
+index-stats = false
 
 namespace-regex = '^memegle\.pictures$'
 elasticsearch-max-conns = 2
