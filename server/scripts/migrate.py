@@ -38,8 +38,14 @@ if args.test:
     output_dir = join(output_dir, 'test/')
 
 BUCKET_NAME = 'memegle' if not args.test else 'memegle-test'
-URL_PREFIX = 'https://memegle.s3-us-west-1.amazonaws.com/' if not args.test \
-    else 'https://memegle-test.s3-us-west-1.amazonaws.com/'
+
+if args.prod:
+    if not args.test:
+        URL_PREFIX = 'https://memegle.s3-us-west-1.amazonaws.com/'
+    else:
+        URL_PREFIX = 'https://memegle-test.s3-us-west-1.amazonaws.com/'
+else:
+    URL_PREFIX = 'http://localhost:8080/img/'
 
 s3 = boto3.resource('s3')
 bucket = s3.Bucket(BUCKET_NAME)

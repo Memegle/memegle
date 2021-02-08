@@ -2,6 +2,7 @@ package com.memegle.server.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.Score;
 
 import java.util.ArrayList;
@@ -22,17 +23,21 @@ public class PictureSearch {
 
     //field shared with Picture.java
     /* paste start */
+    @Field("source_url")
     private String sourceUrl;
     private String title;
     private String source;
+    @Field("media_url")
     private String mediaUrl;
     private String ext;
-    private Date dateCreated;
     private int width;
     private int height;
     private ArrayList<String> texts;
     private ArrayList<Float> confidences;
+    @Field("bounding_boxes")
     private ArrayList<ArrayList<ArrayList<Integer>>> boundingBoxes;
+    @Field("date_created")
+    private Date dateCreated;
     /* paste end */
 
     public PictureSearch() {}

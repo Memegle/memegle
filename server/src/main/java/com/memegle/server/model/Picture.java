@@ -1,9 +1,10 @@
 package com.memegle.server.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Field;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -14,17 +15,21 @@ public class Picture {
     @Id
     private ObjectId id;
 
-    //field shared with PictureSearch.java  (total:12)
+    //field shared with PictureSearch.java
+    @Field("source_url")
     private String sourceUrl;
     private String title;   
     private String source;
+    @Field("media_url")
     private String mediaUrl;
     private String ext;
     private int width;
     private int height;
     private ArrayList<String> texts;
     private ArrayList<Float> confidences;
+    @Field("bounding_boxes")
     private ArrayList<ArrayList<ArrayList<Integer>>> boundingBoxes;
+    @Field("date_created")
     private Date dateCreated;
 
     public Picture() {}

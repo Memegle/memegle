@@ -13,6 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.SampleOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -59,20 +63,15 @@ public class PictureController {
         return this.pictureRepo.count();
     }
 
-    // Used for testing
-    @GetMapping("/pictures/{id}")
-    @ResponseBody
-    public Picture id(@PathVariable String id) {
-        return pictureRepo.findById(id);
-    }
-
     @GetMapping("/random")
     @ResponseBody
-    public String random() {
-        ObjectId newId = new ObjectId();
-        String id = newId.toString();
-        Picture picture = this.pictureRepo.findById(id);
-        return picture.getSourceUrl();
+    public Picture random(MongoTemplate mongoTemplate) {
+        SampleOperation sample = Aggregation.sample(1);
+        Aggregation aggregation = Aggregation.newAggregation(sample);
+        AggregationResults<Picture> output = mongoTemplate
+                .aggregate(aggregation, "pictures", Picture.class);
+
+        return output.getUniqueMappedResult();
     }
 
     @PostMapping(value = "/search",
@@ -95,6 +94,7 @@ public class PictureController {
 
         // Log search query to db
         searchRepo.save(new Search(query.keyword, new Date(), result.size()));
+
 
         return result;
     }
