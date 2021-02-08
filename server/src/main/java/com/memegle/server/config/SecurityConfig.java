@@ -27,12 +27,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.httpBasic().disable()
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authorizeRequests().antMatchers("/static/**", "/register", "/auth", "/activation/**", "/", "/welcome/").permitAll()
-            .anyRequest()
-            .authenticated();
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/static/**", "/register", "/auth", "/activation/**", "/", "/welcome/")
+                .permitAll();
+//            .anyRequest()
+//            .authenticated();
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
