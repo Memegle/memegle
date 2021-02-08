@@ -9,7 +9,6 @@ import coloredLogo from 'assets/logo-mm-transparent.png';
 import {LOG} from 'utils';
 import performSearch, {getSearchRoute} from 'actions/search';
 import submitFeedback from "actions/feedback";
-import secretPage from "routes/Result/secretPage";
 
 class Result extends Component {
     constructor(props) {
