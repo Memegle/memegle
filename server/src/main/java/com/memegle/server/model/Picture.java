@@ -14,23 +14,23 @@ public class Picture {
     //field only in Picture.java
     @Id
     private ObjectId id;
-
-    //field shared with PictureSearch.java
     @Field("source_url")
     private String sourceUrl;
-    private String title;   
-    private String source;
     @Field("media_url")
     private String mediaUrl;
+    @Field("bounding_boxes")
+    private ArrayList<ArrayList<ArrayList<Integer>>> boundingBoxes;
+    @Field("date_created")
+    private Date dateCreated;
+
+    //field shared with PictureSearch.java
+    private String title;   
+    private String source;
     private String ext;
     private int width;
     private int height;
     private ArrayList<String> texts;
     private ArrayList<Float> confidences;
-    @Field("bounding_boxes")
-    private ArrayList<ArrayList<ArrayList<Integer>>> boundingBoxes;
-    @Field("date_created")
-    private Date dateCreated;
 
     public Picture() {}
 

@@ -1,5 +1,6 @@
 package com.memegle.server.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -20,24 +21,24 @@ public class PictureSearch {
     private String id;
     @Score
     private float score;
+    @JsonProperty("source_url")
+    private String sourceUrl;
+    @JsonProperty("media_url")
+    private String mediaUrl;
+    @JsonProperty("bounding_boxes")
+    private ArrayList<ArrayList<ArrayList<Integer>>> boundingBoxes;
+    @JsonProperty("date_created")
+    private Date dateCreated;
 
     //field shared with Picture.java
     /* paste start */
-    @Field("source_url")
-    private String sourceUrl;
     private String title;
     private String source;
-    @Field("media_url")
-    private String mediaUrl;
     private String ext;
     private int width;
     private int height;
     private ArrayList<String> texts;
     private ArrayList<Float> confidences;
-    @Field("bounding_boxes")
-    private ArrayList<ArrayList<ArrayList<Integer>>> boundingBoxes;
-    @Field("date_created")
-    private Date dateCreated;
     /* paste end */
 
     public PictureSearch() {}
@@ -59,5 +60,4 @@ public class PictureSearch {
     public ArrayList<Float> getConfidences() {return this.confidences;}
     public ArrayList<ArrayList<ArrayList<Integer>>> getBoundingBoxes() {return this.boundingBoxes;}
     /* paste end */
-
 }

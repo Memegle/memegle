@@ -8,6 +8,7 @@ import com.memegle.server.repository.PictureSearchRepository;
 import com.memegle.server.model.Picture;
 import com.memegle.server.repository.SearchRepository;
 import com.memegle.server.service.SequenceGeneratorService;
+import com.mongodb.Mongo;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,12 +44,14 @@ public class PictureController {
     private final PictureRepository pictureRepo;
     private final PictureSearchRepository pictureSearchRepo;
     private final SearchRepository searchRepo;
+    private final MongoTemplate mongoTemplate;
 
     public PictureController(PictureRepository pictureRepo, PictureSearchRepository pictureSearchRepo,
-                             SearchRepository searchRepo) {
+                             SearchRepository searchRepo, MongoTemplate mongoTemplate) {
         this.pictureRepo = pictureRepo;
         this.pictureSearchRepo = pictureSearchRepo;
         this.searchRepo = searchRepo;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @GetMapping("/all")
@@ -65,7 +68,7 @@ public class PictureController {
 
     @GetMapping("/random")
     @ResponseBody
-    public Picture random(MongoTemplate mongoTemplate) {
+    public Picture random() {
         SampleOperation sample = Aggregation.sample(1);
         Aggregation aggregation = Aggregation.newAggregation(sample);
         AggregationResults<Picture> output = mongoTemplate
@@ -88,13 +91,8 @@ public class PictureController {
 
         List<PictureSearch> result =  pictureSearchRepo.searchTitle(query.keyword, pageable);
 
-        for (PictureSearch pictureSearch : result) {
-            LOGGER.info(pictureSearch.getDateCreated().toString());
-        }
-
         // Log search query to db
         searchRepo.save(new Search(query.keyword, new Date(), result.size()));
-
 
         return result;
     }
