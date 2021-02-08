@@ -56,11 +56,11 @@ public class GeneralController {
 
     @GetMapping("/secrets/{name}")
     public String secrets(HttpServletRequest request, @PathVariable String name) {
-        return name + "/index.html";
+        return "secrets/" + name + "/index";
     }
 
     @GetMapping(value = "/welcome")
     public String welcome(HttpServletRequest request) {
-        return "index.html";
+        return "/welcome/index";
     }
 }
