@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Redirect} from "react-router-dom";
 import {count} from "actions/count";
-import {postLogIn,postRegistration} from 'actions/auth.js';
+import {postLogin,postRegistration} from 'actions/auth.js';
 
-class secretPage extends Component {
+class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -37,7 +37,7 @@ class secretPage extends Component {
 
     handleSubmit= (event) => {   
         alert(`${this.state.loginUsername} ${this.state.loginPassword}`) ;
-        postLogIn(this.state);
+        postLogin(this.state);
         }
 
     handleRegisterNameChange = (event) => {
@@ -129,4 +129,4 @@ class secretPage extends Component {
     }
 };
 
-export default secretPage;
+export default index;
