@@ -22,16 +22,6 @@ import java.util.List;
 public class PictureChangelog {
     private final static Logger LOGGER = LoggerFactory.getLogger(PictureChangelog.class);
 
-    @ChangeSet(author = "Paul", id = "enforcePictureSchema", order = "000", runAlways = true)
-    public void enforcePictureSchema(PictureRepository pictureRepo) {
-        LOGGER.info("Enforce DB schema start...");
-        Instant start = Instant.now();
-        List<Picture> all = pictureRepo.findAll();
-        pictureRepo.saveAll(all);
-        Instant end = Instant.now();
-        LOGGER.info("Enforced DB schema finished, took " + Duration.between(start, end).getSeconds() + " seconds");
-    }
-
     @ChangeSet(author = "Paul", id = "renameTextAndConfidenceAndAddTag", order = "001")
     public void renameTextAndConfidenceAndAddTag(MongoTemplate mongoTemplate) {
         LOGGER.info("Executing change log renameTextAndConfidenceAndAddTag...");
