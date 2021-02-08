@@ -6,7 +6,7 @@ stats = true
 index-stats = true
 
 namespace-regex = '^memegle\.pictures$'
-elasticsearch-max-conns = 4
+elasticsearch-max-conns = 2
 dropped-collections = true
 dropped-databases = true
 replay = false
