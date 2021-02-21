@@ -11,8 +11,8 @@ until [ $es_status -eq 200 ]; do
   sleep 2
   es_status=$(curl --write-out %{http_code} --silent --output /dev/null $uri)
   PING_COUNT=$((PING_COUNT+1))
-  # Stop after 1 min
-  if [ $PING_COUNT -gt 30 ]
+  # Stop after 2 min
+  if [ $PING_COUNT -gt 60 ]
   then
     echo Connection failed, stopping...
     exit 1
