@@ -113,6 +113,7 @@ class Result extends Component {
         LOG('pic per row: ' + picPerRow);
         LOG('pic per col: ' + picPerCol);
         this.numImagesToAdd = picPerRow * picPerCol;
+        this.displayMoreImages();
     }
 
     handleScroll() {
