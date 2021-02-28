@@ -122,7 +122,7 @@ public class UserController {
         }
 
 
-        return "/result/index";
+        return "/activation/index";
     }
 
 }

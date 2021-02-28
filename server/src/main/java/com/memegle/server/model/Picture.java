@@ -63,9 +63,15 @@ public class Picture {
     public Date getDateCreated() {return this.dateCreated;}
     public int getWidth() {return this.width;}
     public int getHeight() {return this.height;}
+<<<<<<< HEAD
     public ArrayList<String> getTexts() {return this.texts;}
     public ArrayList<Float> getConfidences() {return this.confidences;}
     public ArrayList<ArrayList<ArrayList<Integer>>> getBoundingBoxes() {return this.boundingBoxes;}
+=======
+    public ArrayList<String> getTexts() {return texts;}
+    public ArrayList<Float> getConfidences() {return confidences;}
+    public ArrayList<ArrayList<ArrayList<Integer>>> getBoundingBoxes() {return boundingBoxes;}
+>>>>>>> 30ebe9d59334f9f24ac7b8537e239d1ad37e6db0
 
     //Setters 
     public void setId(String id) {this.id = new ObjectId(id);}

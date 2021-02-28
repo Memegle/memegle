@@ -1,5 +1,2 @@
 # Don't upload image data to GitHub
 /static/data
-
-# Ignore change to welcome page
-/static/welcome/index.html

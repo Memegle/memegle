@@ -9,7 +9,6 @@ import coloredLogo from 'assets/logo-mm-transparent.png';
 import {LOG} from 'utils';
 import performSearch, {getSearchRoute} from 'actions/search';
 import submitFeedback from "actions/feedback";
-import secretPage from "routes/Result/secretPage";
 
 class Result extends Component {
     constructor(props) {
@@ -114,6 +113,7 @@ class Result extends Component {
         LOG('pic per row: ' + picPerRow);
         LOG('pic per col: ' + picPerCol);
         this.numImagesToAdd = picPerRow * picPerCol;
+        this.displayMoreImages();
     }
 
     handleScroll() {

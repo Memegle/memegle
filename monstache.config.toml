@@ -3,10 +3,19 @@ direct-read-namespaces = ["memegle.pictures"]
 
 gzip = true
 stats = true
-index-stats = true
+index-stats = false
 
 namespace-regex = '^memegle\.pictures$'
+elasticsearch-max-conns = 2
+elasticsearch-max-bytes = 2000000
+prune-invalid-json = true
+direct-read-split-max = 1
+
+<<<<<<< HEAD
+namespace-regex = '^memegle\.pictures$'
 elasticsearch-max-conns = 4
+=======
+>>>>>>> 30ebe9d59334f9f24ac7b8537e239d1ad37e6db0
 dropped-collections = true
 dropped-databases = true
 replay = false
