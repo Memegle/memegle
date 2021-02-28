@@ -8,7 +8,7 @@ const submitFeedback = async (feedback) => {
     const processed = feedback.replaceAll('，', ',');
     const parts = processed.split(',').map(item => item.trim());
     const uniq_parts = [...new Set(parts)]
-
+    
     const url = serverUrl + '/feedback';
     const response = await fetch(url, {
         method: 'POST',
