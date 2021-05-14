@@ -8,10 +8,16 @@ import com.memegle.server.repository.PictureSearchRepository;
 import com.memegle.server.model.Picture;
 import com.memegle.server.repository.SearchRepository;
 import com.memegle.server.service.SequenceGeneratorService;
+import com.mongodb.Mongo;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.SampleOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -37,15 +43,15 @@ public class PictureController {
 
     private final PictureRepository pictureRepo;
     private final PictureSearchRepository pictureSearchRepo;
-    private final SequenceGeneratorService sequenceGeneratorService;
     private final SearchRepository searchRepo;
+    private final MongoTemplate mongoTemplate;
 
     public PictureController(PictureRepository pictureRepo, PictureSearchRepository pictureSearchRepo,
-                             SequenceGeneratorService sequenceGeneratorService, SearchRepository searchRepo) {
+                             SearchRepository searchRepo, MongoTemplate mongoTemplate) {
         this.pictureRepo = pictureRepo;
         this.pictureSearchRepo = pictureSearchRepo;
-        this.sequenceGeneratorService = sequenceGeneratorService;
         this.searchRepo = searchRepo;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @GetMapping("/all")
@@ -60,24 +66,15 @@ public class PictureController {
         return this.pictureRepo.count();
     }
 
-    // Used for testing
-    @GetMapping("/pictures/{id}")
-    @ResponseBody
-    public Picture id(@PathVariable long id) {
-        return pictureRepo.findById(id);
-    }
-
     @GetMapping("/random")
     @ResponseBody
-    public String random() {
-        Random random = new Random();
-        long count = this.pictureRepo.count();
-        if (count <= 0) {
-            return "";
-        }
-        long id = Math.abs(random.nextLong()) % count + 1;
-        Picture picture = this.pictureRepo.findById(id);
-        return picture.getFullUrl();
+    public Picture random() {
+        SampleOperation sample = Aggregation.sample(1);
+        Aggregation aggregation = Aggregation.newAggregation(sample);
+        AggregationResults<Picture> output = mongoTemplate
+                .aggregate(aggregation, "pictures", Picture.class);
+
+        return output.getUniqueMappedResult();
     }
 
     @PostMapping(value = "/search",
@@ -92,19 +89,11 @@ public class PictureController {
 
         LOGGER.info("Querying:\n" + query);
 
-        List<PictureSearch> result =  pictureSearchRepo.searchName(query.keyword, pageable);
+        List<PictureSearch> result =  pictureSearchRepo.searchTitle(query.keyword, pageable);
 
         // Log search query to db
         searchRepo.save(new Search(query.keyword, new Date(), result.size()));
 
         return result;
     }
-
-    // Getting the picture sequence, for manual data migration.
-    @GetMapping("/sequence")
-    @ResponseBody
-    public long sequence() {
-        return sequenceGeneratorService.getCurrentSequence(Picture.SEQUENCE_NAME);
-    }
-
 }

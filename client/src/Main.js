@@ -5,6 +5,7 @@ import paths from "./routes/paths";
 import Welcome from "./routes/Welcome";
 import Result from "./routes/Result"
 
+
 class Main extends Component {
     render() {
         const ResultPage = ({location}) => {

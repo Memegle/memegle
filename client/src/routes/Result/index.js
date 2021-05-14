@@ -113,6 +113,7 @@ class Result extends Component {
         LOG('pic per row: ' + picPerRow);
         LOG('pic per col: ' + picPerCol);
         this.numImagesToAdd = picPerRow * picPerCol;
+        this.displayMoreImages();
     }
 
     handleScroll() {
@@ -223,7 +224,7 @@ class Result extends Component {
                                 }
                                 return (
                                     <div className={styles.image} key={image.id}>
-                                        <img src={image.fullUrl} style={{height: height + '%', width: width + '%'}}
+                                        <img src={image.media_url} style={{height: height + '%', width: width + '%'}}
                                              alt='none'/>
                                         <div className={styles.frame}/>
                                     </div>

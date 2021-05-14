@@ -23,7 +23,7 @@ services:
       - ./server:/home/gradle/server
       - ./server/data/processed:/root/memegle/images
     environment:
-      - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs0
+      - MONGO_URI=mongodb://mongo1:27017/memegle?replicaSet=rs
       - ES_URI=es:9200
     ports:
       - 8080:8080
@@ -42,12 +42,12 @@ services:
       - 27017
     ports:
       - 27017:27017
-    restart: always
+    restart: unless-stopped
     volumes:
       - rs1:/data/db
-    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0"]
+    entrypoint: ["/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs"]
 
-  init-mongo-rs:
+  init_mongo_rs:
     image: mongo:4.0-xenial
     links:
       - mongo1
@@ -74,7 +74,7 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
-    restart: always
+    restart: unless-stopped
 
 
   # https://rwynn.github.io/monstache-site/start/
@@ -86,8 +86,10 @@ services:
     volumes:
       - ./monstache.config.toml:/app/monstache.config.toml
     depends_on:
-      - init-mongo-rs
+      - init_mongo_rs
       - es
+    env_file:
+      - ./scripts/env/monstache-cfg.env
     ports:
       - 8081:8080     # host-port:container-port
     links:
