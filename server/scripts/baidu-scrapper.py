@@ -40,7 +40,7 @@ args = parser.parse_args()
 QUERY = args.searching_word
 PHOTO_COUNT = args.count
 TAGS = '#'+args.tags
-tags = [TAGS]
+tags = [TAGS,QUERY]
 
 
 
