@@ -17,8 +17,7 @@ import pathlib
 # This function checks whether the input is string.
 #
 def string_check(val):
-    fl= False
-    if isinstance(val,str) is fl:
+    if not isinstance(val,str):
         raise argparse.ArgumentTypeError("Cannot accept non-string input")
     return val
     
