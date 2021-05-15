@@ -32,20 +32,19 @@ def positive_int(num):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('searching_word', type=string_check)
-parser.add_argument('tags', type=string_check)
+parser.add_argument('tags')
 parser.add_argument('count', type=positive_int)
 parser.add_argument('-o', '--output_dir', default='./data/raw/')
 
 args = parser.parse_args()
 QUERY = args.searching_word
 PHOTO_COUNT = args.count
-TAGS = '#'+args.tags
-tags = [TAGS,QUERY]
+TAGS = args.tags.split(',')
 
 
 
 # Constants
-DOWNLOAD_FOLDER =   'data/raw/' + ';'.join(tags) + '/'     #os.path.abspath('data/raw/' + ';'.join(tags) + '/')
+DOWNLOAD_FOLDER =   'data/raw/' + ','.join(TAGS ) + '/'     #os.path.abspath('data/raw/' + ';'.join(tags) + '/')
 CSV_PATH = 'data/raw/meta.csv'     #os.path.abspath('data/raw/meta.csv')
 HEADERS = ['source_url','tag','title','file_name','path', 'source']
 
@@ -111,7 +110,7 @@ for i in range(PHOTO_COUNT):
             print('file already exists, skipping: {}'.format(path))
             continue
         urllib.request.urlretrieve(img_url, path)
-        writer.writerow({'source_url': img_url,'tag':tags,'title':d['fromPageTitleEnc'],'file_name':filename ,'path': path, 'source':QUERY,
+        writer.writerow({'source_url': img_url,'tag':TAGS,'title':d['fromPageTitleEnc'],'file_name':filename ,'path': path, 'source':QUERY,
     })
         print('{}.{}: Saving {}'.format(page, i, path))
         success += 1
