@@ -143,6 +143,7 @@ def process_img(filename, d):
 
 def process_dir(dir, recur=False):
     global success
+    has_fail = False
     if recur:
         for filename in listdir(dir):
             p = join(dir, filename)
@@ -198,11 +199,13 @@ def process_dir(dir, recur=False):
             except Exception as e:
                 print('Failed to update s3 or mongo: {}'.format(e))
                 rename(path, join(error_dir, filename))
+                has_fail = True
 
         if args.test:
             rename(meta_path, join(output_dir, META_FILENAME))
         else:
-            remove(meta_path)
+            if not has_fail:
+                remove(meta_path)
 
 
 def upload_file(path, key):
