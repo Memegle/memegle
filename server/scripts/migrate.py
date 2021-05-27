@@ -206,8 +206,6 @@ def process_dir(dir, recur=False):
         else:
             if not has_fail:
                 remove(meta_path)
-            else:
-                return
 
 
 def upload_file(path, key):
