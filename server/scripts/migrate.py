@@ -13,7 +13,7 @@ from paddleocr import PaddleOCR
 import numpy as np
 import datetime
 import getpass
-from server.scripts.watermark_predict_DUMMY import watermark_predict as wp
+from server.scripts.watermark_predict_DUMMY import predict_watermark
 
 DEFAULT_INPUT_FOLDER = './data/raw/'
 DEFAULT_OUTPUT_FOLDER = './data/processed/'
@@ -187,8 +187,10 @@ def process_dir(dir, recur=False):
             new_name = str(d['_id']) + '.' + d['ext']
 
             try:
-                # had watermark (6/19/2021: using dummy predictor)
-                if wp.predict_watermark(path):
+                # had watermark, put in another folder
+                # (Bob 6/19/2021: using dummy predictor)
+                # TODO: change to actual predictor
+                if predict_watermark(path):
                     rename(path, join(watermark_dir, new_name))
                     success += 1
                     continue
