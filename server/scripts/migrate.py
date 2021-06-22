@@ -191,7 +191,7 @@ def process_dir(dir, recur=False):
                 # (Bob 6/19/2021: using dummy predictor)
                 # TODO: change to actual predictor
                 if predict_watermark(path):
-                    rename(path, join(watermark_dir, new_name))
+                    rename(path, join(watermark_dir, filename))
                     success += 1
                     continue
 
