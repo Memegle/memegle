@@ -10,9 +10,6 @@ import json as js
 import csv
 import pathlib
 
-# Please manually filter out bad images after running the scripts.
-# Always change this two variable before executing
-# The + sign force the result to include pattern 表情包
 
 # This function checks whether the input is string.
 #
@@ -30,13 +27,13 @@ def positive_int(num):
     return val
 
 parser = argparse.ArgumentParser()
-parser.add_argument('searching_word', type=string_check)
+parser.add_argument('keyword', type=string_check)
 parser.add_argument('tags')
 parser.add_argument('count', type=positive_int)
 parser.add_argument('-o', '--output_dir', default='./data/raw/')
 
 args = parser.parse_args()
-QUERY = args.searching_word
+QUERY = args.keyword
 PHOTO_COUNT = args.count
 TAGS = args.tags.split(',')
 
@@ -109,7 +106,7 @@ for i in range(PHOTO_COUNT):
             print('file already exists, skipping: {}'.format(path))
             continue
         urllib.request.urlretrieve(img_url, path)
-        writer.writerow({'source_url': img_url,'tag':TAGS,'title':d['fromPageTitleEnc'],'file_name':filename ,'path': path, 'source':QUERY,
+        writer.writerow({'source_url': img_url,'tag':TAGS,'title':d['fromPageTitleEnc'],'file_name':filename ,'path': path, 'source':"baidu",
     })
         print('{}.{}: Saving {}'.format(page, i, path))
         success += 1
