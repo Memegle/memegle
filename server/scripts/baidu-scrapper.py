@@ -37,11 +37,9 @@ QUERY = args.keyword
 PHOTO_COUNT = args.count
 TAGS = args.tags.split(',')
 
-
-
 # Constants
-DOWNLOAD_FOLDER =   'data/raw/' + ','.join(TAGS ) + '/'     #os.path.abspath('data/raw/' + ';'.join(tags) + '/')
-CSV_PATH = 'data/raw/meta.csv'     #os.path.abspath('data/raw/meta.csv')
+DOWNLOAD_FOLDER =   'data/raw/' + ','.join(TAGS ) + '/'   
+CSV_PATH = 'data/raw/meta.csv'   
 HEADERS = ['source_url','tag','title','file_name','path', 'source']
 
 
@@ -65,54 +63,80 @@ else:
     writer.writeheader()
 
 
-#for page in range(START_PAGE, END_PAGE, 1):
-page = 0
-print('Processing page {}'.format(page))
-start_ind = page
-url = 'https://tupian.baidu.com/search/acjson?tn=resultjson_com&logid=9967771140088488215&ipn=rj&ct=201326592&is=&fp=result&QUERYWord=' \
-    + QUERY + '&cl=2&lm=-1&ie=utf-8&oe=utf-8&adpicid=&st=-1&z=&ic=0&hd=&latest=&copyright=&word=' \
-    + QUERY + '&s=&se=&tab=&width=&height=&face=0&istype=2&qc=&nc=1&fr=&expermode=&force=&pn=' \
-    + str(start_ind) + '&rn=30&gsm=1e&1603393461671='
 
-response = session.get(url)
-# handle invalid escapes
-text = response.text
-text = re.sub(r'"fromPageTitle":".*?[^\\]",', '', text)
-text = re.sub(r'\\([^\/u"])', '\\1', text, re.MULTILINE)
-result = re.sub(r'\\\\"', '', text, re.MULTILINE)
-
-json = js.loads(result, strict=False)
-data = json['data']
 
 #function to get the file name from the last part of 'middleURL'
 def get_filename(str):
-    for i in range(len(str)-1):
-        if (str[i]== 'u') and (str[i+1]== "=") :
-            file_name = str[i:len(str)] 
-            break
+    idx = str.rindex("/")
+    file_name = str[idx:len(str)] 
     return file_name
 
 
+# variable that keeps track of the number of images
+num_of_images =len(os.listdir(DOWNLOAD_FOLDER))
+
+#number of pages needed to download from
+total_page = int((num_of_images + PHOTO_COUNT) / 30)
+
+#variable that helps turn to the next available page
+new_page = int(num_of_images / 30)
+
+
+def get_json_data(i):
+    page = i  # + new_page
+    print('Processing page {}'.format(page))
+    start_ind = page
+    url = 'https://tupian.baidu.com/search/acjson?tn=resultjson_com&logid=9967771140088488215&ipn=rj&ct=201326592&is=&fp=result&QUERYWord=' \
+        + QUERY + '&cl=2&lm=-1&ie=utf-8&oe=utf-8&adpicid=&st=-1&z=&ic=0&hd=&latest=&copyright=&word=' \
+        + QUERY + '&s=&se=&tab=&width=&height=&face=0&istype=2&qc=&nc=1&fr=&expermode=&force=&pn=' \
+        + str(start_ind) + '&rn=30&gsm=1e&1603393461671='
+
+    response = session.get(url)
+    # handle invalid escapes
+    text = response.text
+    text = re.sub(r'"fromPageTitle":".*?[^\\]",', '', text)
+    text = re.sub(r'\\([^\/u"])', '\\1', text, re.MULTILINE)
+    result = re.sub(r'\\\\"', '', text, re.MULTILINE)
+
+    json = js.loads(result, strict=False)
+    data = json['data']
+    return data
+
 # download each image
-for i in range(PHOTO_COUNT):
-    try:
-        d = data[i]
-        img_url = d['middleURL']
+page=0
+ 
+for x in range(page+ total_page + 2):
 
-        filename =  get_filename(img_url)
-        ext = '.' + d['type']
-        path = DOWNLOAD_FOLDER + d['fromURL'] + ext
-        if isfile(path):
-            print('file already exists, skipping: {}'.format(path))
-            continue
-        urllib.request.urlretrieve(img_url, path)
-        writer.writerow({'source_url': img_url,'tag':TAGS,'title':d['fromPageTitleEnc'],'file_name':filename ,'path': path, 'source':"baidu",
-    })
-        print('{}.{}: Saving {}'.format(page, i, path))
-        success += 1
+    data = get_json_data(x)
 
-    except Exception as e:
-        print('{}.{}: {}'.format(page, i, str(e)))
-        fail += 1
+    for i in range(30):
+        try:
+            num_of_images =len(os.listdir(DOWNLOAD_FOLDER))
+          #  print(num_of_images)
+          #  print(PHOTO_COUNT)
+            if  num_of_images == PHOTO_COUNT:
+                break
 
-print('successfully download {} images, failing {}'.format(success, fail))
+            d = data[i] 
+            img_url = d['middleURL']
+            filename =  get_filename(img_url)
+            ext = '.' + d['type']
+            path = DOWNLOAD_FOLDER + d['fromURL'] + ext
+
+            if isfile(path):
+                print('file already exists, skipping: {}'.format(path))
+                continue
+
+            urllib.request.urlretrieve(img_url, path)
+            writer.writerow({'source_url': img_url,'tag':TAGS,'title':d['fromPageTitleEnc'],'file_name':filename ,'path': path, 'source':"baidu",
+        })
+            print('{}.{}: Saving {}'.format(page, i, path))
+            success += 1
+
+        except Exception as e:
+            print('{}.{}: {}'.format(page, i, str(e)))
+            fail += 1
+
+    print('successfully download {} images, failing {}'.format(success, fail))
+
+    
