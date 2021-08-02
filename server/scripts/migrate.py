@@ -13,16 +13,19 @@ from paddleocr import PaddleOCR
 import numpy as np
 import datetime
 import getpass
+from server.scripts.watermark_predict_DUMMY import predict_watermark
 
 DEFAULT_INPUT_FOLDER = './data/raw/'
 DEFAULT_OUTPUT_FOLDER = './data/processed/'
 DEFAULT_ERROR_FOLDER = './data/error/'
+DEFAULT_WATERMARK_FOLDER = './data/watermark'
 META_FILENAME = 'meta.csv'
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input_dir')
 parser.add_argument('-o', '--output_dir')
 parser.add_argument('-e', '--error_dir')
+parser.add_argument('-w', '--watermark_dir')
 parser.add_argument('-r', '--recursive', action='store_true')
 parser.add_argument('-p', '--prod', action='store_true')
 parser.add_argument('-t', '--test', action='store_true')
@@ -32,6 +35,7 @@ args = parser.parse_args()
 input_dir = args.input_dir if args.input_dir else DEFAULT_INPUT_FOLDER
 output_dir = args.output_dir if args.output_dir else DEFAULT_OUTPUT_FOLDER
 error_dir = args.error_dir if args.error_dir else DEFAULT_ERROR_FOLDER
+watermark_dir = args.watermark_dir if args.watermark_dir else DEFAULT_WATERMARK_FOLDER
 
 if args.test:
     print('Running in test mode, output directory will be changed to ${output_dir}/test/')
@@ -143,6 +147,7 @@ def process_img(filename, d):
 
 def process_dir(dir, recur=False):
     global success
+    has_fail = False
     if recur:
         for filename in listdir(dir):
             p = join(dir, filename)
@@ -183,6 +188,14 @@ def process_dir(dir, recur=False):
             new_name = str(d['_id']) + '.' + d['ext']
 
             try:
+                # had watermark, put in another folder
+                # (Bob 6/19/2021: using dummy predictor)
+                # TODO: change to actual predictor
+                if predict_watermark(path):
+                    rename(path, join(watermark_dir, filename))
+                    success += 1
+                    continue
+
                 # add to mongo and upload to s3
                 if args.prod:
                     upload_file(path, new_name)
@@ -198,11 +211,13 @@ def process_dir(dir, recur=False):
             except Exception as e:
                 print('Failed to update s3 or mongo: {}'.format(e))
                 rename(path, join(error_dir, filename))
+                has_fail = True
 
         if args.test:
             rename(meta_path, join(output_dir, META_FILENAME))
         else:
-            remove(meta_path)
+            if not has_fail:
+                remove(meta_path)
 
 
 def upload_file(path, key):
